@@ -15,7 +15,18 @@ let cachedPosts: Post[] | null = null
 export function getPosts(): Post[] {
   if (cachedPosts) return cachedPosts
 
-  const postsPath = /* path.join(Deno.cwd(), "posts") */ "./posts"
+  // Debug: log current working directory and available files
+  console.log("Current working directory:", Deno.cwd())
+  console.log("Available files in root:", Array.from(Deno.readDirSync(".")))
+  
+  // Try to find where posts might be
+  try {
+    console.log("Contents of src:", Array.from(Deno.readDirSync("./src")))
+  } catch (e) {
+    console.log("No src directory")
+  }
+
+  const postsPath = path.join(Deno.cwd(), "posts")
   if (!Deno.statSync(postsPath).isDirectory) return []
 
   const files = Deno.readDirSync(postsPath)
