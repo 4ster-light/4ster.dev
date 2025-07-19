@@ -15,7 +15,7 @@ let cachedPosts: Post[] | null = null
 export function getPosts(): Post[] {
   if (cachedPosts) return cachedPosts
 
-  const postsPath = path.join(Deno.cwd(), "posts")
+  const postsPath = /* path.join(Deno.cwd(), "posts") */ "./posts"
   if (!Deno.statSync(postsPath).isDirectory) return []
 
   const files = Deno.readDirSync(postsPath)
