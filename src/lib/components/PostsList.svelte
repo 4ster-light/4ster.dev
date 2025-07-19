@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { formatDate, type Post } from "$lib/posts";
-
+  import { formatDate } from "$lib/posts";
+  import type { Post } from "$lib/types/post";
+  
   type Props = {
     posts: Post[];
   };
