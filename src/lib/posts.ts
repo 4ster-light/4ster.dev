@@ -1,4 +1,4 @@
-import matter from "gray-matter"
+import frontMatter from "front-matter"
 import * as path from "@jsr/std__path"
 
 export type Post = {
@@ -10,9 +10,12 @@ export type Post = {
   content: string
 }
 
-export function getPosts(): Post[] {
-  const postsPath = path.join(Deno.cwd(), "src", "posts")
+let cachedPosts: Post[] | null = null
 
+export function getPosts(): Post[] {
+  if (cachedPosts) return cachedPosts
+
+  const postsPath = path.join(Deno.cwd(), "src", "posts")
   if (!Deno.statSync(postsPath).isDirectory) return []
 
   const files = Deno.readDirSync(postsPath)
@@ -23,19 +26,26 @@ export function getPosts(): Post[] {
 
     const filePath = `${postsPath}/${file.name}`
     const fileContent = Deno.readTextFileSync(filePath)
-    const { data, content } = matter(fileContent)
+    const { attributes, body } = frontMatter<{
+      slug: string
+      title: string
+      description: string
+      date: string
+      tags?: string[]
+    }>(fileContent)
 
     posts.push({
       slug: file.name.replace(".md", ""),
-      title: data.title,
-      description: data.description,
-      date: data.date,
-      tags: data.tags || [],
-      content,
+      title: attributes.title,
+      description: attributes.description,
+      date: attributes.date,
+      tags: attributes.tags || [],
+      content: body,
     })
   }
 
   posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
+  cachedPosts = posts
 
   return posts
 }
