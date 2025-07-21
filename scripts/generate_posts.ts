@@ -1,22 +1,18 @@
 import frontMatter from "front-matter"
 import * as path from "@jsr/std__path"
-import type { Post } from "../src/lib/types/post"
+import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
+import { marked } from "marked"
 
-const postsPath = path.join(Deno.cwd(), "posts")
-const staticPath = path.join(Deno.cwd(), "static")
+const POSTS_PATH = path.join(Deno.cwd(), "posts")
+const STATIC_PATH = path.join(Deno.cwd(), "static")
 const posts: Post[] = []
 
-for (const file of Deno.readDirSync(postsPath)) {
+for (const file of Deno.readDirSync(POSTS_PATH)) {
   if (!file.name.endsWith(".md")) continue
 
-  const filePath = path.join(postsPath, file.name)
+  const filePath = path.join(POSTS_PATH, file.name)
   const fileContent = Deno.readTextFileSync(filePath)
-  const { attributes, body } = frontMatter<{
-    title: string
-    description: string
-    date: string
-    tags?: string[]
-  }>(fileContent)
+  const { attributes, body } = frontMatter<PostMeta>(fileContent)
 
   posts.push({
     slug: file.name.replace(".md", ""),
@@ -24,13 +20,13 @@ for (const file of Deno.readDirSync(postsPath)) {
     description: attributes.description,
     date: attributes.date,
     tags: attributes.tags || [],
-    content: body,
+    content: await marked(body),
   })
 }
 
 posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
 
-const jsonFilePath = path.join(staticPath, "posts.json")
+const jsonFilePath = path.join(STATIC_PATH, "posts.json")
 Deno.writeTextFileSync(jsonFilePath, JSON.stringify(posts, null, 2))
 
 console.log("\nPosts JSON file generated successfully\n")

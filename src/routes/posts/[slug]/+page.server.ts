@@ -1,14 +1,14 @@
-import { findPost, type Post } from "$lib/posts"
+import { findPost } from "$lib/posts"
+import type { Post } from "$lib/types/post"
 import { error } from "@sveltejs/kit"
-import { marked } from "marked"
 
-export async function load({ params }: {
+export function load({ params }: {
   params: {
     slug: string
   }
-}): Promise<{
+}): {
   post: Post
-}> {
+} {
   const post = findPost(params.slug)
 
   if (!post) throw error(404, "Post not found")
@@ -16,7 +16,7 @@ export async function load({ params }: {
   return {
     post: {
       ...post,
-      content: await marked(post.content),
+      content: post.content,
     },
   }
 }

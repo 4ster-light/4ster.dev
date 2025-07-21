@@ -6,7 +6,11 @@ let cachedPosts: Post[] | null = null
 export function getPosts(): Post[] {
   if (cachedPosts) return cachedPosts
 
-  const jsonFilePath = path.join(Deno.cwd(), "client", "posts.json")
+  let jsonFilePath: string
+  import.meta.env.DEV
+    ? jsonFilePath = path.join(Deno.cwd(), "static", "posts.json")
+    : jsonFilePath = path.join(Deno.cwd(), "client", "posts.json")
+
   const jsonContent = Deno.readTextFileSync(jsonFilePath)
   cachedPosts = JSON.parse(jsonContent) as Post[]
 

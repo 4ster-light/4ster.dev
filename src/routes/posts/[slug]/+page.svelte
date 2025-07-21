@@ -1,6 +1,7 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte";
-  import type { Post } from "$lib/posts";
+    import SupportButton from "$lib/components/SupportButton.svelte";
+  import type { Post } from "$lib/types/post";
 
   type Props = {
     data: {
@@ -30,6 +31,7 @@
 
 <nav class="footer-nav">
   <a href="/" class="back-link">← back</a>
+  <SupportButton />
 </nav>
 
 <style lang="scss">
@@ -71,6 +73,9 @@
   .footer-nav {
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     .back-link {
       color: var(--text-dim);

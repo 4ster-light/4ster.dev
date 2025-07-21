@@ -1,6 +1,6 @@
 <script lang="ts">
   import PostsList from "$lib/components/PostsList.svelte";
-  import type { Post } from "$lib/posts";
+  import type { Post } from "$lib/types/post";
 
   type Props = {
     data: {
@@ -45,7 +45,6 @@
       height: 100px;
       object-fit: cover;
       flex-shrink: 0;
-      align-self: flex-start;
     }
 
     p {

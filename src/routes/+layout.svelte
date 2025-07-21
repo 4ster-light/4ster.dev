@@ -2,6 +2,7 @@
   import "$lib/styles/typography.scss";
   import NavLink from "$lib/components/NavLink.svelte";
   import type { Snippet } from "svelte";
+    import SupportButton from "$lib/components/SupportButton.svelte";
 
   type Props = {
     children: Snippet;
@@ -17,14 +18,7 @@
       <div class="links">
         <NavLink href="https://twitter.com/4ster_light">X/Twitter</NavLink>
         <NavLink href="https://github.com/4ster-light">GitHub</NavLink>
-        <a href="https://ko-fi.com/B0B41HVJUR" target="_blank"
-          ><img
-            height="36"
-            style="border:0px;height:36px;"
-            src="https://storage.ko-fi.com/cdn/kofi3.png?v=6"
-            alt="Buy Me a Coffee at ko-fi.com"
-          /></a
-        >
+        <SupportButton />
       </div>
     </nav>
   </header>
