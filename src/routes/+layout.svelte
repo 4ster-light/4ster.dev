@@ -1,14 +1,14 @@
 <script lang="ts">
-  import "$lib/styles/typography.scss";
-  import NavLink from "$lib/components/NavLink.svelte";
-  import type { Snippet } from "svelte";
-    import SupportButton from "$lib/components/SupportButton.svelte";
+  import "$lib/styles/typography.scss"
+  import NavLink from "$lib/components/NavLink.svelte"
+  import type { Snippet } from "svelte"
+  import SupportButton from "$lib/components/SupportButton.svelte"
 
   type Props = {
-    children: Snippet;
-  };
+    children: Snippet
+  }
 
-  let { children }: Props = $props();
+  let { children }: Props = $props()
 </script>
 
 <div class="container">

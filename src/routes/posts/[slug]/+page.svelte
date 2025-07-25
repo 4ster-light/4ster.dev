@@ -1,16 +1,16 @@
 <script lang="ts">
-  import PostMeta from "$lib/components/PostMeta.svelte";
-    import SupportButton from "$lib/components/SupportButton.svelte";
-  import type { Post } from "$lib/types/post";
+  import PostMeta from "$lib/components/PostMeta.svelte"
+  import SupportButton from "$lib/components/SupportButton.svelte"
+  import type { Post } from "$lib/types/post"
 
   type Props = {
     data: {
-      post: Post;
-    };
-  };
+      post: Post
+    }
+  }
 
-  let props: Props = $props();
-  let post = props.data.post;
+  let props: Props = $props()
+  let post = props.data.post
 </script>
 
 <svelte:head>

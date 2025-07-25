@@ -1,20 +1,20 @@
 <script lang="ts">
-  import type { Snippet } from "svelte";
+  import type { Snippet } from "svelte"
 
   type Props = {
-    href: string;
-    class?: string;
-    target?: string;
-    rel?: string;
-    children: Snippet;
-  };
+    href: string
+    class?: string
+    target?: string
+    rel?: string
+    children: Snippet
+  }
 
   let {
     href,
     target = "_blank",
     rel = "noopener noreferrer",
     children,
-  }: Props = $props();
+  }: Props = $props()
 </script>
 
 <a {href} {target} {rel} class="nav-link">
@@ -23,7 +23,7 @@
 
 <style lang="scss">
   @use "$lib/styles/fonts";
-  
+
   a {
     font-family: fonts.$font-mono;
     color: var(--text-dim);

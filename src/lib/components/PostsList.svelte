@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { formatDate } from "$lib/posts";
-  import type { Post } from "$lib/types/post";
-  
-  type Props = {
-    posts: Post[];
-  };
+  import { formatDate } from "$lib/posts"
+  import type { Post } from "$lib/types/post"
 
-  let props: Props = $props();
+  type Props = {
+    posts: Post[]
+  }
+
+  let props: Props = $props()
 </script>
 
 <section class="posts">

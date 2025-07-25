@@ -1,14 +1,14 @@
 <script lang="ts">
-  import PostsList from "$lib/components/PostsList.svelte";
-  import type { Post } from "$lib/types/post";
+  import PostsList from "$lib/components/PostsList.svelte"
+  import type { Post } from "$lib/types/post"
 
   type Props = {
     data: {
-      posts: Post[];
-    };
-  };
+      posts: Post[]
+    }
+  }
 
-  let props: Props = $props();
+  let props: Props = $props()
 </script>
 
 <svelte:head>
@@ -22,13 +22,11 @@
 <section class="intro">
   <img src="/pfp.jpg" alt="Avatar" class="avatar" />
   <p>
-    Hi, I am <strong>David Vivar Bogónez</strong>, a Spanish programmer most
-    known as <strong>Aster</strong>, I am a computer engineering undergraduate
-    at
-    <a href="https://uclm.es/" target="_blank" rel="noopener">UCLM</a>. I am
-    very passionate about software, especially fullstack web development and
-    game development, as well as other areas with languages/technologies like
-    Typescript, Svelte, C#/F# and Rust.
+    Hi, I am <strong>David Vivar Bogónez</strong>, a Spanish programmer most known as <strong
+    >Aster</strong>, I am a computer engineering undergraduate at
+    <a href="https://uclm.es/" target="_blank" rel="noopener">UCLM</a>. I am very passionate about
+    software, especially fullstack web development and game development, as well as other areas with
+    languages/technologies like Typescript, Svelte, C#/F# and Rust.
   </p>
 </section>
 <hr />

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { formatDate } from "$lib/posts";
+  import { formatDate } from "$lib/posts"
 
   type Props = {
-    date: string;
-    tags?: string[];
-  };
+    date: string
+    tags?: string[]
+  }
 
-  let props: Props = $props();
+  let props: Props = $props()
 </script>
 
 <div class="meta">
