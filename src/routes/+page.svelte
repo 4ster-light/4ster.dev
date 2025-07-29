@@ -1,14 +1,12 @@
 <script lang="ts">
   import PostsList from "$lib/components/PostsList.svelte"
+  import { error } from "@sveltejs/kit"
   import type { Post } from "$lib/types/post"
 
-  type Props = {
-    data: {
-      posts: Post[]
-    }
-  }
-
-  let props: Props = $props()
+  const getPosts = async () =>
+    await fetch("/posts.json").then((res) => res.json()).catch(() => {
+      throw error(404, "No posts found")
+    }) as Post[]
 </script>
 
 <svelte:head>
@@ -16,6 +14,22 @@
   <meta
     name="description"
     content="David Vivar Bogónez - A minimal blog about programming, technology, and life."
+  />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="✰λster✰" />
+  <meta
+    property="og:description"
+    content="Personal blog about programming and software in general by David Vivar Bogónez"
+  />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary" />
+  <meta property="twitter:title" content="✰λster✰" />
+  <meta
+    property="twitter:description"
+    content="Personal blog about programming and software in general by David Vivar Bogónez"
   />
 </svelte:head>
 
@@ -30,7 +44,17 @@
   </p>
 </section>
 <hr />
-<PostsList posts={props.data.posts} />
+
+<section class="posts">
+  <h2>Blog Posts</h2>
+  {#await getPosts()}
+    <h1>Loading posts...</h1>
+  {:then posts}
+    <PostsList {posts} />
+  {:catch error}
+    <h1>Error loading posts: {error.message}</h1>
+  {/await}
+</section>
 
 <style lang="scss">
   .intro {
@@ -68,6 +92,14 @@
         margin-top: 0;
         margin-bottom: 0;
       }
+    }
+  }
+
+  .posts {
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent-bright);
     }
   }
 </style>

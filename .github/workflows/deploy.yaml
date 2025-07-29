@@ -26,10 +26,7 @@ jobs:
           deno-version: v2.x
 
       - name: Install dependencies with pnpm
-        run: |
-          pnpm install --ignore-scripts
-          pnpm approve-builds
-          pnpm install
+        run: pnpm install
 
       - name: Build step
         run: deno task build

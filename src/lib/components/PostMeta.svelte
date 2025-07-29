@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { formatDate } from "$lib/posts"
-
   type Props = {
     date: string
     tags?: string[]
@@ -10,7 +8,13 @@
 </script>
 
 <div class="meta">
-  <time datetime={props.date}>{formatDate(new Date(props.date))}</time>
+  <time datetime={props.date}>{
+    new Date(props.date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }</time>
   {#if props.tags?.length}
     <div class="tags">
       {#each props.tags as tag}

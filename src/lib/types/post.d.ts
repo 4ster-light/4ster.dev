@@ -1,15 +1,11 @@
-export type Post = {
-  slug: string
-  title: string
-  description: string
-  date: string
-  tags?: string[]
-  content: string
-}
-
 export type PostMeta = {
   title: string
   description: string
   date: string
-  tags?: string[]
+  tags: string[]
+}
+
+export type Post = PostMeta & {
+  slug: string
+  content: string
 }

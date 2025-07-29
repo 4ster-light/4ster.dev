@@ -1,32 +1,51 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte"
   import SupportButton from "$lib/components/SupportButton.svelte"
+  import { page } from "$app/state"
+  import { error } from "@sveltejs/kit"
   import type { Post } from "$lib/types/post"
 
-  type Props = {
-    data: {
-      post: Post
-    }
-  }
-
-  let props: Props = $props()
-  let post = props.data.post
+  const getPost = async () =>
+    await fetch("/posts.json")
+      .then((res) => res.json())
+      .then((posts: Post[]) => posts.find((post) => post.slug === page.params.slug as string))
+      .catch(() => {
+        throw error(404, `Post ${page.params.slug} not found`)
+      }) as Post
 </script>
 
 <svelte:head>
-  <title>{post.title} - ✰λster✰</title>
-  <meta name="description" content={post.description} />
+  {#await getPost() then post}
+    <title>{post.title} - ✰λster✰</title>
+    <meta name="description" content={post.description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={post.title} />
+    <meta property="og:description" content={post.description} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content={post.title} />
+    <meta property="twitter:description" content={post.description} />
+  {/await}
 </svelte:head>
 
 <article class="post">
-  <header class="header">
-    <h1>{post.title}</h1>
-    <PostMeta date={post.date} tags={post.tags} />
-  </header>
+  {#await getPost()}
+    <h1>Loading Post...</h1>
+  {:then post}
+    <header class="header">
+      <h1>{post.title}</h1>
+      <PostMeta date={post.date} tags={post.tags} />
+    </header>
 
-  <div class="content">
-    {@html post.content}
-  </div>
+    <div class="content">
+      {@html post.content}
+    </div>
+  {:catch error}
+    <h1>Error loading post: {error.message}</h1>
+  {/await}
 </article>
 
 <nav class="footer-nav">
