@@ -14,5 +14,3 @@ It is rolled as a custom SSG where the posts are stored in a `posts.json` file i
 directory already parsed as html at build time along with its metadata and then served directly at
 runtime. The script in charge of this is
 [scripts/generate_posts.ts](https://github.com/4ster-light/blog/blob/main/scripts/generate_posts.ts).
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B41HVJUR)
