@@ -99,14 +99,9 @@ a {
 
 pre {
   font-family: fonts.$font-mono;
-  background: var(--code-bg);
   border: 1px solid var(--code-border);
-  border-radius: 4px;
-  padding: 0.75rem;
+  border-radius: 8px;
   overflow-x: auto;
-  margin: 1rem 0;
-  font-size: 0.85rem;
-  line-height: 1.4;
 
   code {
     background: none;

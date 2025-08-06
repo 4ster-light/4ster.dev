@@ -4,6 +4,8 @@
   import { page } from "$app/state"
   import { error } from "@sveltejs/kit"
   import type { Post } from "$lib/types/post"
+  import "highlight.js/styles/github-dark.css"
+  import LoadingSpinner from "$lib/components/LoadingSpinner.svelte"
 
   const getPost = async () =>
     await fetch("/posts.json")
@@ -33,7 +35,7 @@
 
 <article class="post">
   {#await getPost()}
-    <h1>Loading Post...</h1>
+    <LoadingSpinner />
   {:then post}
     <header class="header">
       <h1>{post.title}</h1>
@@ -44,7 +46,7 @@
       {@html post.content}
     </div>
   {:catch error}
-    <h1>Error loading post: {error.message}</h1>
+    <h1 class="error-message">Error loading post: {error.message}</h1>
   {/await}
 </article>
 

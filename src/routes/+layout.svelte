@@ -11,6 +11,18 @@
   let { children }: Props = $props()
 </script>
 
+<svelte:head>
+  <meta
+    name="description"
+    content="Personal blog about programming, technology, and life."
+  />
+  <meta name="author" content="David Vivar Bogónez" />
+
+  <link rel="icon" href="/pfp.jpg" />
+  <meta property="og:image" content="/banner.png" />
+  <meta name="twitter:image" content="/banner.png" />
+</svelte:head>
+
 <div class="container">
   <header class="header">
     <nav class="nav">

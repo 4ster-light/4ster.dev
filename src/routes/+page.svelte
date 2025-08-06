@@ -2,6 +2,7 @@
   import PostsList from "$lib/components/PostsList.svelte"
   import { error } from "@sveltejs/kit"
   import type { Post } from "$lib/types/post"
+  import LoadingSpinner from "$lib/components/LoadingSpinner.svelte"
 
   const getPosts = async () =>
     await fetch("/posts.json").then((res) => res.json()).catch(() => {
@@ -11,12 +12,7 @@
 
 <svelte:head>
   <title>✰λster✰</title>
-  <meta
-    name="description"
-    content="David Vivar Bogónez - A minimal blog about programming, technology, and life."
-  />
 
-  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="✰λster✰" />
   <meta
@@ -24,7 +20,6 @@
     content="Personal blog about programming and software in general by David Vivar Bogónez"
   />
 
-  <!-- Twitter -->
   <meta property="twitter:card" content="summary" />
   <meta property="twitter:title" content="✰λster✰" />
   <meta
@@ -48,7 +43,7 @@
 <section class="posts">
   <h2>Blog Posts</h2>
   {#await getPosts()}
-    <h1>Loading posts...</h1>
+    <LoadingSpinner />
   {:then posts}
     <PostsList {posts} />
   {:catch error}
