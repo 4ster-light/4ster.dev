@@ -8,24 +8,34 @@
     await fetch("/posts.json").then((res) => res.json()).catch(() => {
       throw error(404, "No posts found")
     }) as Post[]
+
+  const description = "Personal blog about programming, technology, and life." as const
 </script>
 
 <svelte:head>
   <title>✰λster✰</title>
+  <meta
+    name="description"
+    content={description}
+  />
+  <meta name="author" content="David Vivar Bogónez" />
+  <link rel="icon" href="/pfp.jpg" />
 
-  <meta property="og:type" content="website" />
   <meta property="og:title" content="✰λster✰" />
-  <meta
-    property="og:description"
-    content="Personal blog about programming and software in general by David Vivar Bogónez"
-  />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/banner.png" />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content="https://aster.deno.dev/" />
+  <meta property="og:site_name" content="✰λster✰" />
+  <meta property="og:locale" content="en_US">
 
-  <meta property="twitter:card" content="summary" />
-  <meta property="twitter:title" content="✰λster✰" />
-  <meta
-    property="twitter:description"
-    content="Personal blog about programming and software in general by David Vivar Bogónez"
-  />
+  <meta name="twitter:title" content="✰λster✰" />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@4ster_light" />
+  <meta name="twitter:image" content="/banner.png" />
+  <meta property="twitter:image:height" content="600" />
+  <meta property="twitter:image:width" content="1200" />
 </svelte:head>
 
 <section class="intro">

@@ -17,19 +17,27 @@
 </script>
 
 <svelte:head>
+  <meta name="author" content="David Vivar Bogónez" />
+  <link rel="icon" href="/pfp.jpg" />
+
   {#await getPost() then post}
-    <title>{post.title} - ✰λster✰</title>
+    <title>{post.title}</title>
     <meta name="description" content={post.description} />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="article" />
     <meta property="og:title" content={post.title} />
+    <meta property="og:type" content="article" />
     <meta property="og:description" content={post.description} />
+    <meta property="og:url" content={`https://aster.deno.dev/posts/${post.slug}`} />
+    <meta property="og:site_name" content={post.title} />
+    <meta property="og:locale" content="en_US">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content={post.title} />
-    <meta property="twitter:description" content={post.description} />
+    <meta name="twitter:title" content={post.title} />
+    <meta name="twitter:description" content={post.description} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@4ster_light" />
+    <meta name="twitter:image" content="/banner.png" />
+    <meta property="twitter:image:height" content="600" />
+    <meta property="twitter:image:width" content="1200" />
   {/await}
 </svelte:head>
 
