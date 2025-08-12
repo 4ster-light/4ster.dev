@@ -3,6 +3,7 @@
   import NavLink from "$lib/components/NavLink.svelte"
   import type { Snippet } from "svelte"
   import SupportButton from "$lib/components/SupportButton.svelte"
+  import { GITHUB_URL, X_URL } from "$lib/urls"
 
   type Props = {
     children: Snippet
@@ -16,8 +17,8 @@
     <nav class="nav">
       <a href="/" class="logo">✰λster✰</a>
       <div class="links">
-        <NavLink href="https://twitter.com/4ster_light">X/Twitter</NavLink>
-        <NavLink href="https://github.com/4ster-light">GitHub</NavLink>
+        <NavLink href={X_URL}>X/Twitter</NavLink>
+        <NavLink href={GITHUB_URL}>GitHub</NavLink>
         <SupportButton />
       </div>
     </nav>

@@ -1,5 +1,9 @@
+<script lang="ts">
+  import { KOFI_URL } from "$lib/urls"
+</script>
+
 <a
-  href="https://ko-fi.com/4ster"
+  href={KOFI_URL}
   rel="noopener noreferrer"
   target="_blank"
   class="support-button"

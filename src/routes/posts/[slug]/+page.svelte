@@ -6,9 +6,10 @@
   import type { Post } from "$lib/types/post"
   import "highlight.js/styles/github-dark.css"
   import LoadingSpinner from "$lib/components/LoadingSpinner.svelte"
+  import { BANNER_URL, PFP_URL, POSTS_URL } from "$lib/urls"
 
-  const getPost = async () =>
-    await fetch("/posts.json")
+  const getPost = async (): Promise<Post> =>
+    await fetch(POSTS_URL)
       .then((res) => res.json())
       .then((posts: Post[]) => posts.find((post) => post.slug === page.params.slug as string))
       .catch(() => {
@@ -18,7 +19,7 @@
 
 <svelte:head>
   <meta name="author" content="David Vivar Bogónez" />
-  <link rel="icon" href="/pfp.jpg" />
+  <link rel="icon" href={PFP_URL} />
 
   {#await getPost() then post}
     <title>{post.title}</title>
@@ -27,7 +28,7 @@
     <meta property="og:title" content={post.title} />
     <meta property="og:type" content="article" />
     <meta property="og:description" content={post.description} />
-    <meta property="og:url" content={`https://aster.deno.dev/posts/${post.slug}`} />
+    <meta property="og:url" content={`${POSTS_URL}/${post.slug}`} />
     <meta property="og:site_name" content={post.title} />
     <meta property="og:locale" content="en_US">
 
@@ -35,7 +36,7 @@
     <meta name="twitter:description" content={post.description} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@4ster_light" />
-    <meta name="twitter:image" content="/banner.png" />
+    <meta name="twitter:image" content={BANNER_URL} />
     <meta property="twitter:image:height" content="600" />
     <meta property="twitter:image:width" content="1200" />
   {/await}
