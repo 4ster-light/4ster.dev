@@ -4,9 +4,14 @@
   import { page } from "$app/state"
   import { error } from "@sveltejs/kit"
   import type { Post } from "$lib/types/post"
-  import "highlight.js/styles/github-dark.css"
   import LoadingSpinner from "$lib/components/LoadingSpinner.svelte"
   import { BANNER_URL, PFP_URL, POSTS_URL } from "$lib/urls"
+
+  $effect(() => {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      import("highlight.js/styles/github-dark.css")
+    else import("highlight.js/styles/github.css")
+  })
 
   const getPost = async (): Promise<Post> =>
     await fetch(POSTS_URL)
