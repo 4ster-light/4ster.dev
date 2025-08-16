@@ -2,6 +2,7 @@ import frontMatter from "front-matter"
 import * as path from "@std/path"
 import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
+import { gfmHeadingId } from "marked-gfm-heading-id"
 import hljs from "highlight.js"
 import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
 
@@ -9,6 +10,7 @@ const POSTS_PATH = path.join(Deno.cwd(), "posts")
 const STATIC_PATH = path.join(Deno.cwd(), "static")
 
 const marked = new Marked(
+  gfmHeadingId(),
   markedHighlight({
     emptyLangClass: "hljs",
     langPrefix: "hljs language-",

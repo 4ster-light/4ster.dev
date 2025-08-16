@@ -19,6 +19,7 @@
     "front-matter": "^4.0.2",
     "highlight.js": "^11.11.1",
     "marked": "^16.1.1",
+    "marked-gfm-heading-id": "^4.1.2",
     "marked-highlight": "^2.2.2",
     "sass-embedded": "^1.89.2",
     "svelte": "^5.0.0",

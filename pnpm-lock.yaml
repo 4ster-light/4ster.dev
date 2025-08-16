@@ -26,6 +26,9 @@ importers:
       marked:
         specifier: ^16.1.1
         version: 16.1.2
+      marked-gfm-heading-id:
+        specifier: ^4.1.2
+        version: 4.1.2(marked@16.1.2)
       marked-highlight:
         specifier: ^2.2.2
         version: 2.2.2(marked@16.1.2)
@@ -512,6 +515,9 @@ packages:
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
+  github-slugger@2.0.0:
+    resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
+
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
@@ -569,6 +575,11 @@ packages:
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
+
+  marked-gfm-heading-id@4.1.2:
+    resolution: {integrity: sha512-EQ1WiEGHJh0C8viU+hbXbhHyWTDgEia2i96fiSemm2wdYER6YBw/9QI5TB6YFTqFfmMOxBFXPcPJtlgD0fVV2w==}
+    peerDependencies:
+      marked: '>=13 <17'
 
   marked-highlight@2.2.2:
     resolution: {integrity: sha512-KlHOP31DatbtPPXPaI8nx1KTrG3EW0Z5zewCwpUj65swbtKOTStteK3sNAjBqV75Pgo3fNEVNHeptg18mDuWgw==}
@@ -1213,6 +1224,8 @@ snapshots:
 
   function-bind@1.1.2: {}
 
+  github-slugger@2.0.0: {}
+
   glob@8.1.0:
     dependencies:
       fs.realpath: 1.0.0
@@ -1268,6 +1281,11 @@ snapshots:
   magic-string@0.30.17:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.4
+
+  marked-gfm-heading-id@4.1.2(marked@16.1.2):
+    dependencies:
+      github-slugger: 2.0.0
+      marked: 16.1.2
 
   marked-highlight@2.2.2(marked@16.1.2):
     dependencies:

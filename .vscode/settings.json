@@ -1,3 +1,11 @@
 {
-  "deno.enable": false
+  "deno.enable": true,
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "posts/*",
+        "cmd": "deno fmt && deno task generate && clear"
+      }
+    ]
+  }
 }
