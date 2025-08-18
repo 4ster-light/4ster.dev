@@ -87,12 +87,12 @@ differently, etc etc.
 
 #### 2. Types of Tokens
 
-As we just mentioned, we need to define the Tokens that exist in our language, and since Python
-lacks enums we will just create a class mapping them to their name in a string for a similar result
-(this is considered good practice instead of repeating strings everywhere):
+As we just mentioned, we need to define the Tokens that exist in our language, we will just define
+an Enum with each of them (this is considered good practice instead of repeating strings
+everywhere):
 
 ```python
-class TokenType:
+class TokenType(Enum):
     LParen = "LParen" # (
     RParen = "RParen" # )
     NotOp = "NotOp" # !
@@ -110,7 +110,7 @@ its type and its _"lexeme"_ (its string form):
 ```python
 @dataclass(frozen=True)
 class Token:
-    type: str
+    type: TokenType
     lexeme: Optional[str] = None
 ```
 
@@ -363,7 +363,7 @@ Just as we did with the lexer we are going to take a look at each of the helper 
    expected type:
 
    ```python
-   def _consume(self, expected_type: str) -> None:
+   def _consume(self, expected_type: TokenType) -> None:
        if self._peek().type == expected_type:
            self._position += 1
        else:
@@ -530,6 +530,12 @@ As always, thanks for reading and if you have any questions or comments feel fre
 on [X/Twitter](https://x.com/4ster_light) or by mail at
 [davidvivarbogonez@gmail.com](mailto:davidvivarbogonez@gmail.com), I am always open to criticism,
 just like I hope you did by reading this, I am always trying to learn and improve.
+
+> Also, as a bonus, you can find a version of this project in F# in
+> [github.com/4ster-light/f-logic](https://github.com/4ster-light/f-logic/), for those who are
+> interested and wanna expand their learning further, you will find interesting ways that Functional
+> Programming helps in this kind of problems, as well as algebraic data types, discriminated unions,
+> pattern matching, etc.
 
 ## Sponsor
 
