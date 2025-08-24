@@ -1,4 +1,4 @@
-import frontMatter from "front-matter"
+import { extract } from "@std/front-matter/yaml"
 import * as path from "@std/path"
 import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
@@ -8,6 +8,7 @@ import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
 
 const POSTS_PATH = path.join(Deno.cwd(), "posts")
 const STATIC_PATH = path.join(Deno.cwd(), "static")
+const JSON_PATH = path.join(STATIC_PATH, "posts.json")
 
 const marked = new Marked(
   gfmHeadingId(),
@@ -23,25 +24,25 @@ const marked = new Marked(
 
 const posts: Post[] = []
 
-for (const file of Deno.readDirSync(POSTS_PATH)) {
+for await (const file of Deno.readDir(POSTS_PATH)) {
   if (!file.name.endsWith(".md")) continue
+
   const filePath = path.join(POSTS_PATH, file.name)
-  const fileContent = Deno.readTextFileSync(filePath)
-  const { attributes, body } = frontMatter<PostMeta>(fileContent)
+  const fileContent = await Deno.readTextFile(filePath)
+
+  const { attrs, body } = extract<PostMeta>(fileContent)
 
   posts.push({
     slug: file.name.replace(".md", ""),
-    title: attributes.title,
-    description: attributes.description,
-    date: attributes.date,
-    tags: attributes.tags || [],
+    title: attrs.title as string,
+    description: attrs.description as string,
+    date: attrs.date as string,
+    tags: (attrs.tags as string[]) || [],
     content: await marked.parse(body),
   })
 }
 
 posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
+await Deno.writeTextFile(JSON_PATH, JSON.stringify(posts, null, 2))
 
-const jsonFilePath = path.join(STATIC_PATH, "posts.json")
-Deno.writeTextFileSync(jsonFilePath, JSON.stringify(posts, null, 2))
-
-console.log("\nPosts JSON file generated successfully\n")
+console.info("\nPosts JSON file generated successfully\n")

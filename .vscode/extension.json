@@ -1,5 +1,7 @@
 {
   "recommendations": [
-    "emeraldwalk.runonsave"
+    "emeraldwalk.runonsave",
+    "denoland.vscode-deno",
+    "svelte.svelte-vscode"
   ]
 }

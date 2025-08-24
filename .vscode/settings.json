@@ -4,7 +4,7 @@
     "commands": [
       {
         "match": "posts/*",
-        "cmd": "deno fmt && deno task generate && clear"
+        "cmd": "deno fmt && deno task generate"
       }
     ]
   }
