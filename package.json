@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "deno task generate && vite dev",
     "build": "deno task generate && vite build",
-    "generate": "deno run --allow-read --allow-write scripts/generate_posts.ts",
-    "preview": "cd build && deno run -A index.js",
+    "generate": "deno task prepare && deno run --allow-read --allow-write scripts/generate_posts.ts",
+    "preview": "deno task build && cd build && deno run -A index.js",
     "prepare": "svelte-kit sync || echo ''",
     "check": "deno fmt && deno lint && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "svelte-check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"

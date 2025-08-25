@@ -1,15 +1,10 @@
 <script lang="ts">
   import "$lib/styles/typography.scss"
   import NavLink from "$lib/components/NavLink.svelte"
-  import type { Snippet } from "svelte"
   import SupportButton from "$lib/components/SupportButton.svelte"
   import { GITHUB_URL, X_URL } from "$lib/urls"
 
-  type Props = {
-    children: Snippet
-  }
-
-  let { children }: Props = $props()
+  let { children } = $props()
 </script>
 
 <div class="container">

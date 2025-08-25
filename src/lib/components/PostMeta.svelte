@@ -15,17 +15,15 @@
       day: "numeric",
     })
   }</time>
-  {#if props.tags?.length}
-    <div class="tags">
+  <div class="tags">
+    {#if props.tags?.length}
       {#each props.tags as tag}
         <span class="tag">{tag}</span>
       {/each}
-    </div>
-  {:else}
-    <div class="tags">
+    {:else}
       <span class="tag">UNCATEGORISED</span>
-    </div>
-  {/if}
+    {/if}
+  </div>
 </div>
 
 <style lang="scss">

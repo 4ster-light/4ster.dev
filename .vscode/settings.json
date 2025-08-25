@@ -5,6 +5,10 @@
       {
         "match": "posts/*",
         "cmd": "deno fmt && deno task generate"
+      },
+      {
+        "match": "src/*",
+        "cmd": "deno fmt && deno lint && deno task prepare"
       }
     ]
   }

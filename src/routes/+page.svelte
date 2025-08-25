@@ -1,23 +1,18 @@
 <script lang="ts">
   import PostsList from "$lib/components/PostsList.svelte"
-  import { error } from "@sveltejs/kit"
+  import type { PageProps } from "./$types"
   import type { Post } from "$lib/types/post"
-  import LoadingSpinner from "$lib/components/LoadingSpinner.svelte"
-  import { BANNER_URL, PFP_URL, POSTS_URL, UNI_URL, URL } from "$lib/urls"
+  import { BANNER_URL, PFP_URL, UNI_URL, URL } from "$lib/urls"
 
-  const getPosts = async () =>
-    await fetch(POSTS_URL).then((res) => res.json()).catch(() => {
-      throw error(404, "No posts found")
-    }) as Post[]
-
-  const description = "Personal blog about programming, technology, and life." as const
+  let { data }: PageProps = $props()
+  const posts: Post[] = data.posts
 </script>
 
 <svelte:head>
   <title>✰λster✰</title>
   <meta
     name="description"
-    content={description}
+    content="Personal blog about programming, technology, and life."
   />
   <meta name="author" content="David Vivar Bogónez" />
   <link rel="icon" href="/pfp.jpg" />
@@ -25,13 +20,19 @@
   <meta property="og:title" content="✰λster✰" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content={BANNER_URL} />
-  <meta property="og:description" content={description} />
+  <meta
+    property="og:description"
+    content="Personal blog about programming, technology, and life."
+  />
   <meta property="og:url" content={URL} />
   <meta property="og:site_name" content="✰λster✰" />
   <meta property="og:locale" content="en_US">
 
   <meta name="twitter:title" content="✰λster✰" />
-  <meta name="twitter:description" content={description} />
+  <meta
+    name="twitter:description"
+    content="Personal blog about programming, technology, and life."
+  />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@4ster_light" />
   <meta name="twitter:image" content={BANNER_URL} />
@@ -53,13 +54,7 @@
 
 <section class="posts">
   <h2>Blog Posts</h2>
-  {#await getPosts()}
-    <LoadingSpinner />
-  {:then posts}
-    <PostsList {posts} />
-  {:catch error}
-    <h1>Error loading posts: {error.message}</h1>
-  {/await}
+  <PostsList {posts} />
 </section>
 
 <style lang="scss">

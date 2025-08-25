@@ -22,9 +22,13 @@
     </div>
     <p class="description">{post.description}</p>
     <div class="tags">
-      {#each post.tags as tag}
-        <span class="tag">{tag}</span>
-      {/each}
+      {#if post.tags?.length}
+        {#each post.tags as tag}
+          <span class="tag">{tag}</span>
+        {/each}
+      {:else}
+        <span class="tag">UNCATEGORISED</span>
+      {/if}
     </div>
   </article>
 {/each}

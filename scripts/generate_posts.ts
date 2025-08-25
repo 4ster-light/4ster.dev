@@ -7,8 +7,7 @@ import hljs from "highlight.js"
 import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
 
 const POSTS_PATH = path.join(Deno.cwd(), "posts")
-const STATIC_PATH = path.join(Deno.cwd(), "static")
-const JSON_PATH = path.join(STATIC_PATH, "posts.json")
+const JSON_PATH = path.join(Deno.cwd(), "src", "lib", "posts.json")
 
 const marked = new Marked(
   gfmHeadingId(),
@@ -45,4 +44,4 @@ for await (const file of Deno.readDir(POSTS_PATH)) {
 posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
 await Deno.writeTextFile(JSON_PATH, JSON.stringify(posts, null, 2))
 
-console.info("\nPosts JSON file generated successfully\n")
+console.info(`\n${JSON_PATH} file generated successfully\n`)
