@@ -7,7 +7,7 @@ import hljs from "highlight.js"
 import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
 
 const POSTS_PATH = path.join(Deno.cwd(), "posts")
-const JSON_PATH = path.join(Deno.cwd(), "src", "lib", "posts.json")
+const JSON_PATH = path.join(Deno.cwd(), "src", "lib", "assets", "posts.json")
 
 const marked = new Marked(
   gfmHeadingId(),

@@ -2,7 +2,8 @@
   import PostsList from "$lib/components/PostsList.svelte"
   import type { PageProps } from "./$types"
   import type { Post } from "$lib/types/post"
-  import { BANNER_URL, PFP_URL, UNI_URL, URL } from "$lib/urls"
+  import { BANNER_URL, UNI_URL, URL } from "$lib/urls"
+  import PFP from "$lib/assets/pfp.jpg"
 
   let { data }: PageProps = $props()
   const posts: Post[] = data.posts
@@ -15,7 +16,7 @@
     content="Personal blog about programming, technology, and life."
   />
   <meta name="author" content="David Vivar Bogónez" />
-  <link rel="icon" href="/pfp.jpg" />
+  <link rel="icon" href={PFP} />
 
   <meta property="og:title" content="✰λster✰" />
   <meta property="og:type" content="website" />
@@ -41,7 +42,7 @@
 </svelte:head>
 
 <section class="intro">
-  <img src={PFP_URL} alt="Avatar" class="avatar" />
+  <img src={PFP} alt="Avatar" class="avatar" />
   <p>
     Hi, I am <strong>David Vivar Bogónez</strong>, a Spanish programmer most known as <strong
     >Aster</strong>, I am a computer engineering undergraduate at
@@ -73,7 +74,10 @@
     p {
       flex-grow: 1;
       margin-bottom: 0;
-      text-align: justify;
+
+      @media (min-width: 768px) {
+        text-align: justify;
+      }
 
       strong {
         color: var(--accent);

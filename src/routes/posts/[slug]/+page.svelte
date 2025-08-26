@@ -3,21 +3,20 @@
   import SupportButton from "$lib/components/SupportButton.svelte"
   import type { Post } from "$lib/types/post"
   import type { PageProps } from "./$types"
-  import { BANNER_URL, PFP_URL, POSTS_URL } from "$lib/urls"
+  import { BANNER_URL, POSTS_URL } from "$lib/urls"
+  import PFP from "$lib/assets/pfp.jpg"
 
   let { data }: PageProps = $props()
   const post: Post = data.post
 
-  $effect(() => {
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
-      import("highlight.js/styles/github-dark.css")
-    else import("highlight.js/styles/github.css")
-  })
+  globalThis.matchMedia && globalThis.matchMedia("(prefers-color-scheme: dark)").matches
+    ? import("highlight.js/styles/github-dark.css")
+    : import("highlight.js/styles/github.css")
 </script>
 
 <svelte:head>
   <meta name="author" content="David Vivar Bogónez" />
-  <link rel="icon" href={PFP_URL} />
+  <link rel="icon" href={PFP} />
 
   <title>{post.title}</title>
   <meta name="description" content={post.description} />
@@ -28,6 +27,7 @@
   <meta property="og:url" content={`${POSTS_URL}${post.slug}`} />
   <meta property="og:site_name" content={post.title} />
   <meta property="og:locale" content="en_US">
+  <meta property="og:image" content={BANNER_URL} />
 
   <meta name="twitter:title" content={post.title} />
   <meta name="twitter:description" content={post.description} />
