@@ -19,7 +19,7 @@
     "marked": "^16.1.1",
     "marked-gfm-heading-id": "^4.1.2",
     "marked-highlight": "^2.2.2",
-    "sass-embedded": "^1.89.2",
+    "sass-embedded": "^1.91.0",
     "svelte": "^5.0.0",
     "svelte-adapter-deno": "^0.9.1",
     "svelte-check": "^4.0.0",

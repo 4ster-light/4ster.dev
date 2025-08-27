@@ -21,6 +21,7 @@
   },
   "imports": {
     "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
-    "@std/path": "jsr:@std/path@^1.1.2"
+    "@std/path": "jsr:@std/path@^1.1.2",
+    "@std/text": "jsr:@std/text@^1.0.16"
   }
 }

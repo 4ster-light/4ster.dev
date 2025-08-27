@@ -1,5 +1,5 @@
 {
-  "deno.enable": false,
+  "deno.enable": true,
   "emeraldwalk.runonsave": {
     "commands": [
       {

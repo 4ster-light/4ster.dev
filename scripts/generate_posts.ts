@@ -1,13 +1,16 @@
 import { extract } from "@std/front-matter/yaml"
-import * as path from "@std/path"
+import { join } from "@std/path"
+import { toKebabCase } from "@std/text"
+
 import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
 import { gfmHeadingId } from "marked-gfm-heading-id"
 import hljs from "highlight.js"
+
 import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
 
-const POSTS_PATH = path.join(Deno.cwd(), "posts")
-const JSON_PATH = path.join(Deno.cwd(), "src", "lib", "assets", "posts.json")
+const POSTS_PATH = join(Deno.cwd(), "posts")
+const JSON_PATH = join(Deno.cwd(), "src", "lib", "assets", "posts.json")
 
 const marked = new Marked(
   gfmHeadingId(),
@@ -26,13 +29,13 @@ const posts: Post[] = []
 for await (const file of Deno.readDir(POSTS_PATH)) {
   if (!file.name.endsWith(".md")) continue
 
-  const filePath = path.join(POSTS_PATH, file.name)
+  const filePath = join(POSTS_PATH, file.name)
   const fileContent = await Deno.readTextFile(filePath)
 
   const { attrs, body } = extract<PostMeta>(fileContent)
 
   posts.push({
-    slug: file.name.replace(".md", ""),
+    slug: toKebabCase(file.name.replace(".md", "")),
     title: attrs.title as string,
     description: attrs.description as string,
     date: attrs.date as string,
