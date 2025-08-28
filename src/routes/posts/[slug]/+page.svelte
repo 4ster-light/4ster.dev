@@ -1,7 +1,7 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte"
   import SupportButton from "$lib/components/SupportButton.svelte"
-  import type { Post } from "$lib/types/post"
+  import type { Post } from "$lib/posts"
   import type { PageProps } from "./$types"
   import { BANNER_URL, POSTS_URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"

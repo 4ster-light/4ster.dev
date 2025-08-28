@@ -9,7 +9,7 @@
       ".svelte-kit",
       "node_modules",
       "pnpm-lock.yaml",
-      "src/lib/posts.json"
+      "pnpm-workspace.yaml"
     ]
   },
   "lint": {
@@ -18,10 +18,5 @@
       ".svelte-kit",
       "node_modules"
     ]
-  },
-  "imports": {
-    "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
-    "@std/path": "jsr:@std/path@^1.1.2",
-    "@std/text": "jsr:@std/text@^1.0.16"
   }
 }

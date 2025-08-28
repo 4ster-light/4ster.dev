@@ -7,10 +7,19 @@ import { markedHighlight } from "marked-highlight"
 import { gfmHeadingId } from "marked-gfm-heading-id"
 import hljs from "highlight.js"
 
-import type { Post, PostMeta } from "../src/lib/types/post.d.ts"
+export type PostMeta = {
+  title: string
+  description: string
+  date: string
+  tags: string[]
+}
+
+export type Post = PostMeta & {
+  slug: string
+  content: string
+}
 
 const POSTS_PATH = join(Deno.cwd(), "posts")
-const JSON_PATH = join(Deno.cwd(), "src", "lib", "assets", "posts.json")
 
 const marked = new Marked(
   gfmHeadingId(),
@@ -45,6 +54,5 @@ for await (const file of Deno.readDir(POSTS_PATH)) {
 }
 
 posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
-await Deno.writeTextFile(JSON_PATH, JSON.stringify(posts, null, 2))
 
-console.info(`\n${JSON_PATH} file generated successfully\n`)
+export default posts

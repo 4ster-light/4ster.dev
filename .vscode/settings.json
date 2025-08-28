@@ -3,11 +3,7 @@
   "emeraldwalk.runonsave": {
     "commands": [
       {
-        "match": "posts/*",
-        "cmd": "deno fmt && deno task generate"
-      },
-      {
-        "match": "src/*",
+        "match": "./src/*",
         "cmd": "deno fmt && deno lint && deno task prepare"
       }
     ]

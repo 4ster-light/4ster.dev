@@ -1,7 +1,7 @@
 <script lang="ts">
   import PostsList from "$lib/components/PostsList.svelte"
   import type { PageProps } from "./$types"
-  import type { Post } from "$lib/types/post"
+  import type { Post } from "$lib/posts"
   import { BANNER_URL, UNI_URL, URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
 

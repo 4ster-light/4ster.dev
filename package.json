@@ -4,15 +4,17 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "deno task generate && vite dev",
-    "build": "deno task generate && vite build",
-    "generate": "deno task prepare && deno run --allow-read --allow-write scripts/generate_posts.ts",
-    "preview": "deno task build && cd build && deno run -A index.js",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "deno task build && deno run -A ./build/index.js",
     "prepare": "svelte-kit sync || echo ''",
     "check": "deno fmt && deno lint && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "svelte-check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@std/front-matter": "jsr:^1.0.9",
+    "@std/path": "jsr:^1.1.2",
+    "@std/text": "jsr:^1.0.16",
     "@sveltejs/kit": "^2.16.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.0",
     "highlight.js": "^11.11.1",

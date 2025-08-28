@@ -1,6 +1,6 @@
+import posts from "$lib/posts"
 import type { EntryGenerator, PageServerLoad } from "./$types"
 import { error } from "@sveltejs/kit"
-import posts from "$lib/assets/posts.json" with { type: "json" }
 
 export const prerender = true
 export const csr = false

@@ -24,8 +24,13 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Install Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: v10.x
+
       - name: Install dependencies
-        run: deno install --allow-scripts
+        run: pnpm install
 
       - name: Build
         run: deno task build

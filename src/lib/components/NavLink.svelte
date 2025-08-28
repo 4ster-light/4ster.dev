@@ -3,10 +3,9 @@
 
   type Props = {
     href: string
-    class?: string
     target?: string
     rel?: string
-    children: Snippet
+    children: Snippet<[]>
   }
 
   let {

@@ -7,7 +7,6 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-/src/lib/assets/posts.json
 
 # OS
 .DS_Store

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Post } from "$lib/types/post"
+  import type { Post } from "$lib/posts"
 
   type Props = {
     posts: Post[]
