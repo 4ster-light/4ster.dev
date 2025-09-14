@@ -12,6 +12,7 @@
     "svelte-check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "devDependencies": {
+    "@std/dotenv": "jsr:^0.225.5",
     "@std/front-matter": "jsr:^1.0.9",
     "@std/path": "jsr:^1.1.2",
     "@std/text": "jsr:^1.0.16",

@@ -1,17 +1,22 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte"
-  import SupportButton from "$lib/components/SupportButton.svelte"
   import type { Post } from "$lib/posts"
   import type { PageProps } from "./$types"
-  import { BANNER_URL, POSTS_URL } from "$lib/urls"
+  import { BANNER_URL, KOFI_URL, POSTS_URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
+  import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
+  import Button from "$lib/components/Button.svelte"
+  import CreditCard from "$lib/assets/icons/CreditCard.svg"
+  import { afterNavigate } from "$app/navigation"
 
   let { data }: PageProps = $props()
   const post: Post = data.post
 
-  globalThis.matchMedia && globalThis.matchMedia("(prefers-color-scheme: dark)").matches
-    ? import("highlight.js/styles/github-dark.css")
-    : import("highlight.js/styles/github.css")
+  afterNavigate(async () => {
+    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? await import("highlight.js/styles/github-dark.css")
+      : await import("highlight.js/styles/github.css")
+  })
 </script>
 
 <svelte:head>
@@ -39,7 +44,7 @@
 </svelte:head>
 
 <article class="post">
-  <header class="header">
+  <header>
     <h1>{post.title}</h1>
     <PostMeta date={post.date} tags={post.tags} />
   </header>
@@ -49,10 +54,16 @@
   </div>
 </article>
 
-<nav class="footer-nav">
-  <a href="/" class="back-link">← back</a>
-  <SupportButton />
-</nav>
+<footer>
+  <nav>
+    <Button href="/" target="">
+      <img src={LeftArrows} alt="Left Arrows" /> back
+    </Button>
+    <Button href={KOFI_URL}>
+      <img src={CreditCard} alt="Support Me" /> Support Me
+    </Button>
+  </nav>
+</footer>
 
 <style lang="scss">
   @use "$lib/styles/fonts";
@@ -60,7 +71,7 @@
   .post {
     margin-bottom: 2rem;
 
-    .header {
+    header {
       margin-bottom: 2rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
@@ -90,39 +101,13 @@
     }
   }
 
-  .footer-nav {
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .back-link {
-      color: var(--text-dim);
-      font-size: 1rem;
-      position: relative;
-      transition: color 0.2s ease;
-      font-family: fonts.$font-mono;
-
-      &:hover {
-        color: var(--accent-bright);
-      }
-
-      // Animated underline
-      &::after {
-        content: "";
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 1px;
-        background: var(--accent-bright);
-        transition: width 0.3s ease;
-      }
-
-      &:hover::after {
-        width: 100%;
-      }
+  footer {
+    nav {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 </style>

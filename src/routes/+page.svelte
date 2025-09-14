@@ -2,7 +2,7 @@
   import PostsList from "$lib/components/PostsList.svelte"
   import type { PageProps } from "./$types"
   import type { Post } from "$lib/posts"
-  import { BANNER_URL, UNI_URL, URL } from "$lib/urls"
+  import { BANNER_URL, PROJECTS_URL, UNI_URL, URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
 
   let { data }: PageProps = $props()
@@ -46,9 +46,9 @@
   <p>
     Hi, I am <strong>David Vivar Bogónez</strong>, a Spanish programmer most known as <strong
     >Aster</strong>, I am a computer engineering undergraduate at
-    <a href={UNI_URL} target="_blank" rel="noopener">UCLM</a>. I am very passionate about software,
-    especially fullstack web development and game development, as well as other areas with
-    languages/technologies like Typescript, Svelte, C#/F# and Rust.
+    <a href={UNI_URL} target="_blank" rel="noopener">ESI-UCLM</a>. I am very passionate about
+    software, especially fullstack web development, as well as other areas with
+    languages/technologies like Typescript, Svelte, C#/F#, Python and Rust.
   </p>
 </section>
 <hr />
@@ -56,6 +56,21 @@
 <section class="posts">
   <h2>Blog Posts</h2>
   <PostsList {posts} />
+
+  <h2>Projects</h2>
+  <p>
+    I also have some open source projects of my own, you can check them out on my
+    <a href={PROJECTS_URL}>projects page</a>. The most significant is my website <a
+      href="https://artscii.deno.dev"
+      target="_blank"
+      rel="noopener"
+    >artscii.deno.dev</a>, an image to ascii art converter used by dozens of people on X/Twitter. Of
+    which I have compiled some of the best images created with it in an <a
+      href="https://ko-fi.com/album/Ascii-Art-L4L21KA9TI"
+      target="_blank"
+      rel="noopener"
+    >image album</a> in my <strong>Ko-Fi page</strong>.
+  </p>
 </section>
 
 <style lang="scss">

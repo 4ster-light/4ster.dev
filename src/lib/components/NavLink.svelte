@@ -29,6 +29,9 @@
     font-size: 1rem;
     position: relative;
     transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 
     &:hover {
       color: var(--accent);
