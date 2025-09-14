@@ -28,7 +28,7 @@ let repositoriesCache: RepositoryInfo[] | null = null
 async function fetchRepositories(): Promise<Repository[]> {
   const token = Deno.env.get("GH_API")
   if (!token)
-    throw new Error("GITHUB_API environment variable is not set.")
+    throw new Error("GH_API environment variable is not set.")
 
   const headers = new Headers({
     "Authorization": `Bearer ${token}`,

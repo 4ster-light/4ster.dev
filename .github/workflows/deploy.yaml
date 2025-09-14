@@ -34,6 +34,8 @@ jobs:
 
       - name: Build
         run: deno task build
+        env:
+          GH_API: ${{ env.GH_API }}
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
