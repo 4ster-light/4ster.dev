@@ -26,7 +26,7 @@ export type RepositoryInfo = {
 let repositoriesCache: RepositoryInfo[] | null = null
 
 async function fetchRepositories(): Promise<Repository[]> {
-  const token = Deno.env.get("GITHUB_API")
+  const token = Deno.env.get("GH_API")
   if (!token)
     throw new Error("GITHUB_API environment variable is not set.")
 
