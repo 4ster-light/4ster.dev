@@ -2,9 +2,6 @@ import posts from "$lib/posts"
 import type { EntryGenerator, PageServerLoad } from "./$types"
 import { error } from "@sveltejs/kit"
 
-export const prerender = true
-export const csr = false
-
 export const entries: EntryGenerator = () =>
   posts.map((post) => ({
     slug: post.slug,
