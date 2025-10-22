@@ -1,4 +1,8 @@
-import "@std/dotenv/load"
+import { config } from "dotenv"
+import { join } from "node:path"
+import process from "node:process"
+
+config({ path: join(process.cwd(), ".env") })
 
 type Repository = {
   id: number
@@ -26,31 +30,31 @@ export type RepositoryInfo = {
 let repositoriesCache: RepositoryInfo[] | null = null
 
 async function fetchRepositories(): Promise<Repository[]> {
-  const token = Deno.env.get("GH_API")
-  if (!token)
-    throw new Error("GH_API environment variable is not set.")
+  const token = process.env.GH_API
+  if (!token) throw new Error("GH_API environment variable is not set.")
 
   const headers = new Headers({
-    "Authorization": `Bearer ${token}`,
-    "Accept": "application/vnd.github.v3+json",
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github.v3+json",
   })
 
   return await fetch("https://api.github.com/user/repos", {
     method: "GET",
     headers,
-  }).catch((error) => {
-    throw new Error(`GitHub API request failed: ${error}`)
-  }).then((response) => response.json())
+  })
+    .catch((error) => {
+      throw new Error(`GitHub API request failed: ${error}`)
+    })
+    .then((response) => response.json())
     .then((repositories: Repository[]) =>
       repositories
-        .filter((repo) => (repo.name !== "4ster-light") && (repo.stargazers_count !== 0))
+        .filter((repo) => repo.name !== "4ster-light" && repo.stargazers_count !== 0)
         .sort((a, b) => b.stargazers_count - a.stargazers_count)
     )
 }
 
-export default async function extractRelevantInfo(): Promise<RepositoryInfo[]> {
-  if (repositoriesCache)
-    return repositoriesCache
+async function extractRelevantInfo(): Promise<RepositoryInfo[]> {
+  if (repositoriesCache) return repositoriesCache
 
   const repos = await fetchRepositories().then((repos) =>
     repos.map((repo) => ({
@@ -67,3 +71,5 @@ export default async function extractRelevantInfo(): Promise<RepositoryInfo[]> {
   repositoriesCache = repos
   return repos
 }
+
+export default await extractRelevantInfo()

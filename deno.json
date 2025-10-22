@@ -5,26 +5,21 @@
     "semiColons": false,
     "useBraces": "preferNone",
     "exclude": [
-      "build",
+      ".deno-deploy",
       ".svelte-kit",
       "node_modules",
-      "pnpm-lock.yaml",
-      "pnpm-workspace.yaml"
+      "deno.lock"
     ]
   },
   "lint": {
+    "rules": {
+      "exclude": ["no-sloppy-imports"]
+    },
     "exclude": [
-      "build",
+      ".deno-deploy",
       ".svelte-kit",
-      "node_modules"
+      "node_modules",
+      "deno.lock"
     ]
-  },
-  "tasks": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "preview": "deno task build && deno run -A ./build/index.js",
-    "prepare": "svelte-kit sync || echo ''",
-    "check": "deno fmt && deno lint && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "svelte-check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   }
 }

@@ -1,11 +1,18 @@
-import { extract } from "@std/front-matter/yaml"
-import { join } from "@std/path"
-import { toKebabCase } from "@std/text"
-
+import matter from "gray-matter"
+import { join } from "node:path"
+import { readdirSync, readFileSync } from "node:fs"
 import { Marked } from "marked"
 import { markedHighlight } from "marked-highlight"
 import { gfmHeadingId } from "marked-gfm-heading-id"
 import hljs from "highlight.js"
+import process from "node:process"
+
+function toKebabCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
+    .toLowerCase()
+}
 
 export type PostMeta = {
   title: string
@@ -19,7 +26,7 @@ export type Post = PostMeta & {
   content: string
 }
 
-const POSTS_PATH = join(Deno.cwd(), "posts")
+const POSTS_PATH = join(process.cwd(), "posts")
 
 const marked = new Marked(
   gfmHeadingId(),
@@ -35,16 +42,18 @@ const marked = new Marked(
 
 const posts: Post[] = []
 
-for await (const file of Deno.readDir(POSTS_PATH)) {
-  if (!file.name.endsWith(".md")) continue
+const files = readdirSync(POSTS_PATH)
 
-  const filePath = join(POSTS_PATH, file.name)
-  const fileContent = await Deno.readTextFile(filePath)
+for (const fileName of files) {
+  if (!fileName.endsWith(".md")) continue
 
-  const { attrs, body } = extract<PostMeta>(fileContent)
+  const filePath = join(POSTS_PATH, fileName)
+  const fileContent = readFileSync(filePath, "utf-8")
+
+  const { data: attrs, content: body } = matter(fileContent)
 
   posts.push({
-    slug: toKebabCase(file.name.replace(".md", "")),
+    slug: toKebabCase(fileName.replace(".md", "")),
     title: attrs.title as string,
     description: attrs.description as string,
     date: attrs.date as string,

@@ -42,15 +42,15 @@ class PrimeGenerator:
                 self._sieve
                     .setdefault(prime + self.current, [])
                     .append(prime)
-            
+
             del self._sieve[self.current]
             self.current += 1
-        
+
         # Found a prime
         self._sieve[self.current * 2] = [self.current]
         prime = self.current
         self.current += 1
-        
+
         return prime
 
     def take(self, n: int) -> list[int]:

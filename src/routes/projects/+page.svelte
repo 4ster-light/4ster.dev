@@ -8,7 +8,7 @@
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
 
   let { data }: PageProps = $props()
-  const repos: RepositoryInfo[] = data.repos
+  const repos: RepositoryInfo[] = data.repositories
 </script>
 
 <svelte:head>

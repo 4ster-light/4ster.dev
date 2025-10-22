@@ -173,7 +173,6 @@ performed at `lex()`.
    The first thing we do is create an empty list of tokens, and then we loop through the input
    string, extracting each individual token into that list until we reach the end, at which point we
    return the list. Let's break it down a bit:
-
    - If the character is a **space**, we just advance the position and continue to the next
      character:
 
@@ -200,7 +199,6 @@ performed at `lex()`.
 
    - Now the four interesting cases left: `->` and `<->`, as well as the **default** and
      **variables**:
-
      - If the character is `-` it indicates we are about to encounter the **Implies** operator,
        right? So instead of creating that token right away we make use of the `_peek()` method I
        told you would be helpful to see if indeed the next character is a `>`. If so, we create the
