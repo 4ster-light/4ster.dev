@@ -2,7 +2,7 @@
   import "$lib/styles/typography.scss"
   import NavLink from "$lib/components/NavLink.svelte"
   import Button from "$lib/components/Button.svelte"
-  import { GITHUB_URL, PROJECTS_URL, DONATE_URL, X_URL } from "$lib/urls"
+  import { DONATE_URL, GITHUB_URL, PROJECTS_URL, URL, X_URL } from "$lib/urls"
   import GitHub from "$lib/assets/icons/GitHub.svg"
   import Twitter from "$lib/assets/icons/Twitter.svg"
   import Code from "$lib/assets/icons/Code.svg"
@@ -18,7 +18,7 @@
 <div class="container">
   <header>
     <nav>
-      <a href="/" class="logo">✰λster✰</a>
+      <a href={URL} class="logo">✰λster✰</a>
 
       <button
         class="menu-toggle"

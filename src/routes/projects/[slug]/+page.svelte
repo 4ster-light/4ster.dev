@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageProps } from "./$types"
   import type { Repository } from "$lib/repositories"
-  import { BANNER_URL, KOFI_URL } from "$lib/urls"
+  import { BANNER_URL, DONATE_URL, URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
   import Button from "$lib/components/Button.svelte"
   import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
@@ -99,10 +99,10 @@
 
   <footer>
     <nav>
-      <Button href="/" target="">
+      <Button href={URL} target="">
         <img src={LeftArrows} alt="Left Arrows" /> back
       </Button>
-      <Button href={KOFI_URL}>
+      <Button href={DONATE_URL}>
         <img src={CreditCard} alt="Support Me" /> Support Me
       </Button>
     </nav>

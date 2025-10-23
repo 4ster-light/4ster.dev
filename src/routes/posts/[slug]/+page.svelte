@@ -1,11 +1,10 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte"
-  import { BANNER_URL, KOFI_URL, POSTS_URL } from "$lib/urls"
+  import { BANNER_URL, KOFI_URL, POSTS_URL, URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
   import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
   import Button from "$lib/components/Button.svelte"
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
-  import { afterNavigate } from "$app/navigation"
   import type { PageProps } from "./$types"
   import type { Post } from "$lib/posts"
   import "highlight.js/styles/github-dark.css"
@@ -51,7 +50,7 @@
 
 <footer>
   <nav>
-    <Button href="/" target="">
+    <Button href={URL} target="">
       <img src={LeftArrows} alt="Left Arrows" /> back
     </Button>
     <Button href={KOFI_URL}>

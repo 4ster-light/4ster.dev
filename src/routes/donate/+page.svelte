@@ -50,7 +50,7 @@
 
 <style lang="scss">
   @use "$lib/styles/fonts";
-  
+
   h2 {
     color: var(--accent-bright);
   }
