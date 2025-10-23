@@ -19,7 +19,7 @@
   }
 </script>
 
-<h1>Support Me</h1>
+<h2>Support Me</h2>
 <div>
   <section class="kofi">
     <p>
@@ -50,7 +50,8 @@
 
 <style lang="scss">
   @use "$lib/styles/fonts";
-  h1 {
+  
+  h2 {
     color: var(--accent-bright);
   }
 

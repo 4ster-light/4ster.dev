@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./$types"
-  import type { RepositoryInfo } from "$lib/repositories"
+  import type { Repository } from "$lib/repositories"
   import Button from "$lib/components/Button.svelte"
   import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
   import { BANNER_URL, KOFI_URL, PROJECTS_URL } from "$lib/urls"
@@ -8,7 +8,7 @@
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
 
   let { data }: PageProps = $props()
-  const repositories: RepositoryInfo[] = data.repositories
+  const repositories: Repository[] = data.repositories
 </script>
 
 <svelte:head>
@@ -56,7 +56,7 @@
         {#if repo.language}
           <span class="language">{repo.language}</span>
         {/if}
-        <span class="updated">Updated {repo.updatedAt}</span>
+        <span class="updated">Updated {repo.updated_at}</span>
         <a href={repo.url} target="_blank" rel="noopener" class="github-link">View on GitHub</a>
       </div>
     </article>

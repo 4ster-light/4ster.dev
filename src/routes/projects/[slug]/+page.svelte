@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageProps } from "./$types"
-  import type { RepositoryInfo } from "$lib/repositories"
+  import type { Repository } from "$lib/repositories"
   import { BANNER_URL, KOFI_URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
   import Button from "$lib/components/Button.svelte"
@@ -8,7 +8,7 @@
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
 
   let { data }: PageProps = $props()
-  const repository: RepositoryInfo = data.repository
+  const repository: Repository = data.repository
 </script>
 
 <svelte:head>
@@ -55,7 +55,7 @@
           <span class="language">{repository.language}</span>
         {/if}
       </div>
-      <time class="updated">Updated {repository.updatedAt}</time>
+      <time class="updated">Updated {repository.updated_at}</time>
     </div>
   </header>
 
@@ -84,7 +84,7 @@
           </tr>
           <tr>
             <th>Last Updated</th>
-            <td>{repository.updatedAt}</td>
+            <td>{repository.updated_at}</td>
           </tr>
         </tbody>
       </table>
