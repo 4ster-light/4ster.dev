@@ -9,7 +9,8 @@
       ".deno-deploy",
       ".svelte-kit",
       "node_modules",
-      "deno.lock"
+      "deno.lock",
+      "**/*.d.ts"
     ]
   },
   "lint": {
@@ -20,7 +21,8 @@
       ".deno-deploy",
       ".svelte-kit",
       "node_modules",
-      "deno.lock"
+      "deno.lock",
+      "**/*.d.ts"
     ]
   }
 }

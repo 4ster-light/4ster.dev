@@ -1,0 +1,7 @@
+name = "aster"
+compatibility_date = "2025-10-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+[observability]
+enabled = true

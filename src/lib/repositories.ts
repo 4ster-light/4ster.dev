@@ -7,16 +7,23 @@ config({ path: join(process.cwd(), ".env") })
 export type Repository = {
   name: string
   url: string
-  description: string | null
+  description?: string
   stars: number
   forks: number
-  language: string | null
+  language?: string
   updated_at: string
 }
 
-type RawRepository = Repository & {
+type RawRepository = {
   id: number
   full_name: string
+  name: string
+  url: string
+  description?: string
+  stargazers_count: number
+  forks: number
+  language?: string
+  updated_at: string
 }
 
 const githubToken = process.env.GH_API
@@ -32,13 +39,13 @@ const repositories: Repository[] = await fetch("https://api.github.com/user/repo
   .then((response) => response.json())
   .then((repositories: RawRepository[]) =>
     repositories
-      .filter((repo) => repo.name !== "4ster-light" && repo.stars !== 0)
-      .sort((a, b) => b.stars - a.stars)
+      .filter((repo) => repo.name !== "4ster-light" && repo.stargazers_count > 0)
+      .sort((a, b) => b.stargazers_count - a.stargazers_count)
       .map((repo) => ({
         name: repo.name,
         url: repo.url,
         description: repo.description,
-        stars: repo.stars,
+        stars: repo.stargazers_count,
         forks: repo.forks,
         language: repo.language,
         updated_at: new Date(repo.updated_at).toLocaleDateString()
