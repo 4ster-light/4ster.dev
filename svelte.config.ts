@@ -5,8 +5,8 @@ import type { Config } from "@sveltejs/kit"
 const config: Config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(),
-  },
+    adapter: adapter()
+  }
 }
 
 export default config

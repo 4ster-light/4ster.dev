@@ -4,6 +4,7 @@
     "lineWidth": 100,
     "semiColons": false,
     "useBraces": "preferNone",
+    "trailingCommas": "never",
     "exclude": [
       ".deno-deploy",
       ".svelte-kit",

@@ -8,31 +8,34 @@
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
 
   let { data }: PageProps = $props()
-  const repo: RepositoryInfo = data.repo
+  const repository: RepositoryInfo = data.repository
 </script>
 
 <svelte:head>
   <meta name="author" content="David Vivar Bogónez" />
   <link rel="icon" href={PFP} />
 
-  <title>{repo.name} - ✰λster✰</title>
-  <meta name="description" content={repo.description || `${repo.name} - Open source project`} />
+  <title>{repository.name} - ✰λster✰</title>
+  <meta
+    name="description"
+    content={repository.description || `${repository.name} - Open source project`}
+  />
 
-  <meta property="og:title" content={repo.name} />
+  <meta property="og:title" content={repository.name} />
   <meta property="og:type" content="website" />
   <meta
     property="og:description"
-    content={repo.description || `${repo.name} - Open source project`}
+    content={repository.description || `${repository.name} - Open source project`}
   />
-  <meta property="og:url" content={repo.url} />
+  <meta property="og:url" content={repository.url} />
   <meta property="og:site_name" content="✰λster✰" />
   <meta property="og:locale" content="en_US">
   <meta property="og:image" content={BANNER_URL} />
 
-  <meta name="twitter:title" content={repo.name} />
+  <meta name="twitter:title" content={repository.name} />
   <meta
     name="twitter:description"
-    content={repo.description || `${repo.name} - Open source project`}
+    content={repository.description || `${repository.name} - Open source project`}
   />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@4ster_light" />
@@ -43,22 +46,22 @@
 
 <article class="project">
   <header>
-    <h1>{repo.name}</h1>
+    <h1>{repository.name}</h1>
     <div class="project-meta">
       <div class="stats">
-        <span class="stat">{repo.stars} stars</span>
-        <span class="stat">{repo.forks} forks</span>
-        {#if repo.language}
-          <span class="language">{repo.language}</span>
+        <span class="stat">{repository.stars} stars</span>
+        <span class="stat">{repository.forks} forks</span>
+        {#if repository.language}
+          <span class="language">{repository.language}</span>
         {/if}
       </div>
-      <time class="updated">Updated {repo.updatedAt}</time>
+      <time class="updated">Updated {repository.updatedAt}</time>
     </div>
   </header>
 
   <div class="content">
-    {#if repo.description}
-      <p class="description">{repo.description}</p>
+    {#if repository.description}
+      <p class="description">{repository.description}</p>
     {:else}
       <p class="description">Open source project by Aster.</p>
     {/if}
@@ -69,26 +72,26 @@
         <tbody>
           <tr>
             <th>Language</th>
-            <td>{repo.language || "Not specified"}</td>
+            <td>{repository.language || "Not specified"}</td>
           </tr>
           <tr>
             <th>Stars</th>
-            <td>{repo.stars}</td>
+            <td>{repository.stars}</td>
           </tr>
           <tr>
             <th>Forks</th>
-            <td>{repo.forks}</td>
+            <td>{repository.forks}</td>
           </tr>
           <tr>
             <th>Last Updated</th>
-            <td>{repo.updatedAt}</td>
+            <td>{repository.updatedAt}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div class="actions">
-      <a href={repo.url} target="_blank" rel="noopener" class="github-button">
+      <a href={repository.url} target="_blank" rel="noopener" class="github-button">
         View on GitHub
       </a>
     </div>

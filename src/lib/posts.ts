@@ -36,8 +36,8 @@ const marked = new Marked(
     highlight(code, lang, _) {
       const language = hljs.getLanguage(lang) ? lang : "plaintext"
       return hljs.highlight(code, { language }).value
-    },
-  }),
+    }
+  })
 )
 
 const posts: Post[] = []
@@ -58,7 +58,7 @@ for (const fileName of files) {
     description: attrs.description as string,
     date: attrs.date as string,
     tags: (attrs.tags as string[]) || [],
-    content: await marked.parse(body),
+    content: await marked.parse(body)
   })
 }
 

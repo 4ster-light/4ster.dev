@@ -4,7 +4,7 @@ import { error } from "@sveltejs/kit"
 
 export const entries: EntryGenerator = () =>
   posts.map((post) => ({
-    slug: post.slug,
+    slug: post.slug
   }))
 
 export const load: PageServerLoad = (event) => {
@@ -14,6 +14,6 @@ export const load: PageServerLoad = (event) => {
   if (!post) throw error(404, "Post not found")
 
   return {
-    post,
+    post
   }
 }

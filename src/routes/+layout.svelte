@@ -2,7 +2,7 @@
   import "$lib/styles/typography.scss"
   import NavLink from "$lib/components/NavLink.svelte"
   import Button from "$lib/components/Button.svelte"
-  import { GITHUB_URL, KOFI_URL, PROJECTS_URL, X_URL } from "$lib/urls"
+  import { GITHUB_URL, PROJECTS_URL, SUPPORT_URL, X_URL } from "$lib/urls"
   import GitHub from "$lib/assets/icons/GitHub.svg"
   import Twitter from "$lib/assets/icons/Twitter.svg"
   import Code from "$lib/assets/icons/Code.svg"
@@ -41,7 +41,7 @@
         <NavLink href={PROJECTS_URL} target="">
           <img src={Code} alt="Code" /> Projects
         </NavLink>
-        <Button href={KOFI_URL}>
+        <Button href={SUPPORT_URL} target="">
           <img src={CreditCard} alt="Support Me" /> Support Me
         </Button>
       </div>

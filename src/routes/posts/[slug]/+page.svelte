@@ -1,22 +1,17 @@
 <script lang="ts">
   import PostMeta from "$lib/components/PostMeta.svelte"
-  import type { Post } from "$lib/posts"
-  import type { PageProps } from "./$types"
   import { BANNER_URL, KOFI_URL, POSTS_URL } from "$lib/urls"
   import PFP from "$lib/assets/pfp.jpg"
   import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
   import Button from "$lib/components/Button.svelte"
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
   import { afterNavigate } from "$app/navigation"
+  import type { PageProps } from "./$types"
+  import type { Post } from "$lib/posts"
+  import "highlight.js/styles/github-dark.css"
 
   let { data }: PageProps = $props()
   const post: Post = data.post
-
-  afterNavigate(async () => {
-    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? await import("highlight.js/styles/github-dark.css")
-      : await import("highlight.js/styles/github.css")
-  })
 </script>
 
 <svelte:head>

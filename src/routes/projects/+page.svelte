@@ -8,7 +8,7 @@
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
 
   let { data }: PageProps = $props()
-  const repos: RepositoryInfo[] = data.repositories
+  const repositories: RepositoryInfo[] = data.repositories
 </script>
 
 <svelte:head>
@@ -38,7 +38,7 @@
 <section class="projects">
   <h2>Projects</h2>
 
-  {#each repos as repo}
+  {#each repositories as repo}
     <article class="project">
       <div class="project-header">
         <h3><a href="/projects/{repo.name}">{repo.name}</a></h3>

@@ -12,7 +12,7 @@
     href,
     target = "_blank",
     rel = "noopener noreferrer",
-    children,
+    children
   }: Props = $props()
 </script>
 

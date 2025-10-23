@@ -6,17 +6,17 @@ export const prerender = true
 export const csr = false
 
 export const entries: EntryGenerator = () =>
-  repositories.map((repo) => ({
-    slug: repo.name,
+  repositories.map((repository) => ({
+    slug: repository.name
   }))
 
 export const load: PageServerLoad = (event) => {
   const slug = event.params.slug
-  const repo = repositories.find((repo) => repo.name === slug)
+  const repository = repositories.find((repository) => repository.name === slug)
 
-  if (!repo) throw error(404, "Repository not found")
+  if (!repository) throw error(404, "Repository not found")
 
   return {
-    repo,
+    repository
   }
 }
