@@ -2,11 +2,9 @@ import adapter from "@sveltejs/adapter-cloudflare"
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte"
 import type { Config } from "@sveltejs/kit"
 
-const config: Config = {
+export default {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter()
   }
-}
-
-export default config
+} satisfies Config

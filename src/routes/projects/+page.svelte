@@ -56,7 +56,7 @@
         {#if repo.language}
           <span class="language">{repo.language}</span>
         {/if}
-        <span class="updated">Updated {repo.updated_at}</span>
+        <span class="updated">Updated at {repo.updated_at}</span>
         <a href={repo.url} target="_blank" rel="noopener" class="github-link">View on GitHub</a>
       </div>
     </article>

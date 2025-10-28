@@ -6,6 +6,7 @@
   import Button from "$lib/components/Button.svelte"
   import LeftArrows from "$lib/assets/icons/LeftArrows.svg"
   import CreditCard from "$lib/assets/icons/CreditCard.svg"
+  import "highlight.js/styles/github-dark.css"
 
   let { data }: PageProps = $props()
   const repository: Repository = data.repository
@@ -45,56 +46,48 @@
 </svelte:head>
 
 <article class="project">
-  <header>
-    <h1>{repository.name}</h1>
-    <div class="project-meta">
-      <div class="stats">
-        <span class="stat">{repository.stars} stars</span>
-        <span class="stat">{repository.forks} forks</span>
-        {#if repository.language}
-          <span class="language">{repository.language}</span>
-        {/if}
-      </div>
-      <time class="updated">Updated {repository.updated_at}</time>
-    </div>
-  </header>
+  <div class="project-info">
+    <h3>Repository Information</h3>
+    <table>
+      <tbody>
+        <tr>
+          <th>Language</th>
+          <td>{repository.language || "Not specified"}</td>
+        </tr>
+        <tr>
+          <th>Stars</th>
+          <td>{repository.stars}</td>
+        </tr>
+        <tr>
+          <th>Forks</th>
+          <td>{repository.forks}</td>
+        </tr>
+        <tr>
+          <th>Last Updated</th>
+          <td>{repository.updated_at}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <a href={repository.url} target="_blank" rel="noopener" class="github-button">
+      View on GitHub
+    </a>
+  </div>
 
   <div class="content">
-    {#if repository.description}
-      <p class="description">{repository.description}</p>
+    {#if repository.readme}
+      <div class="readme">
+        {@html repository.readme}
+      </div>
     {:else}
-      <p class="description">Open source project by Aster.</p>
+      {#if repository.description}
+        <p class="description">{repository.description}</p>
+      {:else}
+        <p class="description">Open source project by Aster.</p>
+      {/if}
     {/if}
-
-    <div class="project-info">
-      <h3>Repository Information</h3>
-      <table>
-        <tbody>
-          <tr>
-            <th>Language</th>
-            <td>{repository.language || "Not specified"}</td>
-          </tr>
-          <tr>
-            <th>Stars</th>
-            <td>{repository.stars}</td>
-          </tr>
-          <tr>
-            <th>Forks</th>
-            <td>{repository.forks}</td>
-          </tr>
-          <tr>
-            <th>Last Updated</th>
-            <td>{repository.updated_at}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="actions">
-      <a href={repository.url} target="_blank" rel="noopener" class="github-button">
-        View on GitHub
-      </a>
-    </div>
   </div>
 
   <footer>
@@ -102,7 +95,7 @@
       <Button href={URL} target="">
         <img src={LeftArrows} alt="Left Arrows" /> back
       </Button>
-      <Button href={DONATE_URL}>
+      <Button href={DONATE_URL} target="">
         <img src={CreditCard} alt="Support Me" /> Support Me
       </Button>
     </nav>
@@ -115,57 +108,31 @@
   .project {
     margin-bottom: 2rem;
 
-    header {
+    .project-info {
       margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
 
-      h1 {
-        font-size: 2.75rem;
-        margin-bottom: 0.8rem;
-        line-height: 1.2;
-
-        @media (max-width: 768px) {
-          font-size: 2rem;
-        }
+      h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: var(--text);
       }
+    }
 
-      .project-meta {
-        font-family: fonts.$font-mono;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
+    .actions {
+      margin-top: 2rem;
 
-        @media (max-width: 768px) {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0.5rem;
-        }
+      .github-button {
+        background-color: var(--bg-secondary);
+        color: var(--accent-bright);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        border: 1px solid var(--border);
+        transition: background-color 0.3s, color 0.3s;
 
-        .stats {
-          display: flex;
-          gap: 1rem;
-          align-items: center;
-
-          .stat {
-            color: var(--text-dim);
-            font-size: 0.8rem;
-          }
-
-          .language {
-            background: var(--bg-secondary);
-            color: var(--text-dim);
-            padding: 0.15rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            border: 1px solid var(--border);
-          }
-        }
-
-        .updated {
-          color: var(--text-dim);
-          font-size: 0.8rem;
+        &:hover {
+          background-color: var(--accent-dim);
+          color: var(--text);
         }
       }
     }
@@ -178,32 +145,23 @@
         color: var(--text-muted);
       }
 
-      .project-info {
-        margin-bottom: 2rem;
+      .readme {
+        margin: 2rem 0;
+        padding: 2rem;
+        background: var(--bg-secondary);
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        overflow-x: auto;
 
-        h3 {
-          font-size: 1.2rem;
-          margin-bottom: 1rem;
-          color: var(--text);
+        :global(img) {
+          max-width: 100%;
+          display: block;
+          margin: 0;
+          height: auto;
         }
-      }
 
-      .actions {
-        margin-top: 2rem;
-
-        .github-button {
-          background-color: var(--bg-secondary);
-          color: var(--accent-bright);
-          padding: 0.5rem 1rem;
-          border-radius: 0.5rem;
-          font-weight: bold;
-          border: 1px solid var(--border);
-          transition: background-color 0.3s, color 0.3s;
-
-          &:hover {
-            background-color: var(--accent-dim);
-            color: var(--text);
-          }
+        :global(img + img) {
+          margin-top: 1rem;
         }
       }
     }
