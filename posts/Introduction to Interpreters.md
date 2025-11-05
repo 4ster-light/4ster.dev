@@ -1,6 +1,6 @@
 ---
 title: "An Introduction to Interpreters: A logic evaluator"
-description: "Tutorial on how to write a simple interpreter evaluates logical expressions"
+description: "Tutorial on how to write a simple interpreter that evaluates logical expressions"
 date: "2025-08-16"
 tags: ["tutorial", "interpreter", "parser", "lexer", "evaluator", "python"]
 ---
@@ -139,7 +139,7 @@ and `_advance()`, are helpers for operations repeated several times throughout t
 performed at `lex()`.
 
 1. **Peek**: Checks whether the character at a certain offset from the current position exists, and
-   if that's the case it returns it. If not, it just returns None. This is used in longer than one
+   if that is the case it returns it. If not, it just returns None. This is used in longer than one
    character tokens, so if we encounter the first character, we can check whether the following
    match the expected for the expected token, and if they do not it is an invalid character so we
    just raise an error.
@@ -172,7 +172,7 @@ performed at `lex()`.
 
    The first thing we do is create an empty list of tokens, and then we loop through the input
    string, extracting each individual token into that list until we reach the end, at which point we
-   return the list. Let's break it down a bit:
+   return the list. Let us break it down a bit:
    - If the character is a **space**, we just advance the position and continue to the next
      character:
 
@@ -239,7 +239,7 @@ performed at `lex()`.
            self._advance()
        ```
 
-     - Now if any character hasn't fallen in any of the above cases, it means that it is an invalid
+     - Now if any character has not fallen in any of the above cases, it means that it is an invalid
        character, so we again raise an error:
 
        ```python
@@ -354,7 +354,7 @@ class Biconditional(Expression):
 
 Just as we did with the lexer we are going to take a look at each of the helper methods of the
 `Parser` class, though it is a lot more complex due to mutual recursivity between the different
-`_parse_*()` methods. Let's take a look at the helpers first:
+`_parse_*()` methods. Let us take a look at the helpers first:
 
 1. **Consume**: Since now we have individual tokens, we will be moving linearly through the list.
    This method will consume the next token and return it, raising an error if it is not of the
@@ -397,7 +397,7 @@ Just as we did with the lexer we are going to take a look at each of the helper 
                        └── _parse_primary()
    ```
 
-   This is a bit counterintuitive since it may seem "upside down", but it's the correct order. The
+   This is a bit counterintuitive since it may seem "upside down", but it is the correct order. The
    parsing process starts with the lowest precedence operator (`_parse_biconditional`), which calls
    the function for the next higher precedence operator (`_parse_implies`), and so on, until it
    reaches the highest precedence operators (`_parse_primary` and `_parse_not`). This recursive
@@ -467,7 +467,7 @@ Just as we did with the lexer we are going to take a look at each of the helper 
         return expr
    ```
 
-## The Evaluator
+### The Evaluator
 
 > You can see the full code of
 > [parser.py](https://github.com/4ster-light/py-logic/blob/main/evaluator.py)

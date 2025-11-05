@@ -1,0 +1,21 @@
+{
+  "markdownlint.config": {
+    "MD024": {
+      "siblings_only": true
+    }
+  },
+  "tailwind-fold.autoFold": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "editor.formatOnSave": true,
+  "deno.enable": true,
+  "deno.lint": true
+}

@@ -58,7 +58,7 @@ here so you or me can come back look at it and laugh for a moment: The languages
 the most and the ones I currently see myself using in the future are: Typescript, C#/F#, and Rust.
 
 Probably my GitHub gives a better view of my stuff either now or whenever you are reading this so,
-have a look and enjoy! [(Click here)](https://github.com/4ster-light)
+have a look and enjoy! [github.com/4ster-light](https://github.com/4ster-light)
 
 Just as a bonus, you also might be wondering about the λ on my socials, which basically represents
 lambda calculus, a mathematical theory that is used to describe functions, and is a very important

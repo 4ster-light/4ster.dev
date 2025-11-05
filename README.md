@@ -1,5 +1,7 @@
 # 📝 Blog
 
+[![Built with the Deno Standard Library](https://img.shields.io/badge/Built_with_std-black?logo=deno)](https://jsr.io/@std)
+
 My personal blog where I share my technical posts.
 
 ## 🚀 Getting Started

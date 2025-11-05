@@ -1,13 +1,9 @@
-import { config } from "dotenv"
-import { join } from "node:path"
-import process from "node:process"
+import "@std/dotenv/load"
 import { createMarkedInstance } from "$lib/utils/marked"
-
-config({ path: join(process.cwd(), ".env") })
 
 const marked = createMarkedInstance()
 
-const githubToken = process.env.GH_API
+const githubToken = Deno.env.get("GH_API")
 if (!githubToken) throw new Error("GH_API environment variable is not set.")
 
 export type Repository = {

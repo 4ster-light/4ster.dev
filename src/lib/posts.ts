@@ -1,11 +1,9 @@
-import matter from "gray-matter"
-import { join } from "node:path"
-import { readdirSync, readFileSync } from "node:fs"
-import process from "node:process"
+import { extract } from "@std/front-matter/yaml"
+import { join } from "@std/path"
 import { createMarkedInstance } from "$lib/utils/marked"
-import { toKebabCase } from "$lib/utils/toKebabCase"
+import { toKebabCase } from "@std/text"
 
-const POSTS_PATH = join(process.cwd(), "posts")
+const POSTS_PATH = join(Deno.cwd(), "posts")
 
 const marked = createMarkedInstance()
 
@@ -21,16 +19,16 @@ export type Post = PostMeta & {
   content: string
 }
 
-export default readdirSync(POSTS_PATH)
-  .filter((fileName) => fileName.endsWith(".md"))
-  .map((fileName) => {
-    const filePath = join(POSTS_PATH, fileName)
-    const fileContent = readFileSync(filePath, "utf-8")
+export default Deno.readDirSync(POSTS_PATH)
+  .filter((file) => file.name.endsWith(".md"))
+  .map((file) => {
+    const filePath = join(POSTS_PATH, file.name)
+    const fileContent = new TextDecoder().decode(Deno.readFileSync(filePath))
 
-    const { data: attrs, content: body } = matter(fileContent)
+    const { attrs, body } = extract<PostMeta>(fileContent)
 
     return {
-      slug: toKebabCase(fileName.replace(".md", "")),
+      slug: toKebabCase(file.name.replace(".md", "")),
       title: attrs.title as string,
       description: attrs.description as string,
       date: attrs.date as string,
@@ -38,4 +36,5 @@ export default readdirSync(POSTS_PATH)
       content: marked.parse(body)
     } as Post
   })
+  .toArray()
   .sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())

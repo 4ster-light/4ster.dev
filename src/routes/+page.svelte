@@ -47,8 +47,8 @@
     Hi, I am <strong>David Vivar Bogónez</strong>, a Spanish programmer most known as <strong
     >Aster</strong>, I am a computer engineering undergraduate at
     <a href={UNI_URL} target="_blank" rel="noopener">ESI-UCLM</a>. I am very passionate about
-    software, especially fullstack web development, as well as other areas with
-    languages/technologies like Typescript, Svelte, C#/F#, Python and Rust.
+    software, specially networks and systems, as well as full stack web development with
+    languages/technologies like Python, Typescript, Rust, Svelte, and F# among others.
   </p>
 </section>
 <hr />
