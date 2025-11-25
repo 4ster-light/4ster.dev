@@ -4,7 +4,7 @@
       "siblings_only": true
     }
   },
-  "tailwind-fold.autoFold": true,
+  "tailwind-fold.autoFold": false,
   "[svelte]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },

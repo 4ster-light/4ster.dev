@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { KOFI_URL } from "$lib/urls"
+  import { BANNER_URL, KOFI_URL, URL } from "$lib/urls"
+  import PFP from "$lib/assets/pfp.jpg"
 
   const cryptoAddresses = {
     BTC: "3LdNwreu7xAoK5hjGRiPae8fE3mtRcbBg4",
@@ -18,6 +19,38 @@
       .finally(() => setTimeout(() => (copiedCoin = null), 1000))
   }
 </script>
+
+<svelte:head>
+  <title>Support- ✰λster✰</title>
+  <meta
+    name="description"
+    content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+  />
+  <meta name="author" content="David Vivar Bogónez" />
+  <link rel="icon" href={PFP} />
+
+  <meta property="og:title" content="✰λster✰" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content={BANNER_URL} />
+  <meta
+    property="og:description"
+    content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+  />
+  <meta property="og:url" content={URL} />
+  <meta property="og:site_name" content="✰λster✰" />
+  <meta property="og:locale" content="en_US">
+
+  <meta name="twitter:title" content="✰λster✰" />
+  <meta
+    name="twitter:description"
+    content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+  />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@4ster_light" />
+  <meta name="twitter:image" content={BANNER_URL} />
+  <meta property="twitter:image:height" content="600" />
+  <meta property="twitter:image:width" content="1200" />
+</svelte:head>
 
 <h2>Support Me</h2>
 <div>
