@@ -1,23 +1,26 @@
-# 📝 Blog
+# Blog
 
 [![Built with the Deno Standard Library](https://img.shields.io/badge/Built_with_std-black?logo=deno)](https://jsr.io/@std)
 
 My personal blog where I share my technical posts.
 
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
-deno install
+deno i --allow-scripts
 deno task dev
 ```
 
-As you can see you will need to have installed `deno` and `pnpm` in order to run the project.
+Or for a production preview:
 
-## 📄 LICENSE
+```bash
+deno task start
+```
 
-Apache License 2.0
+As you can see you will need to have installed the `deno` toolchain in order to run the project
+(find it in [deno.com](https://deno.com/)).
 
-## 💝 Sponsor
+## Sponsor
 
 If you like this project, consider supporting me by buying me a coffee.
 

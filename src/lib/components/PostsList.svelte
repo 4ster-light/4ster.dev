@@ -9,28 +9,30 @@
 </script>
 
 {#each props.posts as post}
-  <article class="post">
-    <div class="post-header">
-      <h3><a href="/posts/{post.slug}">{post.title}</a></h3>
-      <time datetime={post.date}>{
-        new Date(post.date).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric"
-        })
-      }</time>
-    </div>
-    <p class="description">{post.description}</p>
-    <div class="tags">
-      {#if post.tags?.length}
-        {#each post.tags as tag}
-          <span class="tag">{tag}</span>
-        {/each}
-      {:else}
-        <span class="tag">UNCATEGORISED</span>
-      {/if}
-    </div>
-  </article>
+  {#if !post["is-preview"]}
+    <article class="post">
+      <div class="post-header">
+        <h3><a href="/posts/{post.slug}">{post.title}</a></h3>
+        <time datetime={post.date}>{
+          new Date(post.date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          })
+        }</time>
+      </div>
+      <p class="description">{post.description}</p>
+      <div class="tags">
+        {#if post.tags?.length}
+          {#each post.tags as tag}
+            <span class="tag">{tag}</span>
+          {/each}
+        {:else}
+          <span class="tag">UNCATEGORISED</span>
+        {/if}
+      </div>
+    </article>
+  {/if}
 {/each}
 
 <style lang="scss">
