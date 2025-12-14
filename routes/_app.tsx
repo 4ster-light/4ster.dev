@@ -1,0 +1,65 @@
+import { define } from "@/utils.ts"
+import urls from "@/lib/urls.ts"
+import NavLink from "@/components/NavLink.tsx"
+
+export default define.page(async function App({ Component }) {
+  const navLinks = [
+    {
+      href: urls.xUrl,
+      label: "Twitter",
+      icon: (await import("@/assets/icons/Twitter.svg")).default
+    },
+    {
+      href: urls.githubUrl,
+      label: "GitHub",
+      icon: (await import("@/assets/icons/GitHub.svg")).default
+    },
+    {
+      href: urls.projectsUrl,
+      label: "Projects",
+      icon: (await import("@/assets/icons/Code.svg")).default,
+      target: ""
+    },
+    {
+      href: urls.donateUrl,
+      label: "Support Me",
+      icon: (await import("@/assets/icons/CreditCard.svg")).default,
+      target: ""
+    }
+  ]
+
+  return (
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/pfp.jpg" />
+      </head>
+      <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
+        <header class="border-b border-base-300 bg-base-200/30">
+          <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-wrap items-center justify-center md:justify-between gap-4">
+            <a href="/" class="text-3xl link-hover font-bold text-secondary">
+              ✰λster✰
+            </a>
+
+            <div class="flex flex-wrap items-center gap-2">
+              {navLinks.map(({ href, label, icon, target }) => (
+                <NavLink href={href} label={label} icon={icon} target={target} key={href} />
+              ))}
+            </div>
+          </nav>
+        </header>
+
+        <main class="max-w-4xl mx-auto p-8 lg:px-0 flex-1 w-full">
+          <Component />
+        </main>
+
+        <footer class="border-t border-base-300 bg-base-200/40">
+          <div class="max-w-4xl mx-auto py-4 text-center text-base-content/70">
+            <p>© {new Date().getFullYear()} ✰λster✰</p>
+          </div>
+        </footer>
+      </body>
+    </html>
+  )
+})

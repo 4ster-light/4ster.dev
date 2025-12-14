@@ -1,9 +1,6 @@
 {
   "recommendations": [
     "denoland.vscode-deno",
-    "svelte.svelte-vscode",
-    "davidanson.vscode-markdownlint",
-    "yoavbls.pretty-ts-errors",
-    "usernamehw.errorlens"
+    "bradlc.vscode-tailwindcss"
   ]
 }
