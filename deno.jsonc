@@ -1,0 +1,61 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "deno task build && deno serve -A _fresh/server.js",
+    "check": "deno fmt && deno lint && deno check",
+    "deploy": "deno task build && deno deploy"
+  },
+  "lint": { "rules": { "tags": ["fresh", "recommended"] } },
+  "fmt": {
+    "lineWidth": 100,
+    "semiColons": false,
+    "useBraces": "preferNone",
+    "trailingCommas": "never"
+  },
+  "exclude": ["**/_fresh/*"],
+  "imports": {
+    // Aliases
+    "@/": "./",
+    // Dependencies
+    "vite": "npm:vite@^7.1.3",
+    "fresh": "jsr:@fresh/core@^2.2.0",
+    "preact": "npm:preact@^10.27.2",
+    "@preact/signals": "npm:@preact/signals@^2.5.0",
+    "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.8",
+    "tailwindcss": "npm:tailwindcss@^4.1.10",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.12",
+    "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.19",
+    "daisyui": "npm:daisyui@^5.5.0",
+    "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.4",
+    "marked": "npm:marked@^15.0.12",
+    "marked-highlight": "npm:marked-highlight@^2.2.1",
+    "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^4.1.1",
+    "highlight.js": "npm:highlight.js@^11.11.1"
+  },
+  "compilerOptions": {
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
+    "jsx": "precompile",
+    "jsxImportSource": "preact",
+    "jsxPrecompileSkipElements": [
+      "a",
+      "img",
+      "source",
+      "body",
+      "html",
+      "head",
+      "title",
+      "meta",
+      "script",
+      "link",
+      "style",
+      "base",
+      "noscript",
+      "template"
+    ],
+    "types": ["vite/client"]
+  },
+  "allowScripts": ["npm:esbuild@0.25.7"]
+}

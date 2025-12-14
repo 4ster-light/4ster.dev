@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "purple_dark";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: #0f0f23;
+  --color-base-200: #1a1a3a;
+  --color-base-300: #2d1b69;
+  --color-base-content: #fffffe;
+  --color-primary: #9370db;
+  --color-primary-content: #fffffe;
+  --color-secondary: #ba55d3;
+  --color-secondary-content: #fffffe;
+  --color-accent: #6a5acd;
+  --color-accent-content: #fffffe;
+  --color-neutral: #1a1a3a;
+  --color-neutral-content: #e2d9f7;
+  --color-info: #7b68ee;
+  --color-info-content: #fffffe;
+  --color-success: #66d9b4;
+  --color-success-content: #0f0f23;
+  --color-warning: #f4a261;
+  --color-warning-content: #0f0f23;
+  --color-error: #e63946;
+  --color-error-content: #fffffe;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "purple_light";
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #f8f4ff;
+  --color-base-200: #efe9fb;
+  --color-base-300: #ded8f8;
+  --color-base-content: #2d1b69;
+  --color-primary: #7b68ee;
+  --color-primary-content: #f8f4ff;
+  --color-secondary: #6a5acd;
+  --color-secondary-content: #f8f4ff;
+  --color-accent: #9370db;
+  --color-accent-content: #2d1b69;
+  --color-neutral: #efe9fb;
+  --color-neutral-content: #4a3e8a;
+  --color-info: #7b68ee;
+  --color-info-content: #f8f4ff;
+  --color-success: #66d9b4;
+  --color-success-content: #2d1b69;
+  --color-warning: #f4a261;
+  --color-warning-content: #2d1b69;
+  --color-error: #e63946;
+  --color-error-content: #f8f4ff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  --border: 1px;
+
+  --depth: 1;
+  --noise: 0;
+}
+
+::selection {
+  @apply bg-primary/25;
+}
+
+.prose {
+  @apply max-w-none;
+
+  a {
+    @apply link link-hover link-secondary;
+  }
+
+  pre {
+    @apply rounded-lg overflow-auto p-0;
+  }
+}

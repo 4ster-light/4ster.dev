@@ -4,27 +4,7 @@ applyTo: "**/*.ts, **/*.svelte.ts, **/*.svelte"
 
 # **TypeScript Coding Guidelines**
 
-## **1. Type Definitions**
-
-- **Prefer `type` over `interface`** for defining types.
-- **Use `&` for type composition** instead of `extends` or `implements`.
-- Avoid `interface` unless required for third-party libraries or declaration merging.
-
-**Example:**
-
-```typescript
-type User = {
-  id: string
-  name: string
-}
-
-type Admin = User & {
-  role: "admin"
-  permissions: string[]
-}
-```
-
-## **2. Async/Await vs Promises**
+## **Async/Await vs Promises**
 
 - **Prefer `.then()`, `.catch()`, and `.finally()`** over `async/await` blocks for promise handling.
 - Use `.map()`, `.filter()`, and other array methods for functional-style transformations.
@@ -107,7 +87,6 @@ Always use the API's and Runes of Svelte 5 like `$props()`, `$state()`, `$derive
 - **Keep components small and focused** on a single responsibility.
 - Use **`<script lang="ts">`** for TypeScript support.
 - Separate logic, markup, and styles clearly within the component.
-- Use **`<style lang="scss">`** for component-specific styles.
 
 ## **2. Props and State Management**
 
@@ -117,15 +96,15 @@ Always use the API's and Runes of Svelte 5 like `$props()`, `$state()`, `$derive
 
 ```svelte
 <script lang="ts">
-  type Props = {
+  interface Props {
     title: string
     isActive: boolean
   }
 
-  let { title, isActive }: Props = $props()
+  let props: Props = $props()
 </script>
 
-<h1 class:is-active={isActive}>{title}</h1>
+<h1 class:is-active={props.isActive}>{props.title}</h1>
 ```
 
 - Use **`$state()`** for local component state.
@@ -134,11 +113,11 @@ Always use the API's and Runes of Svelte 5 like `$props()`, `$state()`, `$derive
 
 ```svelte
 <script lang="ts">
-  type Props = {
+  interface Props {
     count: number
   }
 
-  let { count }: Props = $props()
+  let props: Props = $props()
   let state = $state({ clicks: 0 })
 </script>
 
@@ -153,12 +132,12 @@ Always use the API's and Runes of Svelte 5 like `$props()`, `$state()`, `$derive
 
 ```svelte
 <script lang="ts">
-  type Props = {
+  interface Props {
     items: string[]
   }
 
-  let { items }: Props = $props()
-  let derived = $derived(() => items.length)
+  let props: Props = $props()
+  let derived = $derived(() => props.items.length)
 </script>
 
 <p>Total items: {derived}</p>

@@ -4,10 +4,7 @@ node_modules
 .vite
 .deno-deploy
 .output
-.vercel
-.netlify
-.wrangler
-.svelte-kit
+dist
 
 # OS
 .DS_Store
@@ -22,3 +19,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Fresh build directory
+_fresh/
+
