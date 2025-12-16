@@ -7,7 +7,7 @@ interface Props {
   children: ComponentChildren
 }
 
-export default function Button({
+export default function ButtonLink({
   href,
   target = "_blank",
   rel = "noopener noreferrer",
