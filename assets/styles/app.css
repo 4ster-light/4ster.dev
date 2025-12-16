@@ -97,3 +97,7 @@
     @apply rounded-lg overflow-auto p-0;
   }
 }
+
+p a {
+  @apply link link-hover link-primary;
+}

@@ -3,7 +3,7 @@ import { page } from "fresh"
 import { define } from "@/utils.ts"
 import { fetchPosts, type Post } from "@/lib/posts.ts"
 import urls from "@/lib/urls.ts"
-import PostsList from "@/components/PostsList.tsx"
+import PostMeta from "@/components/PostMeta.tsx"
 
 function SEO() {
   return (
@@ -58,6 +58,8 @@ export default define.page<typeof handler>(function Home(ctx) {
   return (
     <>
       <SEO />
+
+      {/* Introduction Section */}
       <section class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center">
         <img
           src="/pfp.jpg"
@@ -81,10 +83,17 @@ export default define.page<typeof handler>(function Home(ctx) {
 
       <div class="divider"></div>
 
-      <section class="space-y-8">
-        <h2 class="text-2xl font-bold text-secondary">Blog Posts</h2>
+      {/* Posts List */}
+      <section>
+        <h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
         {posts && posts.length > 0
-          ? <PostsList posts={posts} />
+          ? (
+            <div class="space-y-8">
+              {posts
+                .filter((post) => !post["is-preview"])
+                .map((post) => <PostMeta key={post.slug} post={post} />)}
+            </div>
+          )
           : (
             <p class="text-error text-4xl leading-relaxed">
               Problem loading posts.
@@ -94,6 +103,7 @@ export default define.page<typeof handler>(function Home(ctx) {
 
       <div class="my-8"></div>
 
+      {/* Projects Section */}
       <section>
         <h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
         <p class="text-base-content/80 leading-relaxed">
@@ -102,8 +112,7 @@ export default define.page<typeof handler>(function Home(ctx) {
           <a
             href="https://artscii.deno.dev"
             target="_blank"
-            rel="noopener"
-            class="link link-hover link-primary"
+            rel="noopener noreferrer"
           >
             artscii.deno.dev
           </a>
@@ -112,7 +121,7 @@ export default define.page<typeof handler>(function Home(ctx) {
           <a
             href="https://ko-fi.com/album/Ascii-Art-L4L21KA9TI"
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             image album
           </a>{" "}

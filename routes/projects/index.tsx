@@ -3,7 +3,7 @@ import { page } from "fresh"
 import { define } from "@/utils.ts"
 import { fetchRepositories, type Repository } from "@/lib/repositories.ts"
 import urls from "@/lib/urls.ts"
-import Button from "@/components/Button.tsx"
+import ButtonLink from "@/components/ButtonLink.tsx"
 
 function SEO() {
   return (
@@ -108,21 +108,21 @@ export default define.page<typeof handler>(async function Projects(ctx) {
       <div class="my-8"></div>
 
       <footer class="border-base-300 flex justify-end items-center gap-4 flex-col sm:flex-row">
-        <Button href={urls.url} target="">
+        <ButtonLink href={urls.url} target="">
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
             alt="Left Arrows"
             class="size-8"
           />
-        </Button>
-        <Button href={urls.kofiUrl}>
+        </ButtonLink>
+        <ButtonLink href={urls.kofiUrl}>
           <img
             src={(await import("@/assets/icons/CreditCard.svg")).default}
             alt="Buy me a Coffee"
             class="size-6"
           />{" "}
           Buy me a Coffee
-        </Button>
+        </ButtonLink>
       </footer>
     </>
   )

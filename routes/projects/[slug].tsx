@@ -2,7 +2,7 @@ import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
 import { fetchRepositories, type Repository } from "@/lib/repositories.ts"
 import urls from "@/lib/urls.ts"
-import Button from "@/components/Button.tsx"
+import ButtonLink from "@/components/ButtonLink.tsx"
 import { page } from "fresh"
 
 function SEO({ repository }: { repository: Repository }) {
@@ -66,9 +66,9 @@ export default define.page<typeof handler>(async function ProjectPage(ctx) {
         <p class="text-base-content/70 mb-6">
           The project you're looking for doesn't exist.
         </p>
-        <Button href="/projects" target="">
+        <ButtonLink href="/projects" target="">
           <img src="/icons/LeftArrows.svg" alt="Left Arrows" class="w-4 h-4" /> back
-        </Button>
+        </ButtonLink>
       </div>
     )
   }
@@ -124,21 +124,21 @@ export default define.page<typeof handler>(async function ProjectPage(ctx) {
         <div class="divider"></div>
 
         <footer class="flex justify-between items-center gap-4 flex-col sm:flex-row">
-          <Button href={urls.url} target="">
+          <ButtonLink href={urls.url} target="">
             <img
               src={(await import("@/assets/icons/LeftArrows.svg")).default}
               alt="Left Arrows"
               class="size-8"
             />
-          </Button>
-          <Button href={urls.kofiUrl}>
+          </ButtonLink>
+          <ButtonLink href={urls.kofiUrl}>
             <img
               src={(await import("@/assets/icons/CreditCard.svg")).default}
               alt="Buy me a Coffee"
               class="size-6"
             />{" "}
             Buy me a Coffee
-          </Button>
+          </ButtonLink>
         </footer>
       </article>
     </div>

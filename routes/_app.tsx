@@ -1,6 +1,20 @@
 import { define } from "@/utils.ts"
 import urls from "@/lib/urls.ts"
 import NavLink from "@/components/NavLink.tsx"
+import type { ComponentChildren } from "preact"
+
+function Html({ children }: { children: ComponentChildren }) {
+  return (
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/pfp.jpg" />
+      </head>
+      {children}
+    </html>
+  )
+}
 
 export default define.page(async function App({ Component }) {
   const navLinks = [
@@ -29,12 +43,7 @@ export default define.page(async function App({ Component }) {
   ]
 
   return (
-    <html lang="en">
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="/pfp.jpg" />
-      </head>
+    <Html>
       <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
         <header class="border-b border-base-300 bg-base-200/30">
           <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-wrap items-center justify-center md:justify-between gap-4">
@@ -60,6 +69,6 @@ export default define.page(async function App({ Component }) {
           </div>
         </footer>
       </body>
-    </html>
+    </Html>
   )
 })

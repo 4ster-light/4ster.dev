@@ -4,7 +4,7 @@ import { define } from "@/utils.ts"
 import urls from "@/lib/urls.ts"
 import { fetchPosts, type Post } from "@/lib/posts.ts"
 import PostMeta from "@/components/PostMeta.tsx"
-import Button from "@/components/Button.tsx"
+import ButtonLink from "@/components/ButtonLink.tsx"
 
 function SEO({ post }: { post: Post }) {
   return (
@@ -47,7 +47,8 @@ export const handler = define.handlers({
     const posts = await fetchPosts(githubToken)
     const post = posts.find((p: Post) => p.slug === ctx.params.slug)
 
-    return (!post) ? page<PageData>({ post: undefined }, { status: 404 }) : page<PageData>({ post })
+    if (!post) return page<PageData>({ post: undefined }, { status: 404 })
+    return page<PageData>({ post })
   }
 })
 
@@ -61,13 +62,13 @@ export default define.page<typeof handler>(async function PostPage(ctx) {
         <p class="text-base-content/70 mb-6">
           The post you're looking for doesn't exist.
         </p>
-        <Button href={urls.url} target="">
+        <ButtonLink href={urls.url} target="">
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
             alt="Left Arrows"
             class="size-8"
           />
-        </Button>
+        </ButtonLink>
       </div>
     )
   }
@@ -76,39 +77,36 @@ export default define.page<typeof handler>(async function PostPage(ctx) {
     <>
       <SEO post={post} />
 
-      <article class="space-y-8">
-        <header>
-          <PostMeta post={post} header />
-        </header>
+      <PostMeta post={post} header />
 
-        <div class="divider" />
+      <div class="divider mb-12" />
 
-        <section
-          class="prose"
-          // deno-lint-ignore react-no-danger
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+      <main
+        class="prose"
+        // deno-lint-ignore react-no-danger
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      >
+      </main>
 
-        <div class="divider" />
+      <div class="divider" />
 
-        <footer class="flex justify-end gap-4 sm:flex-row">
-          <Button href={urls.url} target="">
-            <img
-              src={(await (import("@/assets/icons/LeftArrows.svg"))).default}
-              alt="Left Arrows"
-              class="size-8"
-            />
-          </Button>
-          <Button href={urls.kofiUrl}>
-            <img
-              src={(await (import("@/assets/icons/CreditCard.svg"))).default}
-              alt=" Buy me a Coffee"
-              class="size-6"
-            />{" "}
-            Buy me a Coffee
-          </Button>
-        </footer>
-      </article>
+      <footer class="flex justify-end gap-4 sm:flex-row">
+        <ButtonLink href={urls.url} target="">
+          <img
+            src={(await (import("@/assets/icons/LeftArrows.svg"))).default}
+            alt="Left Arrows"
+            class="size-8"
+          />
+        </ButtonLink>
+        <ButtonLink href={urls.kofiUrl}>
+          <img
+            src={(await (import("@/assets/icons/CreditCard.svg"))).default}
+            alt=" Buy me a Coffee"
+            class="size-6"
+          />{" "}
+          Buy me a Coffee
+        </ButtonLink>
+      </footer>
     </>
   )
 })
