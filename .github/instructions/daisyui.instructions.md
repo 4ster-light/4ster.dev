@@ -29,11 +29,7 @@ components
    you can use Tailwind CSS and daisyUI CDN files:
 
 ```html
-<link
-  href="https://cdn.jsdelivr.net/npm/daisyui@5"
-  rel="stylesheet"
-  type="text/css"
-/>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 ```
 
@@ -778,11 +774,7 @@ Example: This sidebar is always visible on large screen, can be toggled on small
     </label>
   </div>
   <div class="drawer-side">
-    <label
-      for="my-drawer-3"
-      aria-label="close sidebar"
-      class="drawer-overlay"
-    ></label>
+    <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
     <ul class="menu bg-base-200 min-h-full w-80 p-4">
       <!-- Sidebar content here -->
       <li><button>Sidebar Item 1</button></li>
@@ -802,11 +794,7 @@ icons and text
     <!-- Page content here -->
   </div>
   <div class="drawer-side is-drawer-close:overflow-visible">
-    <label
-      for="my-drawer-4"
-      aria-label="close sidebar"
-      class="drawer-overlay"
-    ></label>
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
     <div
       class="is-drawer-close:w-14 is-drawer-open:w-64 bg-base-200 flex flex-col items-start min-h-full"
     >
@@ -814,30 +802,21 @@ icons and text
       <ul class="menu w-full grow">
         <!-- list item -->
         <li>
-          <button
-            class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-            data-tip="Homepage"
-          >
+          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Homepage">
             🏠
             <span class="is-drawer-close:hidden">Homepage</span>
           </button>
         </li>
         <!-- list item -->
         <li>
-          <button
-            class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-            data-tip="Settings"
-          >
+          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
             ⚙️
             <span class="is-drawer-close:hidden">Settings</span>
           </button>
         </li>
       </ul>
       <!-- button to open/close drawer -->
-      <div
-        class="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right"
-        data-tip="Open"
-      >
+      <div class="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Open">
         <label
           for="my-drawer-4"
           class="btn btn-ghost btn-circle drawer-button is-drawer-open:rotate-y-180"
@@ -939,9 +918,7 @@ A FAB that opens a 3 other buttons in the corner of page vertically
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
   <button class="btn btn-lg btn-circle">{Icon1}</button>
   <button class="btn btn-lg btn-circle">{Icon2}</button>
   <button class="btn btn-lg btn-circle">{Icon3}</button>
@@ -952,9 +929,7 @@ A FAB that opens a 3 other buttons in the corner of page vertically and they hav
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
   <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
@@ -965,9 +940,7 @@ FAB with rectangle buttons. These are not circular buttons so they can have more
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
   <button class="btn btn-lg">{Label1}</button>
   <button class="btn btn-lg">{Label2}</button>
   <button class="btn btn-lg">{Label3}</button>
@@ -978,12 +951,8 @@ FAB with close button. When FAB is open, the original button is replaced with a 
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
-  <div class="fab-close">
-    Close <span class="btn btn-circle btn-lg btn-error">✕</span>
-  </div>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <div class="fab-close">Close <span class="btn btn-circle btn-lg btn-error">✕</span></div>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
   <div>{Label3}<button class="btn btn-lg btn-circle">{Icon3}</button></div>
@@ -995,13 +964,9 @@ button
 
 ```html
 <div class="fab">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
   <div class="fab-main-action">
-    {LabelMainAction}<button class="btn btn-circle btn-secondary btn-lg">
-      {IconMainAction}
-    </button>
+    {LabelMainAction}<button class="btn btn-circle btn-secondary btn-lg">{IconMainAction}</button>
   </div>
   <div>{Label1}<button class="btn btn-lg btn-circle">{Icon1}</button></div>
   <div>{Label2}<button class="btn btn-lg btn-circle">{Icon2}</button></div>
@@ -1013,12 +978,8 @@ FAB Flower. It opens the buttons in a flower shape (quarter circle) arrangement 
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
-  <button class="fab-main-action btn btn-circle btn-lg">
-    {IconMainAction}
-  </button>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
   <button class="btn btn-lg btn-circle">{Icon1}</button>
   <button class="btn btn-lg btn-circle">{Icon2}</button>
   <button class="btn btn-lg btn-circle">{Icon3}</button>
@@ -1030,12 +991,8 @@ used to indicate the button's function
 
 ```html
 <div class="fab fab-flower">
-  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">
-    {IconOriginal}
-  </div>
-  <button class="fab-main-action btn btn-circle btn-lg">
-    {IconMainAction}
-  </button>
+  <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">{IconOriginal}</div>
+  <button class="fab-main-action btn btn-circle btn-lg">{IconMainAction}</button>
   <div class="tooltip tooltip-left" data-tip="{Label1}">
     <button class="btn btn-lg btn-circle">{Icon1}</button>
   </div>
@@ -1223,10 +1180,7 @@ like buttons or links inside it.
 ```html
 <div class="hover-3d my-12 mx-2">
   <figure class="max-w-100 rounded-2xl">
-    <img
-      src="https://img.daisyui.com/images/stock/creditcard.webp"
-      alt="Tailwind CSS 3D card"
-    />
+    <img src="https://img.daisyui.com/images/stock/creditcard.webp" alt="Tailwind CSS 3D card" />
   </figure>
   <div></div>
   <div></div>
@@ -1780,14 +1734,7 @@ Radial progress can be used to show the progress of a task or to show the passin
 #### Syntax
 
 ```html
-<div
-  class="radial-progress"
-  style="--value: 70"
-  aria-valuenow="70"
-  role="progressbar"
->
-  70%
-</div>
+<div class="radial-progress" style="--value: 70" aria-valuenow="70" role="progressbar">70%</div>
 ```
 
 #### Rules
