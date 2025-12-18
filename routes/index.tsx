@@ -47,8 +47,10 @@ interface PageData {
 export const handler = define.handlers({
   async GET(_ctx) {
     const githubToken = Deno.env.get("GH_API") || ""
+
     const posts = await fetchPosts(githubToken)
-    return page<PageData>({ posts })
+
+    return posts ? page<PageData>({ posts }) : page<PageData>({ posts: undefined }, { status: 404 })
   }
 })
 

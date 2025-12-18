@@ -47,7 +47,7 @@ export default define.page(async function App({ Component }) {
       <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
         <header class="border-b border-base-300 bg-base-200/30">
           <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-wrap items-center justify-center md:justify-between gap-4">
-            <a href="/" class="text-3xl link-hover font-bold text-secondary">
+            <a href={urls.url} class="text-3xl link-hover font-bold text-secondary">
               ✰λster✰
             </a>
 

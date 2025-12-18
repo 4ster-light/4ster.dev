@@ -47,12 +47,11 @@ export const handler = define.handlers({
     const posts = await fetchPosts(githubToken)
     const post = posts.find((p: Post) => p.slug === ctx.params.slug)
 
-    if (!post) return page<PageData>({ post: undefined }, { status: 404 })
-    return page<PageData>({ post })
+    return post ? page<PageData>({ post }) : page<PageData>({ post: undefined }, { status: 404 })
   }
 })
 
-export default define.page<typeof handler>(async function PostPage(ctx) {
+export default define.page<typeof handler>(async (ctx) => {
   const { post } = ctx.data
 
   if (!post) {
