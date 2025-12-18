@@ -1,4 +1,4 @@
-import type { Post } from "@/lib/posts.ts"
+import type { Post } from "@/lib/content/posts.ts"
 
 interface Props {
   post: Post
