@@ -38,17 +38,16 @@ async function fetchReadme(
     })
   })
     .then((response) => response.json())
-    .then(({ content }: { content: string }) =>
-      createMarkedInstance().parse(
-        new TextDecoder().decode(Uint8Array.from(
-          atob(content.replace(/\s/g, "")),
-          (c) => c.charCodeAt(0)
-        )).replace(
-          /\]\((?!https?:\/\/)([^)]+)\)/g,
-          `](https://github.com/${owner}/${repo}/blob/main/$1)`
-        )
+    .then(({ content }: { content: string }) => {
+      const decodedContent = atob(content.replace(/\s/g, ""))
+      const bytes = Uint8Array.from(decodedContent, (c) => c.charCodeAt(0))
+      const utf8Content = new TextDecoder("utf-8").decode(bytes)
+      const adjustedContent = utf8Content.replace(
+        /\]\((?!https?:\/\/)([^)]+)\)/g,
+        `](https://github.com/${owner}/${repo}/blob/main/$1)`
       )
-    )
+      return createMarkedInstance().parse(adjustedContent)
+    })
     .catch((error) => {
       console.error(`Failed to fetch README for ${owner}/${repo}: ${error}`)
       return ""
