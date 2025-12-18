@@ -1,7 +1,7 @@
 import { Head } from "fresh/runtime"
 import { page } from "fresh"
 import { define } from "@/utils.ts"
-import { fetchPosts, type Post } from "@/lib/posts.ts"
+import { fetchPosts, type Post } from "@/lib/content/posts.ts"
 import urls from "@/lib/urls.ts"
 import PostMeta from "@/components/PostMeta.tsx"
 

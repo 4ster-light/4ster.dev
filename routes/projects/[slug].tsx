@@ -1,6 +1,6 @@
 import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
-import { fetchRepositories, type Repository } from "@/lib/repositories.ts"
+import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
 import urls from "@/lib/urls.ts"
 import ButtonLink from "@/components/ButtonLink.tsx"
 import { page } from "fresh"
