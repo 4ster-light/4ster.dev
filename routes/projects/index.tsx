@@ -38,19 +38,45 @@ function SEO() {
 }
 
 interface PageData {
-  repositories: Repository[]
+  repositories?: Repository[]
 }
 
 export const handler = define.handlers({
   async GET(_ctx) {
     const githubToken = Deno.env.get("GH_API") || ""
+
     const repositories = await fetchRepositories(githubToken)
-    return page<PageData>({ repositories })
+
+    return repositories
+      ? page<PageData>({ repositories })
+      : page<PageData>({ repositories: undefined }, { status: 404 })
   }
 })
 
 export default define.page<typeof handler>(async function Projects(ctx) {
   const { repositories } = ctx.data
+
+  if (!repositories) {
+    return (
+      <>
+        <SEO />
+
+        <div class="text-center py-16">
+          <h1 class="text-3xl font-bold mb-4 text-error">Projects Not Found</h1>
+          <p class="text-base-content/70 mb-6">
+            The projects you're looking for aren't loading right now.
+          </p>
+          <ButtonLink href={urls.url} target="">
+            <img
+              src={(await import("@/assets/icons/LeftArrows.svg")).default}
+              alt="Left Arrows"
+              class="size-8"
+            />
+          </ButtonLink>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>

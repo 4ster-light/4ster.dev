@@ -39,35 +39,38 @@ function SEO({ repository }: { repository: Repository }) {
 }
 
 interface PageData {
-  repository: Repository | null
+  repository?: Repository
 }
 
 export const handler = define.handlers({
   async GET(ctx) {
-    const { slug } = ctx.params
     const githubToken = Deno.env.get("GH_API") || ""
 
     const repositories = await fetchRepositories(githubToken)
-    const repository = repositories.find((r: Repository) => r.name === slug)
+    const repository = repositories.find((r: Repository) => r.name === ctx.params.slug)
 
-    if (!repository)
-      return page<PageData>({ repository: null }, { status: 404 })
-    return page<PageData>({ repository })
+    return repository
+      ? page<PageData>({ repository })
+      : page<PageData>({ repository: undefined }, { status: 404 })
   }
 })
 
-export default define.page<typeof handler>(async function ProjectPage(ctx) {
+export default define.page<typeof handler>(async (ctx) => {
   const { repository } = ctx.data
 
   if (!repository) {
     return (
       <div class="text-center py-16">
-        <h1 class="text-3xl font-bold mb-4">Project Not Found</h1>
+        <h1 class="text-3xl font-bold mb-4 text-error">Project Not Found</h1>
         <p class="text-base-content/70 mb-6">
           The project you're looking for doesn't exist.
         </p>
-        <ButtonLink href="/projects" target="">
-          <img src="/icons/LeftArrows.svg" alt="Left Arrows" class="w-4 h-4" /> back
+        <ButtonLink href={urls.projectsUrl} target="">
+          <img
+            src={(await import("@/assets/icons/LeftArrows.svg")).default}
+            alt="Left Arrows"
+            class="size-8"
+          />
         </ButtonLink>
       </div>
     )
@@ -124,7 +127,7 @@ export default define.page<typeof handler>(async function ProjectPage(ctx) {
         <div class="divider"></div>
 
         <footer class="flex justify-between items-center gap-4 flex-col sm:flex-row">
-          <ButtonLink href={urls.url} target="">
+          <ButtonLink href={urls.projectsUrl} target="">
             <img
               src={(await import("@/assets/icons/LeftArrows.svg")).default}
               alt="Left Arrows"
