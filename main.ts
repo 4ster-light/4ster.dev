@@ -7,7 +7,7 @@ const logginMiddleware = define.middleware(async (ctx) => {
   return await ctx.next()
 })
 
-const cacheHeadersMiddleware = define.middleware(async (ctx) => {
+export const cacheHeadersMiddleware = define.middleware(async (ctx) => {
   const response = await ctx.next()
   response.headers.set("Cache-Control", "public, s-maxage=600, stale-while-revalidate=1800")
   return response
