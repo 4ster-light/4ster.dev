@@ -5,6 +5,6 @@ export default {
   githubUrl: "https://github.com/4ster-light",
   projectsUrl: "/projects",
   donateUrl: "/donate",
-  kofiUrl: "https://ko-fi.com/asterlight",
+  kofiUrl: "https://ko-fi.com/4ster",
   uniUrl: "https://esi.uclm.es"
 }
