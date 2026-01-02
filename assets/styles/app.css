@@ -3,31 +3,31 @@
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {
-  name: "purple_dark";
+  name: "teal_dark";
   default: true;
   prefersdark: true;
   color-scheme: dark;
 
-  --color-base-100: #0f0f23;
-  --color-base-200: #1a1a3a;
-  --color-base-300: #2d1b69;
-  --color-base-content: #fffffe;
-  --color-primary: #9370db;
-  --color-primary-content: #fffffe;
-  --color-secondary: #ba55d3;
-  --color-secondary-content: #fffffe;
-  --color-accent: #6a5acd;
-  --color-accent-content: #fffffe;
-  --color-neutral: #1a1a3a;
-  --color-neutral-content: #e2d9f7;
-  --color-info: #7b68ee;
-  --color-info-content: #fffffe;
-  --color-success: #66d9b4;
-  --color-success-content: #0f0f23;
-  --color-warning: #f4a261;
-  --color-warning-content: #0f0f23;
-  --color-error: #e63946;
-  --color-error-content: #fffffe;
+  --color-base-100: #0f1419;
+  --color-base-200: #1a2028;
+  --color-base-300: #252d38;
+  --color-base-content: #dce8ea;
+  --color-primary: #45a293;
+  --color-primary-content: #0d1f1c;
+  --color-secondary: #3d8c7e;
+  --color-secondary-content: #e8f4f5;
+  --color-accent: #8b4a52;
+  --color-accent-content: #fef5f6;
+  --color-neutral: #1f2730;
+  --color-neutral-content: #c8d8da;
+  --color-info: #5499b8;
+  --color-info-content: #0d1f1c;
+  --color-success: #45a88f;
+  --color-success-content: #0d1f1c;
+  --color-warning: #d4a574;
+  --color-warning-content: #1a2028;
+  --color-error: #c94b54;
+  --color-error-content: #fef5f6;
 
   --radius-selector: 1rem;
   --radius-field: 0.5rem;
@@ -43,31 +43,31 @@
 }
 
 @plugin "daisyui/theme" {
-  name: "purple_light";
+  name: "teal_light";
   default: false;
   prefersdark: false;
   color-scheme: light;
 
-  --color-base-100: #f8f4ff;
-  --color-base-200: #efe9fb;
-  --color-base-300: #ded8f8;
-  --color-base-content: #2d1b69;
-  --color-primary: #7b68ee;
-  --color-primary-content: #f8f4ff;
-  --color-secondary: #6a5acd;
-  --color-secondary-content: #f8f4ff;
-  --color-accent: #9370db;
-  --color-accent-content: #2d1b69;
-  --color-neutral: #efe9fb;
-  --color-neutral-content: #4a3e8a;
-  --color-info: #7b68ee;
-  --color-info-content: #f8f4ff;
-  --color-success: #66d9b4;
-  --color-success-content: #2d1b69;
-  --color-warning: #f4a261;
-  --color-warning-content: #2d1b69;
-  --color-error: #e63946;
-  --color-error-content: #f8f4ff;
+  --color-base-100: #f5fafa;
+  --color-base-200: #e8f4f5;
+  --color-base-300: #d4e8e9;
+  --color-base-content: #1a2028;
+  --color-primary: #3a9d8f;
+  --color-primary-content: #f5fafa;
+  --color-secondary: #4db8a8;
+  --color-secondary-content: #f5fafa;
+  --color-accent: #a85860;
+  --color-accent-content: #f5fafa;
+  --color-neutral: #e8f4f5;
+  --color-neutral-content: #2a3340;
+  --color-info: #5ba3c4;
+  --color-info-content: #f5fafa;
+  --color-success: #52c4a0;
+  --color-success-content: #1a2028;
+  --color-warning: #d4a574;
+  --color-warning-content: #1a2028;
+  --color-error: #c94b54;
+  --color-error-content: #f5fafa;
 
   --radius-selector: 1rem;
   --radius-field: 0.5rem;
@@ -94,7 +94,11 @@
   }
 
   pre {
-    @apply rounded-lg overflow-auto p-0;
+    @apply rounded-lg overflow-auto p-0 border border-base-content/10;
+  }
+
+  .line-number {
+    @apply inline-block w-8 pr-4 text-right text-base-content/40 select-none;
   }
 }
 
