@@ -12,6 +12,9 @@ export function createMarkedInstance() {
       highlight(code, lang, _) {
         const language = hljs.getLanguage(lang) ? lang : "plaintext"
         return hljs.highlight(code, { language }).value
+          .split("\n")
+          .map((line, index) => `<span class="line-number">${index + 1}</span>${line}`)
+          .join("\n")
       }
     })
   )
