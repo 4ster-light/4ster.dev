@@ -97,13 +97,13 @@ export default define.page<typeof handler>(async (ctx) => {
             class="size-8"
           />
         </ButtonLink>
-        <ButtonLink href={urls.kofiUrl}>
+        <ButtonLink href={urls.githubSponsorsUrl}>
           <img
             src={(await (import("@/assets/icons/CreditCard.svg"))).default}
-            alt=" Buy me a Coffee"
+            alt="Sponsor"
             class="size-6"
           />{" "}
-          Buy me a Coffee
+          Sponsor
         </ButtonLink>
       </footer>
     </>
