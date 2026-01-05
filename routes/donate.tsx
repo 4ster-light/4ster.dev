@@ -54,12 +54,11 @@ export default define.page(function Donate() {
         <div>
           <h2 class="text-4xl font-bold text-secondary mb-4">Support Me</h2>
           <p>
-            If you like my work you can <strong>subscribe</strong> or <strong>donate</strong> to my
-            {" "}
-            <a href={urls.kofiUrl} target="_blank" rel="noopener">
-              Ko-fi page
+            If you like my work you can <strong>sponsor</strong> me on{" "}
+            <a href={urls.githubSponsorsUrl} target="_blank" rel="noopener">
+              GitHub Sponsors
             </a>
-            , where I also post updates and different content by the way.
+            .
           </p>
         </div>
 
