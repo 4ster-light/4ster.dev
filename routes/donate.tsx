@@ -15,7 +15,7 @@ function SEO() {
 
       <meta property="og:title" content="Support - ✰λster✰" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content={urls.bannerUrl} />
+      <meta property="og:image" content={urls.banner} />
       <meta
         property="og:description"
         content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
@@ -31,7 +31,7 @@ function SEO() {
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.bannerUrl} />
+      <meta name="twitter:image" content={urls.banner} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>
@@ -51,19 +51,34 @@ export default define.page(function Donate() {
       <SEO />
 
       <div class="space-y-8">
-        <div>
-          <h2 class="text-4xl font-bold text-secondary mb-4">Support Me</h2>
+        <h2 class="text-4xl font-bold text-secondary mb-8">Support Me</h2>
+        <section>
+          <h3 class="text-xl font-semibold mb-4">Github Sponsors</h3>
           <p>
-            If you like my work you can <strong>sponsor</strong> me on{" "}
-            <a href={urls.githubSponsorsUrl} target="_blank" rel="noopener">
+            If you like my open source projects you can see my most significant ones and{" "}
+            <strong>sponsor</strong> me on{" "}
+            <a href={urls.githubSponsors} target="_blank" rel="noopener">
               GitHub Sponsors
             </a>
             .
           </p>
-        </div>
+        </section>
 
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Cryptocurrency Donations</h3>
+        <section>
+          <h3 class="text-xl font-semibold mb-4">Subscribe to My Substack</h3>
+          <div class="flex justify-center overflow-x-auto">
+            <iframe
+              src="https://4sterlight.substack.com/embed"
+              height="320"
+              class="md:w-full border border-primary rounded-lg"
+              frameborder="0"
+              scrolling="no"
+            />
+          </div>
+        </section>
+
+        <section>
+          <h3 class="text-xl font-semibold mb-4">Cryptocurrency Donations</h3>
           <p class="mb-6">
             You can also send cryptocurrency to any of the following wallet addresses if preferred:
           </p>
@@ -81,7 +96,7 @@ export default define.page(function Donate() {
               </li>
             ))}
           </ul>
-        </div>
+        </section>
       </div>
     </div>
   )

@@ -7,7 +7,7 @@
   },
 
   "tasks": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vite build",
     "check": "deno fmt && deno lint && deno check",
     "preview:dev": "deno task --tunnel dev",

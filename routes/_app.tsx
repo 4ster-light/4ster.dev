@@ -19,23 +19,18 @@ function Html({ children }: { children: ComponentChildren }) {
 export default define.page(async function App({ Component }) {
   const navLinks = [
     {
-      href: urls.xUrl,
-      label: "Twitter",
-      icon: (await import("@/assets/icons/Twitter.svg")).default
+      href: urls.bio,
+      label: "Link Tree",
+      icon: (await import("@/assets/icons/Link.svg")).default
     },
     {
-      href: urls.githubUrl,
-      label: "GitHub",
-      icon: (await import("@/assets/icons/GitHub.svg")).default
-    },
-    {
-      href: urls.projectsUrl,
+      href: urls.projects,
       label: "Projects",
       icon: (await import("@/assets/icons/Code.svg")).default,
       target: ""
     },
     {
-      href: urls.donateUrl,
+      href: urls.donate,
       label: "Support Me",
       icon: (await import("@/assets/icons/CreditCard.svg")).default,
       target: ""
@@ -46,12 +41,12 @@ export default define.page(async function App({ Component }) {
     <Html>
       <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
         <header class="border-b border-base-300 bg-base-200/30">
-          <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-wrap items-center justify-center md:justify-between gap-4">
+          <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4">
             <a href={urls.url} class="text-3xl link-hover font-bold text-secondary">
               ✰λster✰
             </a>
 
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-wrap items-center justify-center md:justify-end gap-2">
               {navLinks.map(({ href, label, icon, target }) => (
                 <NavLink href={href} label={label} icon={icon} target={target} key={href} />
               ))}
