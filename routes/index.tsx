@@ -17,7 +17,7 @@ function SEO() {
 
       <meta property="og:title" content="✰λster✰" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content={urls.bannerUrl} />
+      <meta property="og:image" content={urls.banner} />
       <meta
         property="og:description"
         content="Personal blog about programming, technology, and life."
@@ -33,7 +33,7 @@ function SEO() {
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.bannerUrl} />
+      <meta name="twitter:image" content={urls.banner} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>
@@ -70,16 +70,29 @@ export default define.page<typeof handler>(function Home(ctx) {
         />
         <p class="m-0 text-base-content/80">
           Hi, I am{" "}
-          <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish programmer most known
-          as{" "}
+          <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source developer
+          most known as{" "}
           <strong class="text-primary">Aster</strong>, I am a computer engineering undergraduate at
           {" "}
-          <a href={urls.uniUrl} target="_blank" rel="noopener">
+          <a href={urls.uni} target="_blank" rel="noopener">
             ESI-UCLM
           </a>
-          . I am very passionate about software, specially networks and systems, as well as full
-          stack web development with languages/technologies like Python, Typescript, Rust, Svelte,
-          and F# among others.
+          . I am very passionate about software and computers in general, I use technologies like
+          Python, TypeScript, Rust, Kotlin and Preact, among others.
+        </p>
+      </section>
+
+      <div class="divider"></div>
+
+      {/* Projects Section */}
+      <section>
+        <h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
+        <p class="text-base-content/80 leading-relaxed">
+          I also have some open source projects of my own, you can check them out on my{" "}
+          <a href={urls.projects}>projects page</a>. The most significant ones are pinned on my{" "}
+          <a href={urls.githubSponsors} target="_blank" rel="noopener">
+            GitHub Sponsors Profile
+          </a>.
         </p>
       </section>
 
@@ -88,9 +101,15 @@ export default define.page<typeof handler>(function Home(ctx) {
       {/* Posts List */}
       <section>
         <h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
+        <p class="text-base-content/80 mb-8">
+          Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to
+          computer science and programming. Know that you can find more (some not published here)
+          posts on my <a href={urls.substack} target="_blank" rel="noopener">Substack</a>{" "}
+          publication.
+        </p>
         {posts && posts.length > 0
           ? (
-            <div class="space-y-8">
+            <div class="space-y-10">
               {posts
                 .filter((post) => !post["is-preview"])
                 .map((post) => <PostMeta key={post.slug} post={post} />)}
@@ -104,32 +123,6 @@ export default define.page<typeof handler>(function Home(ctx) {
       </section>
 
       <div class="my-8"></div>
-
-      {/* Projects Section */}
-      <section>
-        <h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
-        <p class="text-base-content/80 leading-relaxed">
-          I also have some open source projects of my own, you can check them out on my{" "}
-          <a href={urls.projectsUrl}>projects page</a>. The most significant is my website{" "}
-          <a
-            href="https://artscii.deno.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            artscii.deno.dev
-          </a>
-          , an image to ascii art converter used by dozens of people on X/Twitter. Of which I have
-          compiled some of the best images created with it in an{" "}
-          <a
-            href="https://ko-fi.com/album/Ascii-Art-L4L21KA9TI"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            image album
-          </a>{" "}
-          in my <strong>Ko-Fi page</strong>.
-        </p>
-      </section>
     </>
   )
 })

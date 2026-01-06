@@ -25,13 +25,13 @@ function SEO({ repository }: { repository: Repository }) {
       <meta property="og:url" content={repository.url} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={urls.bannerUrl} />
+      <meta property="og:image" content={urls.banner} />
 
       <meta name="twitter:title" content={repository.name} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.bannerUrl} />
+      <meta name="twitter:image" content={urls.banner} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>
@@ -65,7 +65,7 @@ export default define.page<typeof handler>(async (ctx) => {
         <p class="text-base-content/70 mb-6">
           The project you're looking for doesn't exist.
         </p>
-        <ButtonLink href={urls.projectsUrl} target="">
+        <ButtonLink href={urls.projects} target="">
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
             alt="Left Arrows"
@@ -127,14 +127,14 @@ export default define.page<typeof handler>(async (ctx) => {
         <div class="divider"></div>
 
         <footer class="flex justify-between items-center gap-4 flex-col sm:flex-row">
-          <ButtonLink href={urls.projectsUrl} target="">
+          <ButtonLink href={urls.projects} target="">
             <img
               src={(await import("@/assets/icons/LeftArrows.svg")).default}
               alt="Left Arrows"
               class="size-8"
             />
           </ButtonLink>
-          <ButtonLink href={urls.githubSponsorsUrl}>
+          <ButtonLink href={urls.githubSponsors}>
             <img
               src={(await import("@/assets/icons/CreditCard.svg")).default}
               alt="Sponsor"

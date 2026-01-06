@@ -23,13 +23,13 @@ function SEO({ post }: { post: Post }) {
       <meta property="og:url" content={`${urls.url}/posts/${post.slug}`} />
       <meta property="og:site_name" content={post.title} />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={urls.bannerUrl} />
+      <meta property="og:image" content={urls.banner} />
 
       <meta name="twitter:title" content={post.title} />
       <meta name="twitter:description" content={post.description} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.bannerUrl} />
+      <meta name="twitter:image" content={urls.banner} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>
@@ -97,7 +97,7 @@ export default define.page<typeof handler>(async (ctx) => {
             class="size-8"
           />
         </ButtonLink>
-        <ButtonLink href={urls.githubSponsorsUrl}>
+        <ButtonLink href={urls.githubSponsors}>
           <img
             src={(await (import("@/assets/icons/CreditCard.svg"))).default}
             alt="Sponsor"

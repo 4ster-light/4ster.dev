@@ -1,10 +1,10 @@
 export default {
   url: "/",
-  bannerUrl: "/banner.png",
-  xUrl: "https://x.com/4ster_light",
-  githubUrl: "https://github.com/4ster-light",
-  githubSponsorsUrl: "https://github.com/sponsors/4ster-light",
-  projectsUrl: "/projects",
-  donateUrl: "/donate",
-  uniUrl: "https://esi.uclm.es"
+  banner: "/banner.png",
+  substack: "https://4sterlight.substack.com",
+  bio: "https://bio.4ster.dev",
+  githubSponsors: "https://github.com/sponsors/4ster-light",
+  projects: "/projects",
+  donate: "/donate",
+  uni: "https://esi.uclm.es"
 }
