@@ -1,4 +1,4 @@
-import { createMarkedInstance } from "@/lib/marked.ts"
+import marked from "@/lib/marked.ts"
 
 export interface Repository {
   name: string
@@ -46,7 +46,7 @@ async function fetchReadme(
         /\]\((?!https?:\/\/)([^)]+)\)/g,
         `](https://github.com/${owner}/${repo}/blob/main/$1)`
       )
-      return createMarkedInstance().parse(adjustedContent)
+      return marked.parse(adjustedContent)
     })
     .catch((error) => {
       console.error(`Failed to fetch README for ${owner}/${repo}: ${error}`)
@@ -64,9 +64,9 @@ export async function fetchRepositories(githubToken: string): Promise<Repository
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then(async (response) => await response.json())
-    .then(async (data: RawRepository[]) =>
-      await Promise.all(
+    .then((response) => response.json())
+    .then((data: RawRepository[]) =>
+      Promise.all(
         data
           .filter((repo) => repo.name !== "4ster-light" && repo.stargazers_count > 0)
           .sort((a, b) => b.stargazers_count - a.stargazers_count)

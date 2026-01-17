@@ -89,6 +89,13 @@
 .prose {
   @apply max-w-none;
 
+  /* Mobile-specific spacing adjustments */
+  @apply prose-p:my-2 sm:prose-p:my-4;
+  @apply prose-headings:my-2 sm:prose-headings:my-4;
+  @apply prose-li:my-1 sm:prose-li:my-2;
+  @apply prose-blockquote:my-2 sm:prose-blockquote:my-4;
+  @apply prose-pre:my-2 sm:prose-pre:my-4;
+
   a {
     @apply link link-hover link-secondary;
   }
@@ -97,8 +104,34 @@
     @apply rounded-lg overflow-auto p-0 border border-base-content/10;
   }
 
+  code {
+    @apply wrap-break-word;
+  }
+
+  .shiki-wrapper {
+    @apply rounded-lg overflow-x-auto border border-base-content/10;
+  }
+
+  .shiki-wrapper pre {
+    @apply p-4 border-0 m-0;
+  }
+
+  .shiki-wrapper code {
+    @apply flex;
+  }
+
   .line-number {
-    @apply inline-block w-8 pr-4 text-right text-base-content/40 select-none;
+    @apply inline-block w-8 pr-4 text-right text-base-content/40 select-none shrink-0;
+  }
+
+  /* Ensure tables wrap properly on mobile */
+  table {
+    @apply text-sm sm:text-base;
+  }
+
+  ul,
+  ol {
+    @apply pl-4 sm:pl-6;
   }
 }
 

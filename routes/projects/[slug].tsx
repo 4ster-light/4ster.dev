@@ -12,10 +12,6 @@ function SEO({ repository }: { repository: Repository }) {
   return (
     <Head>
       <title>{repository.name} - ✰λster✰</title>
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
-      />
       <meta name="author" content="David Vivar Bogónez" />
       <meta name="description" content={description} />
 
@@ -84,7 +80,7 @@ export default define.page<typeof handler>(async (ctx) => {
         <div class="mb-8">
           <h3 class="text-xl font-bold mb-4">Repository Information</h3>
           <div class="overflow-x-auto">
-            <table class="table table-compact border border-base-200">
+            <table class="table table-xs sm:table-sm border border-base-200">
               <tbody>
                 <tr>
                   <th class="text-left">Language</th>
@@ -119,7 +115,7 @@ export default define.page<typeof handler>(async (ctx) => {
         </div>
 
         <section
-          class="prose mt-4 card card-border rounded-2xl p-8 bg-info/5"
+          class="prose prose-sm sm:prose-base mt-4 card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
           // deno-lint-ignore react-no-danger
           dangerouslySetInnerHTML={{ __html: repository.readme! }}
         />
