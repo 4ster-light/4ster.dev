@@ -1,5 +1,5 @@
 import { extract } from "@std/front-matter/yaml"
-import { createMarkedInstance } from "@/lib/marked.ts"
+import marked from "@/lib/marked.ts"
 
 export interface PostMeta {
   title: string
@@ -37,7 +37,7 @@ async function fetchPostContent(
       })
     }
   )
-    .then(async (response) => await response.text())
+    .then((response) => response.text())
     .then((fileContent) => {
       const { attrs, body } = extract<PostMeta>(fileContent)
       return {
@@ -48,7 +48,7 @@ async function fetchPostContent(
         tags: attrs.tags || [],
         "is-preview": attrs["is-preview"] || false,
         "header-image": attrs["header-image"] || false,
-        content: createMarkedInstance().parse(body) as string
+        content: marked.parse(body) as string
       }
     })
     .catch((error) => {
@@ -66,9 +66,9 @@ export async function fetchPosts(githubToken: string): Promise<Post[]> {
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then(async (response) => await response.json())
-    .then(async (data: DirectoryItem[]) =>
-      await Promise.all(
+    .then((response) => response.json())
+    .then((data: DirectoryItem[]) =>
+      Promise.all(
         data
           .filter((dir) => dir.type === "dir")
           .map((dir) => fetchPostContent(dir.name, githubToken))

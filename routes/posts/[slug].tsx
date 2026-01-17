@@ -10,10 +10,6 @@ function SEO({ post }: { post: Post }) {
   return (
     <Head>
       <title>{post.title}</title>
-      <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css"
-      />
       <meta name="author" content="David Vivar Bogónez" />
       <meta name="description" content={post.description} />
 
