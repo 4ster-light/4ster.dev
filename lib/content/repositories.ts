@@ -37,7 +37,7 @@ async function fetchReadme(
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.json())
+    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
     .then(({ content }: { content: string }) => {
       const decodedContent = atob(content.replace(/\s/g, ""))
       const bytes = Uint8Array.from(decodedContent, (c) => c.charCodeAt(0))
@@ -64,7 +64,7 @@ export async function fetchRepositories(githubToken: string): Promise<Repository
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.json())
+    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
     .then((data: RawRepository[]) =>
       Promise.all(
         data

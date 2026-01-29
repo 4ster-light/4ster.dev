@@ -37,7 +37,7 @@ async function fetchPostContent(
       })
     }
   )
-    .then((response) => response.text())
+    .then((response) => response.ok ? response.text() : Promise.reject(response.statusText))
     .then((fileContent) => {
       const { attrs, body } = extract<PostMeta>(fileContent)
       return {
@@ -51,9 +51,7 @@ async function fetchPostContent(
         content: marked.parse(body) as string
       }
     })
-    .catch((error) => {
-      throw new Error(`GitHub API post content request failed: ${error}`)
-    })
+    .catch(() => Promise.reject(`Failed to fetch post: ${dirName}`))
 }
 
 export async function fetchPosts(githubToken: string): Promise<Post[]> {
@@ -66,17 +64,17 @@ export async function fetchPosts(githubToken: string): Promise<Post[]> {
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.json())
+    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
     .then((data: DirectoryItem[]) =>
       Promise.all(
         data
           .filter((dir) => dir.type === "dir")
           .map((dir) => fetchPostContent(dir.name, githubToken))
       ).then((posts) =>
-        posts.sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
+        posts
+          .filter((post) => typeof post !== "string")
+          .sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
       )
     )
-    .catch((error) => {
-      throw new Error(`GitHub API posts request failed: ${error}`)
-    })
+    .catch((error) => Promise.reject(`Failed to fetch posts: ${error}`))
 }
