@@ -66,13 +66,14 @@ export async function fetchPosts(githubToken: string): Promise<Post[]> {
   })
     .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
     .then((data: DirectoryItem[]) =>
-      Promise.all(
+      Promise.allSettled(
         data
           .filter((dir) => dir.type === "dir")
           .map((dir) => fetchPostContent(dir.name, githubToken))
-      ).then((posts) =>
-        posts
-          .filter((post) => typeof post !== "string")
+      ).then((results) =>
+        results
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => (result as PromiseFulfilledResult<Post>).value)
           .sort((a, b) => new Date(b.date).valueOf() - new Date(a.date).valueOf())
       )
     )

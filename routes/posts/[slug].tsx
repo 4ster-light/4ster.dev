@@ -3,7 +3,9 @@ import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
 import urls from "@/lib/urls.ts"
 import { fetchPosts, type Post } from "@/lib/content/posts.ts"
+import { extractHeadings, type TocItem } from "@/lib/toc.ts"
 import PostMeta from "@/components/PostMeta.tsx"
+import TocSidebar from "@/components/TocSidebar.tsx"
 import ButtonLink from "@/components/ButtonLink.tsx"
 
 function SEO({ post }: { post: Post }) {
@@ -34,6 +36,7 @@ function SEO({ post }: { post: Post }) {
 
 interface PageData {
   post?: Post
+  toc?: TocItem[]
 }
 
 export const handler = define.handlers({
@@ -43,12 +46,18 @@ export const handler = define.handlers({
     const posts = await fetchPosts(githubToken)
     const post = posts.find((p: Post) => p.slug === ctx.params.slug)
 
-    return post ? page<PageData>({ post }) : page<PageData>({ post: undefined }, { status: 404 })
+    if (!post)
+      return page<PageData>({ post: undefined }, { status: 404 })
+
+    const { html, items } = extractHeadings(post.content)
+    post.content = html
+
+    return page<PageData>({ post, toc: items })
   }
 })
 
 export default define.page<typeof handler>(async (ctx) => {
-  const { post } = ctx.data
+  const { post, toc } = ctx.data
 
   if (!post) {
     return (
@@ -76,12 +85,18 @@ export default define.page<typeof handler>(async (ctx) => {
 
       <div class="divider mb-12" />
 
-      <main
-        class="prose"
-        // deno-lint-ignore react-no-danger
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      >
-      </main>
+      <div class="grid grid-cols-1 lg:grid-cols-6 gap-8">
+        <main
+          class="-mt-6 prose lg:col-span-4"
+          // deno-lint-ignore react-no-danger
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        >
+        </main>
+
+        <div class="lg:col-span-2 lg:border-l lg:border-base-300 lg:pl-8">
+          <TocSidebar items={toc || []} />
+        </div>
+      </div>
 
       <div class="divider" />
 
