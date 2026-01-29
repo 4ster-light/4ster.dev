@@ -5,6 +5,6 @@ export default {
   bio: "https://bio.4ster.dev",
   githubSponsors: "https://github.com/sponsors/4ster-light",
   projects: "/projects",
-  donate: "/donate",
+  donate: "/sponsor",
   uni: "https://esi.uclm.es"
 }

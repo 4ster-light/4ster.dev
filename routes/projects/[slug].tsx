@@ -132,7 +132,7 @@ export default define.page<typeof handler>(async (ctx) => {
           </ButtonLink>
           <ButtonLink href={urls.githubSponsors}>
             <img
-              src={(await import("@/assets/icons/CreditCard.svg")).default}
+              src={(await import("@/assets/icons/Love.svg")).default}
               alt="Sponsor"
               class="size-6"
             />{" "}

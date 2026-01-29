@@ -54,14 +54,15 @@ export default define.page(function Donate() {
         <h2 class="text-4xl font-bold text-secondary mb-8">Support Me</h2>
         <section>
           <h3 class="text-xl font-semibold mb-4">Github Sponsors</h3>
-          <p>
-            If you like my open source projects you can see my most significant ones and{" "}
-            <strong>sponsor</strong> me on{" "}
-            <a href={urls.githubSponsors} target="_blank" rel="noopener">
-              GitHub Sponsors
-            </a>
-            .
-          </p>
+          <div class="flex justify-center overflow-x-auto">
+            <iframe
+              src="https://github.com/sponsors/4ster-light/card"
+              title="Sponsor 4ster-light"
+              class="h-62.5 md:h-31.25 w-full border border-primary rounded-lg"
+              frameborder="0"
+              scrolling="no"
+            />
+          </div>
         </section>
 
         <section>
@@ -70,7 +71,7 @@ export default define.page(function Donate() {
             <iframe
               src="https://4sterlight.substack.com/embed"
               height="320"
-              class="md:w-full border border-primary rounded-lg"
+              class="w-full border border-primary rounded-lg"
               frameborder="0"
               scrolling="no"
             />
