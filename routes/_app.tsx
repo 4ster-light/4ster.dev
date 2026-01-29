@@ -32,7 +32,7 @@ export default define.page(async function App({ Component }) {
     {
       href: urls.donate,
       label: "Support Me",
-      icon: (await import("@/assets/icons/CreditCard.svg")).default,
+      icon: (await import("@/assets/icons/Love.svg")).default,
       target: ""
     }
   ]

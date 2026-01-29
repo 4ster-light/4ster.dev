@@ -93,7 +93,7 @@ export default define.page<typeof handler>(async (ctx) => {
         >
         </main>
 
-        <div class="lg:col-span-2 lg:border-l lg:border-base-300 lg:pl-8">
+        <div class="lg:col-span-2 lg:border-l lg:border-base-300 lg:pl-8 hidden lg:block">
           <TocSidebar items={toc || []} />
         </div>
       </div>
@@ -110,7 +110,7 @@ export default define.page<typeof handler>(async (ctx) => {
         </ButtonLink>
         <ButtonLink href={urls.githubSponsors}>
           <img
-            src={(await (import("@/assets/icons/CreditCard.svg"))).default}
+            src={(await (import("@/assets/icons/Love.svg"))).default}
             alt="Sponsor"
             class="size-6"
           />{" "}
