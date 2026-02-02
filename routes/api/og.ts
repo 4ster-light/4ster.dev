@@ -13,43 +13,52 @@ const COLORS = {
 
 export type OGType = "post" | "project" | "default"
 
-// Cache for WASM and fonts
-let wasmInitialized = false
+// Cache for WASM, fonts, and pfp
+let initialized = false
 let fontBuffers: Uint8Array[] = []
+let pfpBase64 = ""
 
-async function ensureInitialized() {
-  if (!wasmInitialized) {
-    // Load the WASM module
-    const wasmUrl = "https://esm.sh/@resvg/resvg-wasm@2.6.2/index_bg.wasm"
+async function ensureInitialized(baseUrl: string) {
+  if (!initialized) {
+    // Load the WASM module from CDN
+    const wasmUrl = "https://cdn.jsdelivr.net/npm/@resvg/resvg-wasm@2.6.2/index_bg.wasm"
     const wasmResponse = await fetch(wasmUrl)
+    if (!wasmResponse.ok)
+      throw new Error(`Failed to fetch WASM: ${wasmResponse.statusText}`)
     const wasmBuffer = await wasmResponse.arrayBuffer()
     await initWasm(wasmBuffer)
 
-    // Load fonts
-    const regularFontPath = new URL("../../static/fonts/Inter-Regular.ttf", import.meta.url)
-    const boldFontPath = new URL("../../static/fonts/Inter-Bold.ttf", import.meta.url)
-
-    const [regularFont, boldFont] = await Promise.all([
-      Deno.readFile(regularFontPath),
-      Deno.readFile(boldFontPath)
+    // Load fonts and pfp via HTTP
+    const [regularFontRes, boldFontRes, pfpRes] = await Promise.all([
+      fetch(`${baseUrl}/fonts/Inter-Regular.ttf`),
+      fetch(`${baseUrl}/fonts/Inter-Bold.ttf`),
+      fetch(`${baseUrl}/pfp.jpg`)
     ])
 
-    fontBuffers = [regularFont, boldFont]
-    wasmInitialized = true
+    const [regularFont, boldFont, pfpData] = await Promise.all([
+      regularFontRes.arrayBuffer(),
+      boldFontRes.arrayBuffer(),
+      pfpRes.arrayBuffer()
+    ])
+
+    fontBuffers = [new Uint8Array(regularFont), new Uint8Array(boldFont)]
+    pfpBase64 = btoa(String.fromCharCode(...new Uint8Array(pfpData)))
+
+    initialized = true
   }
 }
 
 export const handler = define.handlers({
   async GET(ctx) {
     const url = new URL(ctx.req.url)
+    const baseUrl = `${url.protocol}//${url.host}`
     const title = url.searchParams.get("title") || "4ster.dev"
     const subtitle = url.searchParams.get("subtitle") || ""
     const type: OGType = (url.searchParams.get("type") as OGType) || "default"
 
-    // Read the pfp image and convert to base64
-    const pfpPath = new URL("../../static/pfp.jpg", import.meta.url)
-    const pfpData = await Deno.readFile(pfpPath)
-    const pfpBase64 = btoa(String.fromCharCode(...pfpData))
+    // Initialize WASM, fonts, and pfp
+    await ensureInitialized(baseUrl)
+
     const pfpDataUri = `data:image/jpeg;base64,${pfpBase64}`
 
     // Truncate title if too long
@@ -108,14 +117,18 @@ export const handler = define.handlers({
     ${
       typeLabel
         ? `
-    <rect x="0" y="180" width="${typeLabel.length * 12 + 32}" height="36" rx="18" fill="${COLORS.primary}" opacity="0.2" />
+    <rect x="0" y="180" width="${
+          typeLabel.length * 12 + 32
+        }" height="36" rx="18" fill="${COLORS.primary}" opacity="0.2" />
     <text x="16" y="205" font-family="Inter" font-size="18" font-weight="500" fill="${COLORS.primary}">${typeLabel}</text>
     `
         : ""
     }
     
     <!-- Title -->
-    <text x="0" y="${typeLabel ? 280 : 260}" font-family="Inter" font-size="56" font-weight="700" fill="${COLORS.baseContent}">
+    <text x="0" y="${
+      typeLabel ? 280 : 260
+    }" font-family="Inter" font-size="56" font-weight="700" fill="${COLORS.baseContent}">
       ${escapeXml(displayTitle)}
     </text>
     
@@ -123,7 +136,9 @@ export const handler = define.handlers({
     ${
       displaySubtitle
         ? `
-    <text x="0" y="${typeLabel ? 340 : 320}" font-family="Inter" font-size="28" font-weight="400" fill="${COLORS.baseContent}" opacity="0.7">
+    <text x="0" y="${
+          typeLabel ? 340 : 320
+        }" font-family="Inter" font-size="28" font-weight="400" fill="${COLORS.baseContent}" opacity="0.7">
       ${escapeXml(displaySubtitle)}
     </text>
     `
@@ -138,9 +153,6 @@ export const handler = define.handlers({
   <rect x="360" y="560" width="200" height="4" rx="2" fill="url(#accent)" />
 </svg>
     `.trim()
-
-    // Initialize WASM and fonts
-    await ensureInitialized()
 
     const resvg = new Resvg(svg, {
       fitTo: {
