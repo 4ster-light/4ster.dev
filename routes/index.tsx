@@ -2,38 +2,42 @@ import { Head } from "fresh/runtime"
 import { page } from "fresh"
 import { define } from "@/utils.ts"
 import { fetchPosts, type Post } from "@/lib/content/posts.ts"
-import urls from "@/lib/urls.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
 import PostMeta from "@/components/PostMeta.tsx"
 
 function SEO() {
+  const image = ogImage("Aster", {
+    subtitle: "Personal blog about programming, technology, and computer science."
+  })
+
   return (
     <Head>
       <title>✰λster✰</title>
       <meta
         name="description"
-        content="Personal blog about programming, technology, and life."
+        content="Personal blog about programming, technology, and computer science."
       />
       <meta name="author" content="David Vivar Bogónez" />
 
       <meta property="og:title" content="✰λster✰" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content={urls.banner} />
+      <meta property="og:image" content={image} />
       <meta
         property="og:description"
-        content="Personal blog about programming, technology, and life."
+        content="Personal blog about programming, technology, and computer science."
       />
-      <meta property="og:url" content={urls.url} />
+      <meta property="og:url" content={urls.baseUrl} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
 
       <meta name="twitter:title" content="✰λster✰" />
       <meta
         name="twitter:description"
-        content="Personal blog about programming, technology, and life."
+        content="Personal blog about programming, technology, and computer science."
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.banner} />
+      <meta name="twitter:image" content={image} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>

@@ -1,6 +1,6 @@
 import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
-import urls from "@/lib/urls.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
 import CopyAddressButton from "@/islands/CopyAddressButton.tsx"
 
 function SEO() {
@@ -9,29 +9,35 @@ function SEO() {
       <title>Support - ✰λster✰</title>
       <meta
         name="description"
-        content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+        content="Support my work by donating or subscribing on GitHub Sponsors or Substack, or sending cryptocurrency to my wallet addresses."
       />
       <meta name="author" content="David Vivar Bogónez" />
 
       <meta property="og:title" content="Support - ✰λster✰" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content={urls.banner} />
+      <meta
+        property="og:image"
+        content={ogImage("Support", { subtitle: "Support my work by donating or subscribing" })}
+      />
       <meta
         property="og:description"
-        content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+        content="Support my work by donating or subscribing on GitHub Sponsors or Substack, or sending cryptocurrency to my wallet addresses."
       />
-      <meta property="og:url" content={`${urls.url}/donate`} />
+      <meta property="og:url" content={`${urls.baseUrl}/sponsor`} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
 
       <meta name="twitter:title" content="Support - ✰λster✰" />
       <meta
         name="twitter:description"
-        content="Support my work by donating or subscribing on Ko-fi, or sending cryptocurrency to my wallet addresses."
+        content="Support my work by donating or subscribing on GitHub Sponsors or Substack, or sending cryptocurrency to my wallet addresses."
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.banner} />
+      <meta
+        name="twitter:image"
+        content={ogImage("Support", { subtitle: "Support my work by donating or subscribing" })}
+      />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>

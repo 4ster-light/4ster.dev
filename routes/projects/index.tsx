@@ -2,10 +2,12 @@ import { Head } from "fresh/runtime"
 import { page } from "fresh"
 import { define } from "@/utils.ts"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
-import urls from "@/lib/urls.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
 import ButtonLink from "@/components/ButtonLink.tsx"
 
 function SEO() {
+  const image = ogImage("Projects", { subtitle: "Open source projects by Aster", type: "project" })
+
   return (
     <Head>
       <title>Projects - ✰λster✰</title>
@@ -18,10 +20,10 @@ function SEO() {
         property="og:description"
         content="Open source projects by Aster"
       />
-      <meta property="og:url" content={`${urls.url}/projects`} />
+      <meta property="og:url" content={`${urls.baseUrl}/projects`} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={urls.banner} />
+      <meta property="og:image" content={image} />
 
       <meta name="twitter:title" content="Projects - ✰λster✰" />
       <meta
@@ -30,7 +32,7 @@ function SEO() {
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.banner} />
+      <meta name="twitter:image" content={image} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>

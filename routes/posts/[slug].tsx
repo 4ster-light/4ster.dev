@@ -1,7 +1,7 @@
 import { page } from "fresh"
 import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
-import urls from "@/lib/urls.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
 import { fetchPosts, type Post } from "@/lib/content/posts.ts"
 import { extractHeadings, type TocItem } from "@/lib/toc.ts"
 import PostMeta from "@/components/PostMeta.tsx"
@@ -9,6 +9,8 @@ import TocSidebar from "@/components/TocSidebar.tsx"
 import ButtonLink from "@/components/ButtonLink.tsx"
 
 function SEO({ post }: { post: Post }) {
+  const image = ogImage(post.title, { subtitle: post.description, type: "post" })
+
   return (
     <Head>
       <title>{post.title}</title>
@@ -18,16 +20,16 @@ function SEO({ post }: { post: Post }) {
       <meta property="og:title" content={post.title} />
       <meta property="og:type" content="article" />
       <meta property="og:description" content={post.description} />
-      <meta property="og:url" content={`${urls.url}/posts/${post.slug}`} />
+      <meta property="og:url" content={`${urls.baseUrl}/posts/${post.slug}`} />
       <meta property="og:site_name" content={post.title} />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={urls.banner} />
+      <meta property="og:image" content={image} />
 
       <meta name="twitter:title" content={post.title} />
       <meta name="twitter:description" content={post.description} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.banner} />
+      <meta name="twitter:image" content={image} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>

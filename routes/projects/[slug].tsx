@@ -1,13 +1,14 @@
 import { Head } from "fresh/runtime"
 import { define } from "@/utils.ts"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
-import urls from "@/lib/urls.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
 import ButtonLink from "@/components/ButtonLink.tsx"
 import { page } from "fresh"
 
 function SEO({ repository }: { repository: Repository }) {
   const description = repository.description ||
     `${repository.name} - Open source project`
+  const image = ogImage(repository.name, { subtitle: description, type: "project" })
 
   return (
     <Head>
@@ -21,13 +22,13 @@ function SEO({ repository }: { repository: Repository }) {
       <meta property="og:url" content={repository.url} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
-      <meta property="og:image" content={urls.banner} />
+      <meta property="og:image" content={image} />
 
       <meta name="twitter:title" content={repository.name} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
-      <meta name="twitter:image" content={urls.banner} />
+      <meta name="twitter:image" content={image} />
       <meta property="twitter:image:height" content="600" />
       <meta property="twitter:image:width" content="1200" />
     </Head>
