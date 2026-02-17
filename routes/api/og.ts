@@ -61,17 +61,9 @@ export const handler = define.handlers({
 
     const pfpDataUri = `data:image/jpeg;base64,${pfpBase64}`
 
-    // Truncate title if too long
-    const maxTitleLength = 50
-    const displayTitle = title.length > maxTitleLength
-      ? title.substring(0, maxTitleLength) + "..."
-      : title
-
-    // Truncate subtitle if too long
-    const maxSubtitleLength = 100
-    const displaySubtitle = subtitle.length > maxSubtitleLength
-      ? subtitle.substring(0, maxSubtitleLength) + "..."
-      : subtitle
+    // Wrap text for multiline display
+    const titleLines = wrapText(title, 28, 2) // Max 28 chars per line, max 2 lines
+    const subtitleLines = subtitle ? wrapText(subtitle, 45, 3) : [] // Max 45 chars per line, max 3 lines
 
     // Type badge text
     const typeLabel = type === "post" ? "Blog Post" : type === "project" ? "Project" : ""
@@ -96,7 +88,7 @@ export const handler = define.handlers({
   <rect width="1200" height="600" fill="url(#bg)" />
   
   <!-- Left accent bar -->
-  <rect x="0" y="0" width="8" height="600" fill="url(#accent)" />
+  <rect x="0" y="0" width="20" height="600" fill="url(#accent)" />
   
   <!-- Profile picture with border -->
   <circle cx="180" cy="300" r="125" fill="${COLORS.primary}" opacity="0.3" />
@@ -112,45 +104,52 @@ export const handler = define.handlers({
   />
   
   <!-- Content area -->
-  <g transform="translate(360, 0)">
+  <g transform="translate(380, 0)">
     <!-- Type badge -->
     ${
       typeLabel
         ? `
-    <rect x="0" y="180" width="${
+    <rect x="0" y="160" width="${
           typeLabel.length * 12 + 32
         }" height="36" rx="18" fill="${COLORS.primary}" opacity="0.2" />
-    <text x="16" y="205" font-family="Inter" font-size="18" font-weight="500" fill="${COLORS.primary}">${typeLabel}</text>
+    <text x="16" y="185" font-family="Inter" font-size="18" font-weight="500" fill="${COLORS.primary}">${typeLabel}</text>
     `
         : ""
     }
     
     <!-- Title -->
     <text x="0" y="${
-      typeLabel ? 280 : 260
-    }" font-family="Inter" font-size="56" font-weight="700" fill="${COLORS.baseContent}">
-      ${escapeXml(displayTitle)}
+      typeLabel ? 260 : 220
+    }" font-family="Inter" font-size="52" font-weight="700" fill="${COLORS.baseContent}">
+      ${renderMultilineText(titleLines, 0, typeLabel ? 260 : 220, 64)}
     </text>
     
     <!-- Subtitle -->
     ${
-      displaySubtitle
+      subtitleLines.length > 0
         ? `
     <text x="0" y="${
-          typeLabel ? 340 : 320
-        }" font-family="Inter" font-size="28" font-weight="400" fill="${COLORS.baseContent}" opacity="0.7">
-      ${escapeXml(displaySubtitle)}
+          typeLabel ? 260 + titleLines.length * 64 + 24 : 220 + titleLines.length * 64 + 24
+        }" font-family="Inter" font-size="26" font-weight="400" fill="${COLORS.baseContent}" opacity="0.7">
+      ${
+          renderMultilineText(
+            subtitleLines,
+            0,
+            typeLabel ? 260 + titleLines.length * 64 + 24 : 220 + titleLines.length * 64 + 24,
+            36
+          )
+        }
     </text>
     `
         : ""
     }
     
     <!-- Site name -->
-    <text x="0" y="520" font-family="Inter" font-size="24" font-weight="400" fill="${COLORS.secondary}">4ster.dev</text>
+    <text x="0" y="540" font-family="Inter" font-size="24" font-weight="400" fill="${COLORS.secondary}">4ster.dev</text>
   </g>
   
   <!-- Bottom accent line -->
-  <rect x="360" y="560" width="200" height="4" rx="2" fill="url(#accent)" />
+  <rect x="380" y="560" width="200" height="4" rx="2" fill="url(#accent)" />
 </svg>
     `.trim()
 
@@ -183,4 +182,52 @@ function escapeXml(str: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;")
+}
+
+function wrapText(text: string, maxChars: number, maxLines: number): string[] {
+  if (text.length <= maxChars) return [text]
+
+  const words = text.split(" ")
+  const lines: string[] = []
+  let currentLine = ""
+
+  for (const word of words) {
+    if ((currentLine + " " + word).trim().length > maxChars) {
+      if (currentLine) {
+        lines.push(currentLine.trim())
+        currentLine = word
+      } else {
+        lines.push(word.substring(0, maxChars))
+      }
+    } else {
+      currentLine = (currentLine + " " + word).trim()
+    }
+
+    if (lines.length >= maxLines) break
+  }
+
+  if (lines.length < maxLines && currentLine)
+    lines.push(currentLine.trim())
+
+  // Truncate last line if needed
+  if (lines.length === maxLines && text.length > lines.join(" ").length) {
+    const lastLine = lines[maxLines - 1]
+    if (lastLine.length > maxChars - 3)
+      lines[maxLines - 1] = lastLine.substring(0, maxChars - 3) + "..."
+    else
+      lines[maxLines - 1] = lastLine + "..."
+  }
+
+  return lines
+}
+
+function renderMultilineText(
+  lines: string[],
+  startX: number,
+  _startY: number,
+  lineHeight: number
+): string {
+  return lines.map((line, index) =>
+    `<tspan x="${startX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  ).join("")
 }
