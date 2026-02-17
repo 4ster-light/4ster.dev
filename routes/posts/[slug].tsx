@@ -39,6 +39,7 @@ function SEO({ post }: { post: Post }) {
 interface PageData {
   post?: Post
   toc?: TocItem[]
+  recentPosts?: Post[]
 }
 
 export const handler = define.handlers({
@@ -54,12 +55,16 @@ export const handler = define.handlers({
     const { html, items } = extractHeadings(post.content)
     post.content = html
 
-    return page<PageData>({ post, toc: items })
+    const recentPosts = posts
+      .filter((p: Post) => p.slug !== post.slug && !p["is-preview"])
+      .slice(0, 5)
+
+    return page<PageData>({ post, toc: items, recentPosts })
   }
 })
 
 export default define.page<typeof handler>(async (ctx) => {
-  const { post, toc } = ctx.data
+  const { post, toc, recentPosts } = ctx.data
 
   if (!post) {
     return (
@@ -96,7 +101,7 @@ export default define.page<typeof handler>(async (ctx) => {
         </main>
 
         <div class="lg:col-span-2 lg:border-l lg:border-base-300 lg:pl-8 hidden lg:block">
-          <TocSidebar items={toc || []} />
+          <TocSidebar items={toc || []} recentPosts={recentPosts} />
         </div>
       </div>
 
