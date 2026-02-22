@@ -212,9 +212,9 @@ function wrapText(text: string, maxChars: number, maxLines: number): string[] {
   // Truncate last line if needed
   if (lines.length === maxLines && text.length > lines.join(" ").length) {
     const lastLine = lines[maxLines - 1]
-    if (lastLine.length > maxChars - 3)
+    if (lastLine && lastLine.length > maxChars - 3)
       lines[maxLines - 1] = lastLine.substring(0, maxChars - 3) + "..."
-    else
+    else if (lastLine)
       lines[maxLines - 1] = lastLine + "..."
   }
 

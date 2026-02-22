@@ -3,9 +3,14 @@ import { gfmHeadingId } from "marked-gfm-heading-id"
 import flourite from "flourite"
 import { type BundledLanguage, createHighlighter } from "shiki"
 
+type Flourite = (
+  snippet: string,
+  options?: { shiki?: boolean }
+) => { statistics?: Record<string, number> }
+
 const shiki = await createHighlighter({
   themes: ["vitesse-dark"],
-  langs: Object.keys(flourite("", { shiki: true }).statistics || {})
+  langs: Object.keys((flourite as unknown as Flourite)("", { shiki: true }).statistics || {})
     .filter((lang) => lang !== "Unknown")
     .map((lang) => lang.toLowerCase().replace(/\s+/g, "-")) as BundledLanguage[]
 })

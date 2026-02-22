@@ -7,7 +7,7 @@
   },
 
   "tasks": {
-    "dev": "vite --open",
+    "dev": "deno run -A --unstable-kv npm:vite --open",
     "build": "vite build",
     "check": "deno fmt && deno lint && deno check",
     "preview:dev": "deno task --tunnel dev",
@@ -54,7 +54,9 @@
   "allowScripts": ["npm:esbuild@0.27.1"],
 
   "compilerOptions": {
-    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns", "deno.unstable"],
     "jsx": "precompile",
     "jsxImportSource": "preact",
     "jsxPrecompileSkipElements": [

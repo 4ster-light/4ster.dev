@@ -1,4 +1,5 @@
 import marked from "@/lib/marked.ts"
+import { cachedArray } from "@/lib/cache.ts"
 
 export interface Repository {
   name: string
@@ -22,6 +23,8 @@ interface RawRepository {
   language?: string
   updated_at: string
 }
+
+const REPOS_CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours
 
 async function fetchReadme(
   owner: string,
@@ -54,7 +57,7 @@ async function fetchReadme(
     })
 }
 
-export async function fetchRepositories(githubToken: string): Promise<Repository[]> {
+async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Repository[]> {
   return await fetch("https://api.github.com/user/repos", {
     method: "GET",
     redirect: "follow",
@@ -71,7 +74,9 @@ export async function fetchRepositories(githubToken: string): Promise<Repository
           .filter((repo) => repo.name !== "4ster-light" && repo.stargazers_count > 0)
           .sort((a, b) => b.stargazers_count - a.stargazers_count)
           .map(async (repo) => {
-            const [owner, repoName] = repo.full_name.split("/")
+            const parts = repo.full_name.split("/")
+            const owner = parts[0] ?? ""
+            const repoName = parts[1] ?? ""
             return await fetchReadme(owner, repoName, githubToken).then((readme) => ({
               name: repo.name,
               url: repo.html_url,
@@ -88,4 +93,13 @@ export async function fetchRepositories(githubToken: string): Promise<Repository
     .catch((error) => {
       throw new Error(`GitHub API repositories request failed: ${error}`)
     })
+}
+
+export function fetchRepositories(githubToken: string): Promise<Repository[]> {
+  return cachedArray(
+    "repositories",
+    REPOS_CACHE_TTL,
+    (repo) => repo.name,
+    () => fetchRepositoriesFromGitHub(githubToken)
+  )
 }
