@@ -1,6 +1,7 @@
 const kv = await Deno.openKv()
 
 const CACHE_PREFIX = ["cache"] as const
+export const CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
 
 interface CacheEntry {
   compressed: Uint8Array

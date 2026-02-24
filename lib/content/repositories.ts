@@ -1,5 +1,5 @@
 import marked from "@/lib/marked.ts"
-import { cachedArray } from "@/lib/cache.ts"
+import { CACHE_TTL, cachedArray } from "@/lib/cache.ts"
 
 export interface Repository {
   name: string
@@ -23,8 +23,6 @@ interface RawRepository {
   language?: string
   updated_at: string
 }
-
-const REPOS_CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours
 
 async function fetchReadme(
   owner: string,
@@ -98,7 +96,7 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
 export function fetchRepositories(githubToken: string): Promise<Repository[]> {
   return cachedArray(
     "repositories",
-    REPOS_CACHE_TTL,
+    CACHE_TTL,
     (repo) => repo.name,
     () => fetchRepositoriesFromGitHub(githubToken)
   )

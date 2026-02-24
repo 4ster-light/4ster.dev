@@ -12,7 +12,7 @@ export const handler = define.handlers({
       console.error("[cache/clear] CACHE_SECRET not configured")
       return new Response(JSON.stringify({ error: "Server misconfigured" }), {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: new Headers({ "Content-Type": "application/json" })
       })
     }
 
@@ -20,7 +20,7 @@ export const handler = define.handlers({
     if (!auth || auth !== `Bearer ${secret}`) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" }
+        headers: new Headers({ "Content-Type": "application/json" })
       })
     }
 
@@ -30,7 +30,7 @@ export const handler = define.handlers({
     if (!key || !VALID_KEYS.includes(key)) {
       return new Response(
         JSON.stringify({ error: "Invalid key", valid: VALID_KEYS }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: new Headers({ "Content-Type": "application/json" }) }
       )
     }
 
@@ -38,14 +38,14 @@ export const handler = define.handlers({
       const count = await invalidateAll()
       return new Response(
         JSON.stringify({ cleared: "all", count }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
+        { status: 200, headers: new Headers({ "Content-Type": "application/json" }) }
       )
     }
 
     await invalidate(key)
     return new Response(
       JSON.stringify({ cleared: key }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { status: 200, headers: new Headers({ "Content-Type": "application/json" }) }
     )
   }
 })

@@ -1,6 +1,6 @@
 import { extract } from "@std/front-matter/yaml"
 import marked from "@/lib/marked.ts"
-import { cachedArray } from "@/lib/cache.ts"
+import { CACHE_TTL, cachedArray } from "@/lib/cache.ts"
 
 export interface PostMeta {
   title: string
@@ -21,8 +21,6 @@ interface DirectoryItem {
   type: string
   download_url: string
 }
-
-const POSTS_CACHE_TTL = 30 * 60 * 1000 // 30 minutes
 
 async function fetchPostContent(
   dirName: string,
@@ -86,7 +84,7 @@ async function fetchPostsFromGitHub(githubToken: string): Promise<Post[]> {
 export function fetchPosts(githubToken: string): Promise<Post[]> {
   return cachedArray(
     "posts",
-    POSTS_CACHE_TTL,
+    CACHE_TTL,
     (post) => post.slug,
     () => fetchPostsFromGitHub(githubToken)
   )
