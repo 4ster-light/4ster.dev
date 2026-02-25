@@ -1,6 +1,6 @@
 const kv = await Deno.openKv()
 
-const CACHE_PREFIX = ["cache"] as const
+const CACHE_PREFIX = "[cache]" as const
 export const CACHE_TTL = 24 * 60 * 60 * 1000 // 24 hours
 
 interface CacheEntry {
@@ -25,6 +25,45 @@ async function decompress<T>(data: Uint8Array): Promise<T> {
   return JSON.parse(json) as T
 }
 
+// Store compressed items in cache, tracking which items were successfully cached
+async function storeCachedItems<T>(
+  prefix: string,
+  items: T[],
+  ttlMs: number,
+  keyExtractor: (item: T) => string,
+  indexKey: string[]
+): Promise<void> {
+  const expiresAt = Date.now() + ttlMs
+
+  const results = await Promise.all(
+    items.map((item) =>
+      compress(item)
+        .then((compressed) =>
+          kv.set([...CACHE_PREFIX, prefix, keyExtractor(item)], {
+            compressed,
+            expiresAt
+          })
+            .then(() => keyExtractor(item))
+        )
+        .catch((err: Error) => {
+          console.warn(
+            `${CACHE_PREFIX} SKIP item (too large): ${keyExtractor(item)}`,
+            err.message
+          )
+          return null
+        })
+    )
+  )
+
+  const successfullyStored = results.filter((key) => key !== null)
+
+  // Only store the index if at least some items were cached successfully
+  if (successfullyStored.length > 0) {
+    await compress(successfullyStored)
+      .then((compressed) => kv.set(indexKey, { compressed, expiresAt }))
+  }
+}
+
 // Cache an array of items individually by a key extractor
 export async function cachedArray<T>(
   prefix: string,
@@ -34,93 +73,39 @@ export async function cachedArray<T>(
 ): Promise<T[]> {
   const indexKey = [...CACHE_PREFIX, prefix, "_index"]
 
-  return await kv.get<CacheEntry>(indexKey)
-    .then(async (indexEntry): Promise<T[]> => {
-      // Check if index exists and is valid
-      if (indexEntry.value && Date.now() < indexEntry.value.expiresAt) {
-        return await decompress<string[]>(indexEntry.value.compressed)
-          .then((keys) => {
-            console.log(`[cache] HIT: ${prefix} (${keys.length} items)`)
-            return Promise.all(
-              keys.map(async (itemKey) =>
-                await kv.get<CacheEntry>([...CACHE_PREFIX, prefix, itemKey])
-                  .then((entry) => entry.value ? decompress<T>(entry.value.compressed) : undefined)
-              )
-            )
-          })
-          .then((items) => {
-            // If any item is missing (expired), treat as cache miss
-            if (items.some((item) => item === undefined)) {
-              console.log(`[cache] PARTIAL HIT: ${prefix} (some items expired, re-fetching)`)
-              throw new Error("Cache miss: expired item")
-            }
-            return items as T[]
-          })
-          .catch(async (): Promise<T[]> => {
-            // Fall back to re-fetching if any item is missing
-            console.log(`[cache] MISS: ${prefix} (fallback from partial hit)`)
-            return await fetcher().then(async (items) => {
-              const expiresAt = Date.now() + ttlMs
-              const keys = items.map(keyExtractor)
+  const indexEntry = await kv.get<CacheEntry>(indexKey)
 
-              // Compress and store each item individually + the index
-              await Promise.all([
-                compress(keys).then(async (compressed) =>
-                  await kv.set(indexKey, { compressed, expiresAt })
-                ),
-                ...items.map((item) =>
-                  compress(item).then(async (compressed) =>
-                    await kv.set([...CACHE_PREFIX, prefix, keyExtractor(item)], {
-                      compressed,
-                      expiresAt
-                    })
-                      .catch((err: Error) => {
-                        console.warn(
-                          `[cache] SKIP item (too large): ${keyExtractor(item)}`,
-                          err.message
-                        )
-                      })
-                  )
-                )
-              ])
-              return items
-            })
-          })
-      }
+  // Check if valid cache exists
+  if (indexEntry.value && Date.now() < indexEntry.value.expiresAt) {
+    const keys = await decompress<string[]>(indexEntry.value.compressed)
+    console.log(`${CACHE_PREFIX} HIT: ${prefix} (${keys.length} items)`)
 
-      // Cache miss - fetch fresh data
-      console.log(`[cache] MISS: ${prefix}`)
-      return fetcher().then(async (items) => {
-        const expiresAt = Date.now() + ttlMs
-        const keys = items.map(keyExtractor)
+    const items = await Promise.all(
+      keys.map((itemKey) =>
+        kv.get<CacheEntry>([...CACHE_PREFIX, prefix, itemKey])
+          .then((entry) => entry.value ? decompress<T>(entry.value.compressed) : undefined)
+      )
+    )
 
-        // Compress and store each item individually + the index
-        await Promise.all([
-          compress(keys).then(async (compressed) =>
-            await kv.set(indexKey, { compressed, expiresAt })
-          ),
-          ...items.map((item) =>
-            compress(item).then(async (compressed) =>
-              await kv.set([...CACHE_PREFIX, prefix, keyExtractor(item)], {
-                compressed,
-                expiresAt
-              })
-                .catch((err: Error) => {
-                  console.warn(
-                    `[cache] SKIP item (too large): ${keyExtractor(item)}`,
-                    err.message
-                  )
-                })
-            )
-          )
-        ])
-        return items
-      })
-    })
+    // If all items are available, return them
+    if (!items.some((item) => item === undefined))
+      return items as T[]
+
+    // Otherwise, some items expired; treat as cache miss and refetch
+    console.log(`${CACHE_PREFIX} PARTIAL HIT: ${prefix} (some items expired, re-fetching)`)
+  }
+
+  // Cache miss - fetch fresh data
+  console.log(`${CACHE_PREFIX} MISS: ${prefix}`)
+  const items = await fetcher()
+
+  await storeCachedItems(prefix, items, ttlMs, keyExtractor, indexKey)
+
+  return items
 }
 
 export async function invalidate(key: string): Promise<void> {
-  console.log(`[cache] INVALIDATE: ${key}`)
+  console.log(`${CACHE_PREFIX} INVALIDATE: ${key}`)
   // Delete the key itself
   const mainDelete = await kv.delete([...CACHE_PREFIX, key])
 
@@ -135,11 +120,11 @@ export async function invalidate(key: string): Promise<void> {
     return deleteNext()
   })()
 
-  return Promise.all([mainDelete, deleteSubKeys]).then(() => {})
+  await Promise.all([mainDelete, deleteSubKeys])
 }
 
 export function invalidateAll(): Promise<number> {
-  console.log("[cache] INVALIDATE ALL")
+  console.log(`${CACHE_PREFIX} INVALIDATE ALL`)
   const iterator = kv.list({ prefix: [...CACHE_PREFIX] })
   let count = 0
 
