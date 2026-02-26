@@ -1,5 +1,5 @@
-import { define } from "@/utils.ts"
 import { invalidate, invalidateAll } from "@/lib/cache.ts"
+import { define } from "@/utils.ts"
 
 type CacheKey = "posts" | "repositories" | "all"
 
@@ -28,24 +28,24 @@ export const handler = define.handlers({
     const key = body?.key as CacheKey | undefined
 
     if (!key || !VALID_KEYS.includes(key)) {
-      return new Response(
-        JSON.stringify({ error: "Invalid key", valid: VALID_KEYS }),
-        { status: 400, headers: new Headers({ "Content-Type": "application/json" }) }
-      )
+      return new Response(JSON.stringify({ error: "Invalid key", valid: VALID_KEYS }), {
+        status: 400,
+        headers: new Headers({ "Content-Type": "application/json" })
+      })
     }
 
     if (key === "all") {
       const count = await invalidateAll()
-      return new Response(
-        JSON.stringify({ cleared: "all", count }),
-        { status: 200, headers: new Headers({ "Content-Type": "application/json" }) }
-      )
+      return new Response(JSON.stringify({ cleared: "all", count }), {
+        status: 200,
+        headers: new Headers({ "Content-Type": "application/json" })
+      })
     }
 
     await invalidate(key)
-    return new Response(
-      JSON.stringify({ cleared: key }),
-      { status: 200, headers: new Headers({ "Content-Type": "application/json" }) }
-    )
+    return new Response(JSON.stringify({ cleared: key }), {
+      status: 200,
+      headers: new Headers({ "Content-Type": "application/json" })
+    })
   }
 })

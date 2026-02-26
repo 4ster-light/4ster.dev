@@ -1,7 +1,7 @@
-import { define } from "@/utils.ts"
-import urls from "@/lib/urls.ts"
-import NavLink from "@/components/NavLink.tsx"
 import type { ComponentChildren } from "preact"
+import NavLink from "@/components/NavLink.tsx"
+import urls from "@/lib/urls.ts"
+import { define } from "@/utils.ts"
 
 function Html({ children }: { children: ComponentChildren }) {
   return (

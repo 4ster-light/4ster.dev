@@ -14,12 +14,7 @@ export default function ButtonLink({
   children
 }: Props) {
   return (
-    <a
-      href={href}
-      target={target}
-      rel={rel}
-      class="btn btn-secondary gap-2"
-    >
+    <a href={href} target={target} rel={rel} class="btn btn-secondary gap-2">
       {children}
     </a>
   )

@@ -7,9 +7,7 @@ interface Props {
 
 export default function PostMeta({ post, header = false }: Props) {
   return (
-    <header
-      class={`flex flex-col ${header ? "gap-4" : "gap-2 border-l-2 border-primary pl-4"}`}
-    >
+    <header class={`flex flex-col ${header ? "gap-4" : "gap-2 border-l-2 border-primary pl-4"}`}>
       {/* Title */}
       {header
         ? <h1 class="text-3xl md:text-4xl font-bold">{post.title}</h1>
@@ -19,9 +17,7 @@ export default function PostMeta({ post, header = false }: Props) {
           </a>
         )}
       {/* Description */}
-      <p class="text-base-content/70 text-sm leading-relaxed">
-        {post.description}
-      </p>
+      <p class="text-base-content/70 text-sm leading-relaxed">{post.description}</p>
       {/* Date */}
       <time datetime={post.date}>
         {new Date(post.date).toLocaleDateString("en-US", {
@@ -33,11 +29,13 @@ export default function PostMeta({ post, header = false }: Props) {
       {/* Tags */}
       <div class="flex gap-2 flex-wrap m-0">
         {post.tags?.length
-          ? post.tags.map((tag) => (
-            <span key={tag} class="badge badge-soft badge-info">
-              {tag}
-            </span>
-          ))
+          ? (
+            post.tags.map((tag) => (
+              <span key={tag} class="badge badge-soft badge-info">
+                {tag}
+              </span>
+            ))
+          )
           : <span class="badge badge-soft badge-info">UNCATEGORISED</span>}
       </div>
     </header>

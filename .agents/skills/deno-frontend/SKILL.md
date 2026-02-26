@@ -127,8 +127,9 @@ await fsRoutes(app, {
   loadRoute: (path) => import(`./routes/${path}`)
 })
 
-if (import.meta.main)
+if (import.meta.main) {
   await app.listen()
+}
 ```
 
 ### vite.config.ts
@@ -398,8 +399,9 @@ import type { PageProps } from "fresh"
 
 // Typed handler with data
 export const handler = define.handlers((ctx) => {
-  if (!ctx.state.user)
+  if (!ctx.state.user) {
     return ctx.redirect("/login")
+  }
   return { data: { user: ctx.state.user } }
 })
 
@@ -437,14 +439,16 @@ import { HttpError } from "fresh"
 export const handler = define.handlers({
   async GET(ctx) {
     const post = await getPost(ctx.params.id)
-    if (!post)
+    if (!post) {
       throw new HttpError(404) // Uses _error.tsx
+    }
     return Response.json(post)
   },
 
   async DELETE(ctx) {
-    if (!ctx.state.user)
+    if (!ctx.state.user) {
       throw new HttpError(401)
+    }
     await deletePost(ctx.params.id)
     return new Response(null, { status: 204 })
   }
@@ -491,8 +495,9 @@ import { useSignal } from "@preact/signals"
 
 export default function LocalStorageCounter() {
   // Return placeholder during SSR
-  if (!IS_BROWSER)
+  if (!IS_BROWSER) {
     return <div>Loading...</div>
+  }
 
   // Client-only code
   const stored = localStorage.getItem("count")

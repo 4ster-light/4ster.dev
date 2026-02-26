@@ -39,17 +39,15 @@ async function storeCachedItems<T>(
     items.map((item) =>
       compress(item)
         .then((compressed) =>
-          kv.set([...CACHE_PREFIX, prefix, keyExtractor(item)], {
-            compressed,
-            expiresAt
-          })
+          kv
+            .set([...CACHE_PREFIX, prefix, keyExtractor(item)], {
+              compressed,
+              expiresAt
+            })
             .then(() => keyExtractor(item))
         )
         .catch((err: Error) => {
-          console.warn(
-            `${CACHE_PREFIX} SKIP item (too large): ${keyExtractor(item)}`,
-            err.message
-          )
+          console.warn(`${CACHE_PREFIX} SKIP item (too large): ${keyExtractor(item)}`, err.message)
           return null
         })
     )
@@ -59,8 +57,9 @@ async function storeCachedItems<T>(
 
   // Only store the index if at least some items were cached successfully
   if (successfullyStored.length > 0) {
-    await compress(successfullyStored)
-      .then((compressed) => kv.set(indexKey, { compressed, expiresAt }))
+    await compress(successfullyStored).then((compressed) =>
+      kv.set(indexKey, { compressed, expiresAt })
+    )
   }
 }
 
@@ -82,14 +81,14 @@ export async function cachedArray<T>(
 
     const items = await Promise.all(
       keys.map((itemKey) =>
-        kv.get<CacheEntry>([...CACHE_PREFIX, prefix, itemKey])
-          .then((entry) => entry.value ? decompress<T>(entry.value.compressed) : undefined)
+        kv
+          .get<CacheEntry>([...CACHE_PREFIX, prefix, itemKey])
+          .then((entry) => (entry.value ? decompress<T>(entry.value.compressed) : undefined))
       )
     )
 
     // If all items are available, return them
-    if (!items.some((item) => item === undefined))
-      return items as T[]
+    if (!items.some((item) => item === undefined)) return items as T[]
 
     // Otherwise, some items expired; treat as cache miss and refetch
     console.log(`${CACHE_PREFIX} PARTIAL HIT: ${prefix} (some items expired, re-fetching)`)

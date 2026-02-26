@@ -165,8 +165,9 @@ async function runUserCode(code: string): Promise<string> {
 
   const output = await child.output()
 
-  if (output.code !== 0)
+  if (output.code !== 0) {
     throw new Error(new TextDecoder().decode(output.stderr))
+  }
 
   return new TextDecoder().decode(output.stdout)
 }
@@ -236,8 +237,9 @@ async function executeAgentTool(toolCode: string, input: unknown): Promise<unkno
 
   const output = await child.output()
 
-  if (output.code !== 0)
+  if (output.code !== 0) {
     throw new Error(new TextDecoder().decode(output.stderr))
+  }
 
   return JSON.parse(new TextDecoder().decode(output.stdout))
 }
@@ -393,8 +395,9 @@ const result = await runUserCode(code)
 const result = await runUserCode(code)
 try {
   const parsed = JSON.parse(result) // Parse as data, not code
-  if (isValidResponse(parsed))
+  if (isValidResponse(parsed)) {
     return parsed
+  }
 } catch {
   throw new Error("Invalid response from sandbox")
 }

@@ -1,9 +1,9 @@
-import { Head } from "fresh/runtime"
 import { page } from "fresh"
-import { define } from "@/utils.ts"
+import { Head } from "fresh/runtime"
+import ButtonLink from "@/components/ButtonLink.tsx"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
 import urls, { ogImage } from "@/lib/urls.ts"
-import ButtonLink from "@/components/ButtonLink.tsx"
+import { define } from "@/utils.ts"
 
 function SEO() {
   const image = ogImage("Projects", { subtitle: "Open source projects by Aster", type: "project" })
@@ -16,20 +16,14 @@ function SEO() {
 
       <meta property="og:title" content="Projects - ✰λster✰" />
       <meta property="og:type" content="website" />
-      <meta
-        property="og:description"
-        content="Open source projects by Aster"
-      />
+      <meta property="og:description" content="Open source projects by Aster" />
       <meta property="og:url" content={`${urls.baseUrl}/projects`} />
       <meta property="og:site_name" content="✰λster✰" />
       <meta property="og:locale" content="en_US" />
       <meta property="og:image" content={image} />
 
       <meta name="twitter:title" content="Projects - ✰λster✰" />
-      <meta
-        name="twitter:description"
-        content="Open source projects by Aster"
-      />
+      <meta name="twitter:description" content="Open source projects by Aster" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@4ster_light" />
       <meta name="twitter:image" content={image} />
@@ -93,10 +87,7 @@ export default define.page<typeof handler>(async function Projects(ctx) {
             <div class="card-body p-5">
               <div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
                 <h3 class="card-title text-lg m-0">
-                  <a
-                    href={`/projects/${repo.name}`}
-                    class="link link-hover link-primary"
-                  >
+                  <a href={`/projects/${repo.name}`} class="link link-hover link-primary">
                     {repo.name}
                   </a>
                 </h3>
@@ -106,18 +97,10 @@ export default define.page<typeof handler>(async function Projects(ctx) {
                 </div>
               </div>
 
-              {repo.description && (
-                <p class="text-sm text-base-content/70">
-                  {repo.description}
-                </p>
-              )}
+              {repo.description && <p class="text-sm text-base-content/70">{repo.description}</p>}
 
               <div class="flex gap-2 text-xs font-mono text-base-content/60 flex-wrap items-center">
-                {repo.language && (
-                  <span class="badge badge-sm badge-outline">
-                    {repo.language}
-                  </span>
-                )}
+                {repo.language && <span class="badge badge-sm badge-outline">{repo.language}</span>}
                 <span>Updated at {repo.updated_at}</span>
                 <a
                   href={repo.url}

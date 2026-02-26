@@ -1,6 +1,6 @@
 import { extract } from "@std/front-matter/yaml"
-import marked from "@/lib/marked.ts"
 import { CACHE_TTL, cachedArray } from "@/lib/cache.ts"
+import marked from "@/lib/marked.ts"
 
 export interface PostMeta {
   title: string
@@ -22,10 +22,7 @@ interface DirectoryItem {
   download_url: string
 }
 
-async function fetchPostContent(
-  dirName: string,
-  githubToken: string
-): Promise<Post> {
+async function fetchPostContent(dirName: string, githubToken: string): Promise<Post> {
   return await fetch(
     `https://api.github.com/repos/4ster-light/blog/contents/${dirName}/content.md`,
     {
@@ -38,7 +35,7 @@ async function fetchPostContent(
       })
     }
   )
-    .then((response) => response.ok ? response.text() : Promise.reject(response.statusText))
+    .then((response) => (response.ok ? response.text() : Promise.reject(response.statusText)))
     .then((fileContent) => {
       const { attrs, body } = extract<PostMeta>(fileContent)
       return {
@@ -65,7 +62,7 @@ async function fetchPostsFromGitHub(githubToken: string): Promise<Post[]> {
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
+    .then((response) => (response.ok ? response.json() : Promise.reject(response.statusText)))
     .then((data: DirectoryItem[]) =>
       Promise.allSettled(
         data

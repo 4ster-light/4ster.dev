@@ -23,11 +23,7 @@ export default function CopyAddressButton({ coin, address }: Props) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      class="btn btn-sm btn-outline btn-primary"
-    >
+    <button type="button" onClick={handleCopy} class="btn btn-sm btn-outline btn-primary">
       {copied.value ? "✓" : "Copy"}
     </button>
   )

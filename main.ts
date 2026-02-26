@@ -7,7 +7,4 @@ const logginMiddleware = define.middleware(async (ctx) => {
   return await ctx.next()
 })
 
-export const app = new App<State>()
-  .use(staticFiles())
-  .use(logginMiddleware)
-  .fsRoutes()
+export const app = new App<State>().use(staticFiles()).use(logginMiddleware).fsRoutes()

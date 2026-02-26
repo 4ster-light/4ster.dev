@@ -216,8 +216,9 @@ const handler = (request: Request): Response => {
     })
   }
 
-  if (url.pathname === "/api/hello")
+  if (url.pathname === "/api/hello") {
     return Response.json({ message: "Hello from Deno" })
+  }
 
   return new Response("Not Found", { status: 404 })
 }

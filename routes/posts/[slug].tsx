@@ -1,12 +1,12 @@
 import { page } from "fresh"
 import { Head } from "fresh/runtime"
-import { define } from "@/utils.ts"
-import urls, { ogImage } from "@/lib/urls.ts"
-import { fetchPosts, type Post } from "@/lib/content/posts.ts"
-import { extractHeadings, type TocItem } from "@/lib/toc.ts"
+import ButtonLink from "@/components/ButtonLink.tsx"
 import PostMeta from "@/components/PostMeta.tsx"
 import TocSidebar from "@/components/TocSidebar.tsx"
-import ButtonLink from "@/components/ButtonLink.tsx"
+import { fetchPosts, type Post } from "@/lib/content/posts.ts"
+import { extractHeadings, type TocItem } from "@/lib/toc.ts"
+import urls, { ogImage } from "@/lib/urls.ts"
+import { define } from "@/utils.ts"
 
 function SEO({ post }: { post: Post }) {
   const image = ogImage(post.title, { subtitle: post.description, type: "post" })
@@ -49,8 +49,7 @@ export const handler = define.handlers({
     const posts = await fetchPosts(githubToken)
     const post = posts.find((p: Post) => p.slug === ctx.params.slug)
 
-    if (!post)
-      return page<PageData>({ post: undefined }, { status: 404 })
+    if (!post) return page<PageData>({ post: undefined }, { status: 404 })
 
     const { html, items } = extractHeadings(post.content)
     post.content = html
@@ -70,9 +69,7 @@ export default define.page<typeof handler>(async (ctx) => {
     return (
       <div class="text-center py-16">
         <h1 class="text-3xl text-error font-bold mb-4">Post Not Found</h1>
-        <p class="text-base-content/70 mb-6">
-          The post you're looking for doesn't exist.
-        </p>
+        <p class="text-base-content/70 mb-6">The post you're looking for doesn't exist.</p>
         <ButtonLink href={urls.url} target="">
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
@@ -110,14 +107,14 @@ export default define.page<typeof handler>(async (ctx) => {
       <footer class="flex justify-end gap-4 sm:flex-row">
         <ButtonLink href={urls.url} target="">
           <img
-            src={(await (import("@/assets/icons/LeftArrows.svg"))).default}
+            src={(await import("@/assets/icons/LeftArrows.svg")).default}
             alt="Left Arrows"
             class="size-8"
           />
         </ButtonLink>
         <ButtonLink href={urls.githubSponsors}>
           <img
-            src={(await (import("@/assets/icons/Love.svg"))).default}
+            src={(await import("@/assets/icons/Love.svg")).default}
             alt="Sponsor"
             class="size-6"
           />{" "}

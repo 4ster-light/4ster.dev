@@ -17,10 +17,7 @@ export default function TocSidebar({ items, recentPosts }: TocSidebarProps) {
           <ul class="space-y-2">
             {items.map((item) => (
               <li key={item.id} style={{ paddingLeft: `${(item.level - 2) * 0.75}rem` }}>
-                <a
-                  href={`#${item.id}`}
-                  class="link link-hover text-sm"
-                >
+                <a href={`#${item.id}`} class="link link-hover text-sm">
                   {item.text}
                 </a>
               </li>
@@ -39,10 +36,7 @@ export default function TocSidebar({ items, recentPosts }: TocSidebarProps) {
             <ul class="space-y-3">
               {recentPosts.map((post) => (
                 <li key={post.slug}>
-                  <a
-                    href={`/posts/${post.slug}`}
-                    class="link text-sm block text-primary"
-                  >
+                  <a href={`/posts/${post.slug}`} class="link text-sm block text-primary">
                     {post.title}
                   </a>
                   <span class="text-xs text-base-content/50">

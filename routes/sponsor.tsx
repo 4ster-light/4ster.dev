@@ -1,7 +1,7 @@
 import { Head } from "fresh/runtime"
-import { define } from "@/utils.ts"
-import urls, { ogImage } from "@/lib/urls.ts"
 import CopyAddressButton from "@/islands/CopyAddressButton.tsx"
+import urls, { ogImage } from "@/lib/urls.ts"
+import { define } from "@/utils.ts"
 
 function SEO() {
   return (
@@ -77,6 +77,7 @@ export default define.page(function Donate() {
             <iframe
               src="https://4sterlight.substack.com/embed"
               height="320"
+              title="Subscribe to my Substack publication"
               class="w-full border border-primary rounded-lg"
               frameborder="0"
               scrolling="no"

@@ -1,5 +1,5 @@
-import { define } from "@/utils.ts"
 import { initWasm, Resvg } from "@resvg/resvg-wasm"
+import { define } from "@/utils.ts"
 
 // Colors from the teal_dark theme
 const COLORS = {
@@ -23,8 +23,7 @@ async function ensureInitialized(baseUrl: string) {
     // Load the WASM module from CDN
     const wasmUrl = "https://cdn.jsdelivr.net/npm/@resvg/resvg-wasm@2.6.2/index_bg.wasm"
     const wasmResponse = await fetch(wasmUrl)
-    if (!wasmResponse.ok)
-      throw new Error(`Failed to fetch WASM: ${wasmResponse.statusText}`)
+    if (!wasmResponse.ok) throw new Error(`Failed to fetch WASM: ${wasmResponse.statusText}`)
     const wasmBuffer = await wasmResponse.arrayBuffer()
     await initWasm(wasmBuffer)
 
@@ -192,7 +191,7 @@ function wrapText(text: string, maxChars: number, maxLines: number): string[] {
   let currentLine = ""
 
   for (const word of words) {
-    if ((currentLine + " " + word).trim().length > maxChars) {
+    if (`${currentLine} ${word}`.trim().length > maxChars) {
       if (currentLine) {
         lines.push(currentLine.trim())
         currentLine = word
@@ -200,22 +199,20 @@ function wrapText(text: string, maxChars: number, maxLines: number): string[] {
         lines.push(word.substring(0, maxChars))
       }
     } else {
-      currentLine = (currentLine + " " + word).trim()
+      currentLine = `${currentLine} ${word}`.trim()
     }
 
     if (lines.length >= maxLines) break
   }
 
-  if (lines.length < maxLines && currentLine)
-    lines.push(currentLine.trim())
+  if (lines.length < maxLines && currentLine) lines.push(currentLine.trim())
 
   // Truncate last line if needed
   if (lines.length === maxLines && text.length > lines.join(" ").length) {
     const lastLine = lines[maxLines - 1]
-    if (lastLine && lastLine.length > maxChars - 3)
-      lines[maxLines - 1] = lastLine.substring(0, maxChars - 3) + "..."
-    else if (lastLine)
-      lines[maxLines - 1] = lastLine + "..."
+    if (lastLine && lastLine.length > maxChars - 3) {
+      lines[maxLines - 1] = `${lastLine.substring(0, maxChars - 3)}...`
+    } else if (lastLine) lines[maxLines - 1] = `${lastLine}...`
   }
 
   return lines
@@ -227,7 +224,10 @@ function renderMultilineText(
   _startY: number,
   lineHeight: number
 ): string {
-  return lines.map((line, index) =>
-    `<tspan x="${startX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
-  ).join("")
+  return lines
+    .map(
+      (line, index) =>
+        `<tspan x="${startX}" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+    )
+    .join("")
 }

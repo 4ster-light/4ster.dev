@@ -14,12 +14,7 @@ export default function NavLink({
   label
 }: Props) {
   return (
-    <a
-      href={href}
-      target={target}
-      rel={rel}
-      class="btn gap-2"
-    >
+    <a href={href} target={target} rel={rel} class="btn gap-2">
       <img src={icon} alt={label} class="size-6 brightness-200" />
       <span class="hidden sm:inline">{label}</span>
     </a>

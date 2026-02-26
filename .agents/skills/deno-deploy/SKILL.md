@@ -463,8 +463,9 @@ const user = await kv.get(["users", "alice"])
 console.log(user.value) // { name: "Alice", role: "admin" }
 
 // List by prefix
-for await (const entry of kv.list({ prefix: ["users"] }))
+for await (const entry of kv.list({ prefix: ["users"] })) {
   console.log(entry.key, entry.value)
+}
 ```
 
 Deno Deploy automatically connects to the correct database based on your environment.

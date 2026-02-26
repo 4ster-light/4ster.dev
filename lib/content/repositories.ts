@@ -1,5 +1,5 @@
-import marked from "@/lib/marked.ts"
 import { CACHE_TTL, cachedArray } from "@/lib/cache.ts"
+import marked from "@/lib/marked.ts"
 
 export interface Repository {
   name: string
@@ -24,11 +24,7 @@ interface RawRepository {
   updated_at: string
 }
 
-async function fetchReadme(
-  owner: string,
-  repo: string,
-  token: string
-): Promise<string> {
+async function fetchReadme(owner: string, repo: string, token: string): Promise<string> {
   return await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
     method: "GET",
     redirect: "follow",
@@ -38,7 +34,7 @@ async function fetchReadme(
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
+    .then((response) => (response.ok ? response.json() : Promise.reject(response.statusText)))
     .then(({ content }: { content: string }) => {
       const decodedContent = atob(content.replace(/\s/g, ""))
       const bytes = Uint8Array.from(decodedContent, (c) => c.charCodeAt(0))
@@ -65,7 +61,7 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
       "User-Agent": "4ster-dev-blog"
     })
   })
-    .then((response) => response.ok ? response.json() : Promise.reject(response.statusText))
+    .then((response) => (response.ok ? response.json() : Promise.reject(response.statusText)))
     .then((data: RawRepository[]) =>
       Promise.all(
         data

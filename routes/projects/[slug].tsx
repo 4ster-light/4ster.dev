@@ -1,13 +1,12 @@
+import { page } from "fresh"
 import { Head } from "fresh/runtime"
-import { define } from "@/utils.ts"
+import ButtonLink from "@/components/ButtonLink.tsx"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
 import urls, { ogImage } from "@/lib/urls.ts"
-import ButtonLink from "@/components/ButtonLink.tsx"
-import { page } from "fresh"
+import { define } from "@/utils.ts"
 
 function SEO({ repository }: { repository: Repository }) {
-  const description = repository.description ||
-    `${repository.name} - Open source project`
+  const description = repository.description || `${repository.name} - Open source project`
   const image = ogImage(repository.name, { subtitle: description, type: "project" })
 
   return (
@@ -59,9 +58,7 @@ export default define.page<typeof handler>(async (ctx) => {
     return (
       <div class="text-center py-16">
         <h1 class="text-3xl font-bold mb-4 text-error">Project Not Found</h1>
-        <p class="text-base-content/70 mb-6">
-          The project you're looking for doesn't exist.
-        </p>
+        <p class="text-base-content/70 mb-6">The project you're looking for doesn't exist.</p>
         <ButtonLink href={urls.projects} target="">
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
@@ -105,12 +102,7 @@ export default define.page<typeof handler>(async (ctx) => {
         </div>
 
         <div class="mb-8 flex gap-2">
-          <a
-            href={repository.url}
-            target="_blank"
-            rel="noopener"
-            class="btn w-full"
-          >
+          <a href={repository.url} target="_blank" rel="noopener" class="btn w-full">
             View on GitHub
           </a>
         </div>
@@ -118,7 +110,7 @@ export default define.page<typeof handler>(async (ctx) => {
         <section
           class="prose prose-sm sm:prose-base mt-4 card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
           // deno-lint-ignore react-no-danger
-          dangerouslySetInnerHTML={{ __html: repository.readme! }}
+          dangerouslySetInnerHTML={{ __html: repository.readme || "" }}
         />
 
         <div class="divider"></div>

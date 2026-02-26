@@ -1,9 +1,9 @@
-import { Head } from "fresh/runtime"
 import { page } from "fresh"
-import { define } from "@/utils.ts"
+import { Head } from "fresh/runtime"
+import PostMeta from "@/components/PostMeta.tsx"
 import { fetchPosts, type Post } from "@/lib/content/posts.ts"
 import urls, { ogImage } from "@/lib/urls.ts"
-import PostMeta from "@/components/PostMeta.tsx"
+import { define } from "@/utils.ts"
 
 function SEO() {
   const image = ogImage("Aster", {
@@ -67,11 +67,7 @@ export default define.page<typeof handler>(function Home(ctx) {
 
       {/* Introduction Section */}
       <section class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center">
-        <img
-          src="/pfp.jpg"
-          alt="Avatar"
-          class="w-24 h-24 object-cover shrink-0 rounded-lg"
-        />
+        <img src="/pfp.jpg" alt="Avatar" class="w-24 h-24 object-cover shrink-0 rounded-lg" />
         <p class="m-0 text-base-content/80">
           Hi, I am{" "}
           <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source developer
@@ -96,7 +92,8 @@ export default define.page<typeof handler>(function Home(ctx) {
           <a href={urls.projects}>projects page</a>. The most significant ones are pinned on my{" "}
           <a href={urls.githubSponsors} target="_blank" rel="noopener">
             GitHub Sponsors Profile
-          </a>.
+          </a>
+          .
         </p>
       </section>
 
@@ -108,7 +105,10 @@ export default define.page<typeof handler>(function Home(ctx) {
         <p class="text-base-content/80 mb-8">
           Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to
           computer science and programming. Know that you can find more (some not published here)
-          posts on my <a href={urls.substack} target="_blank" rel="noopener">Substack</a>{" "}
+          posts on my{" "}
+          <a href={urls.substack} target="_blank" rel="noopener">
+            Substack
+          </a>{" "}
           publication.
         </p>
         {posts && posts.length > 0
@@ -119,11 +119,7 @@ export default define.page<typeof handler>(function Home(ctx) {
                 .map((post) => <PostMeta key={post.slug} post={post} />)}
             </div>
           )
-          : (
-            <p class="text-error text-4xl leading-relaxed">
-              Problem loading posts.
-            </p>
-          )}
+          : <p class="text-error text-4xl leading-relaxed">Problem loading posts.</p>}
       </section>
 
       <div class="my-8"></div>
