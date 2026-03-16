@@ -52,6 +52,17 @@ async function fetchReadme(owner: string, repo: string, token: string): Promise<
 }
 
 async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Repository[]> {
+  const repos = [
+    "artscii",
+    "sentinel",
+    "perlin",
+    "http",
+    "pmatrix",
+    "bfcompiler",
+    "py-logic",
+    "rshell"
+  ]
+
   return await fetch("https://api.github.com/user/repos", {
     method: "GET",
     redirect: "follow",
@@ -65,8 +76,8 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
     .then((data: RawRepository[]) =>
       Promise.all(
         data
-          .filter((repo) => repo.name !== "4ster-light" && repo.stargazers_count > 0)
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .filter((repo) => repos.includes(repo.name))
+          .sort((a, b) => repos.indexOf(a.name) - repos.indexOf(b.name))
           .map(async (repo) => {
             const parts = repo.full_name.split("/")
             const owner = parts[0] ?? ""

@@ -7,12 +7,12 @@
   },
 
   "tasks": {
-    "dev": "deno run -A --unstable-kv npm:vite --open",
+    "dev": "deno run -A --unstable-kv vite --open",
     "build": "vite build",
     "check": "deno fmt && deno lint --fix && deno check",
     "preview:dev": "deno task --tunnel dev",
-    "preview:prod": "deno task build && deno serve -A --tunnel _fresh/server.js",
-    "start": "deno task build && deno serve -A _fresh/server.js"
+    "preview:prod": "deno task build && deno serve -A --tunnel --unstable-kv _fresh/server.js",
+    "start": "deno task build && deno serve -A --unstable-kv _fresh/server.js"
   },
 
   "imports": {
@@ -38,7 +38,11 @@
     "flourite": "npm:flourite@^1.3.0",
     "@resvg/resvg-wasm": "npm:@resvg/resvg-wasm@^2.6.2"
   },
-  "allowScripts": ["npm:esbuild@0.25.7", "npm:esbuild@0.27.1", "npm:esbuild@0.27.3"],
+  "allowScripts": [
+    "npm:esbuild@0.25.7",
+    "npm:esbuild@0.27.1",
+    "npm:esbuild@0.27.3"
+  ],
 
   "exclude": [
     "_fresh",
@@ -82,7 +86,13 @@
   "compilerOptions": {
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns", "deno.unstable"],
+    "lib": [
+      "dom",
+      "dom.asynciterable",
+      "dom.iterable",
+      "deno.ns",
+      "deno.unstable"
+    ],
     "jsx": "precompile",
     "jsxImportSource": "preact",
     "jsxPrecompileSkipElements": [
