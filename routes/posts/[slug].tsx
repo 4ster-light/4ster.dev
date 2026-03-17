@@ -112,7 +112,7 @@ export default define.page<typeof handler>(async (ctx) => {
             class="size-8"
           />
         </ButtonLink>
-        <ButtonLink href={urls.githubSponsors}>
+        <ButtonLink href={urls.donate}>
           <img
             src={(await import("@/assets/icons/Love.svg")).default}
             alt="Sponsor"
