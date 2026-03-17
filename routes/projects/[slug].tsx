@@ -4,6 +4,7 @@ import ButtonLink from "@/components/ButtonLink.tsx"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
 import urls, { ogImage } from "@/lib/urls.ts"
 import { define } from "@/utils.ts"
+import ReposCard from "@/components/ReposCard.tsx"
 
 function SEO({ repository }: { repository: Repository }) {
   const description = repository.description || `${repository.name} - Open source project`
@@ -56,16 +57,20 @@ export default define.page<typeof handler>(async (ctx) => {
 
   if (!repository) {
     return (
-      <div class="text-center py-16">
-        <h1 class="text-3xl font-bold mb-4 text-error">Project Not Found</h1>
-        <p class="text-base-content/70 mb-6">The project you're looking for doesn't exist.</p>
-        <ButtonLink href={urls.projects} target="">
-          <img
-            src={(await import("@/assets/icons/LeftArrows.svg")).default}
-            alt="Left Arrows"
-            class="size-8"
-          />
-        </ButtonLink>
+      <div class="text-center py-16 flex flex-col gap-6">
+        <h1 class="text-3xl font-bold text-error">Project Not Found</h1>
+        <p class="text-base-content/70">The project you're looking for doesn't exist.</p>
+        <div>
+          <ButtonLink href={urls.projects} target="">
+            <img
+              src={(await import("@/assets/icons/LeftArrows.svg")).default}
+              alt="Left Arrows"
+              class="size-8"
+            />
+          </ButtonLink>
+        </div>
+
+        <ReposCard />
       </div>
     )
   }
@@ -74,63 +79,61 @@ export default define.page<typeof handler>(async (ctx) => {
     <div>
       <SEO repository={repository} />
 
-      <article class="mb-8">
-        <div class="mb-8">
-          <h3 class="text-xl font-bold mb-4">Repository Information</h3>
-          <div class="overflow-x-auto">
-            <table class="table table-xs sm:table-sm border border-base-200">
-              <tbody>
-                <tr>
-                  <th class="text-left">Language</th>
-                  <td>{repository.language || "Not specified"}</td>
-                </tr>
-                <tr>
-                  <th class="text-left">Stars</th>
-                  <td>{repository.stars}</td>
-                </tr>
-                <tr>
-                  <th class="text-left">Forks</th>
-                  <td>{repository.forks}</td>
-                </tr>
-                <tr>
-                  <th class="text-left">Last Updated</th>
-                  <td>{repository.updated_at}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <article class="flex flex-col gap-8">
+        <h3 class="text-xl font-bold">Repository Information</h3>
+        <div class="overflow-x-auto">
+          <table class="table table-xs sm:table-sm border border-base-200">
+            <tbody>
+              <tr>
+                <th class="text-left">Language</th>
+                <td>{repository.language || "Not specified"}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Stars</th>
+                <td>{repository.stars}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Forks</th>
+                <td>{repository.forks}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Last Updated</th>
+                <td>{repository.updated_at}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="mb-8 flex gap-2">
-          <a href={repository.url} target="_blank" rel="noopener" class="btn w-full">
-            View on GitHub
-          </a>
-        </div>
+        <a href={repository.url} target="_blank" rel="noopener" class="btn w-full">
+          View on GitHub
+        </a>
 
         <section
-          class="prose prose-sm sm:prose-base mt-4 card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
+          class="prose prose-sm sm:prose-base card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
           // deno-lint-ignore react-no-danger
           dangerouslySetInnerHTML={{ __html: repository.readme || "" }}
         />
 
-        <div class="divider"></div>
+        <ReposCard />
 
         <footer class="flex justify-between items-center gap-4 flex-col sm:flex-row">
-          <ButtonLink href={urls.projects} target="">
-            <img
-              src={(await import("@/assets/icons/LeftArrows.svg")).default}
-              alt="Left Arrows"
-              class="size-8"
-            />
-          </ButtonLink>
-          <ButtonLink href={urls.githubSponsors}>
-            <img
-              src={(await import("@/assets/icons/Love.svg")).default}
-              alt="Sponsor"
-              class="size-6"
-            />{" "}
-            Sponsor
-          </ButtonLink>
+          <div class="flex gap-2 sm:ml-auto">
+            <ButtonLink href={urls.projects} target="">
+              <img
+                src={(await import("@/assets/icons/LeftArrows.svg")).default}
+                alt="Left Arrows"
+                class="size-8"
+              />
+            </ButtonLink>
+            <ButtonLink href={urls.donate}>
+              <img
+                src={(await import("@/assets/icons/Love.svg")).default}
+                alt="Sponsor"
+                class="size-6"
+              />{" "}
+              Sponsor
+            </ButtonLink>
+          </div>
         </footer>
       </article>
     </div>

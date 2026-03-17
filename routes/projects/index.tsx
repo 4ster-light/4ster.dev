@@ -4,6 +4,7 @@ import ButtonLink from "@/components/ButtonLink.tsx"
 import { fetchRepositories, type Repository } from "@/lib/content/repositories.ts"
 import urls, { ogImage } from "@/lib/urls.ts"
 import { define } from "@/utils.ts"
+import ReposCard from "@/components/ReposCard.tsx"
 
 function SEO() {
   const image = ogImage("Projects", { subtitle: "Open source projects by Aster", type: "project" })
@@ -70,6 +71,8 @@ export default define.page<typeof handler>(async function Projects(ctx) {
             />
           </ButtonLink>
         </div>
+
+        <ReposCard />
       </>
     )
   }
@@ -118,21 +121,7 @@ export default define.page<typeof handler>(async function Projects(ctx) {
 
       <div class="my-8"></div>
 
-      <div class="alert alert-info bg-primary/10 border-primary/20 p-5 flex justify-center">
-        <div class="gap-3 items-center text-center">
-          <p class="text-base-content/80 mb-2">
-            Want to see more? Visit my GitHub page for all my repositories and contributions.
-          </p>
-          <a
-            href="https://github.com/4ster-light?tab=repositories"
-            target="_blank"
-            rel="noopener"
-            class="btn btn-sm btn-primary"
-          >
-            View All Repositories on GitHub →
-          </a>
-        </div>
-      </div>
+      <ReposCard />
 
       <div class="my-8"></div>
 
