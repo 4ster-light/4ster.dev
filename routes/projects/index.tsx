@@ -67,6 +67,9 @@ export default define.page<typeof handler>(async function Projects(ctx) {
             <img
               src={(await import("@/assets/icons/LeftArrows.svg")).default}
               alt="Left Arrows"
+              width="32"
+              height="32"
+              decoding="async"
               class="size-8"
             />
           </ButtonLink>
@@ -130,6 +133,9 @@ export default define.page<typeof handler>(async function Projects(ctx) {
           <img
             src={(await import("@/assets/icons/LeftArrows.svg")).default}
             alt="Left Arrows"
+            width="32"
+            height="32"
+            decoding="async"
             class="size-8"
           />
         </ButtonLink>

@@ -5,11 +5,24 @@ import { define } from "@/utils.ts"
 
 function Html({ children }: { children: ComponentChildren }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="teal_dark">
       <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="theme-color"
+          content="#0f1419"
+          media="(prefers-color-scheme: dark)"
+        />
+        <meta
+          name="theme-color"
+          content="#f5fafa"
+          media="(prefers-color-scheme: light)"
+        />
+        <meta name="color-scheme" content="dark light" />
         <link rel="icon" href="/pfp.jpg" />
+        <link rel="preconnect" href="https://github.com" />
+        <link rel="preconnect" href="https://avatars.githubusercontent.com" />
       </head>
       {children}
     </html>
@@ -54,7 +67,14 @@ export default define.page(async function App({ Component }) {
           </nav>
         </header>
 
-        <main class="max-w-4xl mx-auto p-4 sm:p-8 lg:px-0 flex-1 w-full">
+        <a
+          href="#main-content"
+          class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:btn focus:btn-primary"
+        >
+          Skip to content
+        </a>
+
+        <main id="main-content" class="max-w-4xl mx-auto p-4 sm:p-8 lg:px-0 flex-1 w-full">
           <Component />
         </main>
 

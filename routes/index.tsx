@@ -67,7 +67,18 @@ export default define.page<typeof handler>(function Home(ctx) {
 
       {/* Introduction Section */}
       <section class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center">
-        <img src="/pfp.jpg" alt="Avatar" class="w-24 h-24 object-cover shrink-0 rounded-lg" />
+        <picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
+          <source srcSet="/pfp-320.webp" type="image/webp" />
+          <img
+            src="/pfp.jpg"
+            alt="Avatar"
+            width="736"
+            height="736"
+            decoding="async"
+            fetchpriority="high"
+            class="w-full h-full object-cover"
+          />
+        </picture>
         <p class="m-0 text-base-content/80">
           Hi, I am{" "}
           <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source developer
@@ -90,7 +101,7 @@ export default define.page<typeof handler>(function Home(ctx) {
         <p class="text-base-content/80 leading-relaxed">
           I also have some open source projects of my own, you can check them out on my{" "}
           <a href={urls.projects}>projects page</a>. The most significant ones are pinned on my{" "}
-          <a href={urls.githubSponsors} target="_blank" rel="noopener">
+          <a href={urls.githubSponsors} target="_blank" rel="noopener noreferrer">
             GitHub Sponsors Profile
           </a>
           .
@@ -106,7 +117,7 @@ export default define.page<typeof handler>(function Home(ctx) {
           Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to
           computer science and programming. Know that you can find more (some not published here)
           posts on my{" "}
-          <a href={urls.substack} target="_blank" rel="noopener">
+          <a href={urls.substack} target="_blank" rel="noopener noreferrer">
             Substack
           </a>{" "}
           publication.
