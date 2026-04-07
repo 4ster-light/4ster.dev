@@ -1,11 +1,6 @@
 {
   "nodeModulesDir": "manual",
-
-  "deploy": {
-    "org": "4ster",
-    "app": "aster"
-  },
-
+  "deploy": { "org": "4ster", "app": "aster" },
   "tasks": {
     "dev": "deno run -A --unstable-kv vite",
     "build": "vite build",
@@ -14,46 +9,28 @@
     "preview:prod": "deno task build && deno serve -A --tunnel --unstable-kv _fresh/server.js",
     "start": "deno task build && deno serve -A --unstable-kv _fresh/server.js"
   },
-
   "imports": {
-    // Aliases
     "@/": "./",
-
-    // Dependencies
-    "vite": "npm:vite@^7.3.1",
-    "fresh": "jsr:@fresh/core@^2.2.0",
-    "preact": "npm:preact@^10.28.4",
-    "@preact/signals": "npm:@preact/signals@^2.8.1",
+    "vite": "npm:vite@^7.3.2",
+    "fresh": "jsr:@fresh/core@^2.2.2",
+    "preact": "npm:preact@^10.29.1",
+    "@preact/signals": "npm:@preact/signals@^2.9.0",
     "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.8",
-    "tailwindcss": "npm:tailwindcss@^4.2.1",
-    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.2.1",
+    "tailwindcss": "npm:tailwindcss@^4.2.2",
+    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.2.2",
     "@tailwindcss/typography": "npm:@tailwindcss/typography@^0.5.19",
     "daisyui": "npm:daisyui@^5.5.19",
     "@std/front-matter": "jsr:@std/front-matter@^1.0.9",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/assert": "jsr:@std/assert@^1.0.19",
     "marked": "npm:marked@^15.0.12",
-    "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^4.1.3",
+    "marked-gfm-heading-id": "npm:marked-gfm-heading-id@^4.1.4",
     "shiki": "npm:shiki@^1.29.2",
     "flourite": "npm:flourite@^1.3.0",
     "@resvg/resvg-wasm": "npm:@resvg/resvg-wasm@^2.6.2"
   },
-  "allowScripts": [
-    "npm:esbuild@0.25.7",
-    "npm:esbuild@0.27.1",
-    "npm:esbuild@0.27.3"
-  ],
-
-  "exclude": [
-    "_fresh",
-    "node_modules",
-    ".env",
-    ".env.*",
-    ".git",
-    ".gitignore",
-    "deno.lock"
-  ],
-
+  "allowScripts": ["npm:esbuild@0.25.7", "npm:esbuild@0.27.1", "npm:esbuild@0.27.3"],
+  "exclude": ["_fresh", "node_modules", ".env", ".env.*", ".git", ".gitignore", "deno.lock"],
   "fmt": {
     "useTabs": false,
     "lineWidth": 100,
@@ -63,7 +40,6 @@
     "trailingCommas": "never",
     "proseWrap": "always"
   },
-
   "lint": {
     "rules": {
       "tags": ["recommended", "fresh", "jsx", "react", "workspace", "jsr"],
@@ -82,17 +58,10 @@
       ]
     }
   },
-
   "compilerOptions": {
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "lib": [
-      "dom",
-      "dom.asynciterable",
-      "dom.iterable",
-      "deno.ns",
-      "deno.unstable"
-    ],
+    "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns", "deno.unstable"],
     "jsx": "precompile",
     "jsxImportSource": "preact",
     "jsxPrecompileSkipElements": [
