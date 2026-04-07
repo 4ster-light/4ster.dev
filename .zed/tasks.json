@@ -1,0 +1,14 @@
+[
+  {
+    "label": "dev",
+    "command": "deno",
+    "args": ["task", "dev"],
+    "hide": "always"
+  },
+  {
+    "label": "check",
+    "command": "deno",
+    "args": ["task", "check"],
+    "hide": "on_success"
+  }
+]
