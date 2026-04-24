@@ -21,7 +21,12 @@
     "flourite": "npm:flourite@^1.3.0",
     "tailwindcss": "npm:tailwindcss@^4.2.4",
   },
-  "allowScripts": ["npm:esbuild@0.25.7", "npm:esbuild@0.27.1", "npm:esbuild@0.27.3", "npm:sharp@0.34.5"],
+  "allowScripts": [
+    "npm:esbuild@0.25.7",
+    "npm:esbuild@0.27.1",
+    "npm:esbuild@0.27.3",
+    "npm:sharp@0.34.5",
+  ],
   "exclude": [
     ".astro",
     "_fresh",
@@ -33,6 +38,7 @@
     ".gitignore",
     "deno.lock",
   ],
+  "unstable": ["fmt-component"],
   "fmt": {
     "useTabs": false,
     "lineWidth": 100,

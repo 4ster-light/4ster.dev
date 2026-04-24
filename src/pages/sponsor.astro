@@ -16,39 +16,63 @@ const cryptoAddresses = {
   ogTitle="Support - ✰λster✰"
   ogDescription="Support my work by donating or subscribing on GitHub Sponsors or Substack, or sending cryptocurrency to my wallet addresses."
   ogUrl={`${site.baseUrl}/sponsor`}
-  ogImage={ogImage("Support", { subtitle: "Support my work by donating or subscribing" })}
+  ogImage={ogImage("Support", {
+    subtitle: "Support my work by donating or subscribing"
+  })}
 >
   <div class="space-y-8">
     <h2 class="text-4xl font-bold text-secondary mb-8">Support Me</h2>
     <section>
       <h3 class="text-xl font-semibold mb-4">Github Sponsors</h3>
       <div class="flex justify-center overflow-x-auto">
-        <iframe src="https://github.com/sponsors/4ster-light/card" title="Sponsor 4ster-light" class="h-62.5 md:h-31.25 w-full border border-primary rounded-lg" frameborder="0" scrolling="no"></iframe>
+        <iframe
+          src="https://github.com/sponsors/4ster-light/card"
+          title="Sponsor 4ster-light"
+          class="h-62.5 md:h-31.25 w-full border border-primary rounded-lg"
+          frameborder="0"
+          scrolling="no"
+        ></iframe>
       </div>
     </section>
 
     <section>
       <h3 class="text-xl font-semibold mb-4">Subscribe to My Substack</h3>
       <div class="flex justify-center overflow-x-auto">
-        <iframe src="https://4sterlight.substack.com/embed" height="320" title="Subscribe to my Substack publication" class="w-full border border-primary rounded-lg" frameborder="0" scrolling="no"></iframe>
+        <iframe
+          src="https://4sterlight.substack.com/embed"
+          height="320"
+          title="Subscribe to my Substack publication"
+          class="w-full border border-primary rounded-lg"
+          frameborder="0"
+          scrolling="no"
+        ></iframe>
       </div>
     </section>
 
     <section>
       <h3 class="text-xl font-semibold mb-4">Cryptocurrency Donations</h3>
-      <p class="mb-6">You can also send cryptocurrency to any of the following wallet addresses if preferred:</p>
+      <p class="mb-6">
+        You can also send cryptocurrency to any of the following wallet addresses if preferred:
+      </p>
       <ul class="space-y-4">
-        {
-          Object.entries(cryptoAddresses).map(([coin, address]) => (
-            <li class="flex items-center gap-3 font-mono text-sm">
-              <strong class="w-10">{coin}:</strong>
-              <code class="text-xs bg-base-200 px-2 py-1 rounded border border-base-300 flex-1 truncate" title={address}>
-                {address.slice(0, 6)}...{address.slice(-4)}
-              </code>
-              <button type="button" class="btn btn-sm btn-outline btn-primary" data-copy-address={address}>Copy</button>
-            </li>
-          ))
-        }
+        {Object.entries(cryptoAddresses).map(([coin, address]) => (
+          <li class="flex items-center gap-3 font-mono text-sm">
+            <strong class="w-10">{coin}:</strong>
+            <code
+              class="text-xs bg-base-200 px-2 py-1 rounded border border-base-300 flex-1 truncate"
+              title={address}
+            >
+              {address.slice(0, 6)}...{address.slice(-4)}
+            </code>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline btn-primary"
+              data-copy-address={address}
+            >
+              Copy
+            </button>
+          </li>
+        ))}
       </ul>
     </section>
   </div>

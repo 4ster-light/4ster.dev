@@ -51,8 +51,16 @@ const navLinks = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0f1419" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f5fafa" media="(prefers-color-scheme: light)" />
+    <meta
+      name="theme-color"
+      content="#0f1419"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#f5fafa"
+      media="(prefers-color-scheme: light)"
+    />
     <meta name="color-scheme" content="dark light" />
     <meta name="description" content={description} />
     <meta name="author" content="David Vivar Bogónez" />
@@ -80,25 +88,40 @@ const navLinks = [
   </head>
   <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <header class="border-b border-base-300 bg-base-200/30">
-      <nav class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4">
-        <a href={site.url} class="text-3xl link-hover font-bold text-secondary">✰λster✰</a>
+      <nav
+        class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4"
+      >
+        <a
+          href={site.url}
+          class="text-3xl link-hover font-bold text-secondary"
+        >✰λster✰</a>
 
-        <div class="flex flex-wrap items-center justify-center md:justify-end gap-2">
+        <div
+          class="flex flex-wrap items-center justify-center md:justify-end gap-2"
+        >
           {navLinks.map((entry) => <NavLink {...entry} />)}
         </div>
       </nav>
     </header>
 
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:btn focus:btn-primary">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:btn focus:btn-primary"
+    >
       Skip to content
     </a>
 
-    <main id="main-content" class="max-w-4xl mx-auto p-4 sm:p-8 lg:px-0 flex-1 w-full">
+    <main
+      id="main-content"
+      class="max-w-4xl mx-auto p-4 sm:p-8 lg:px-0 flex-1 w-full"
+    >
       <slot />
     </main>
 
     <footer class="border-t border-base-300 bg-base-200/40">
-      <div class="max-w-4xl mx-auto py-4 text-center text-base-content/70">
+      <div
+        class="max-w-4xl mx-auto py-4 text-center text-base-content/70"
+      >
         <p>© {new Date().getFullYear()} ✰λster✰</p>
       </div>
     </footer>
