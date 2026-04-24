@@ -10,7 +10,11 @@ async function getKv(): Promise<Deno.Kv | null> {
   return await Deno.openKv()
 }
 
-export async function cached<T>(prefix: string, ttlMs: number, fetcher: () => Promise<T>): Promise<T> {
+export async function cached<T>(
+  prefix: string,
+  ttlMs: number,
+  fetcher: () => Promise<T>
+): Promise<T> {
   const kv = await getKv()
   if (!kv) return await fetcher()
 

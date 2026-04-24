@@ -88,8 +88,6 @@
 
 .prose {
   @apply max-w-none;
-
-  /* Mobile-specific spacing adjustments */
   @apply prose-p:my-2 sm:prose-p:my-4;
   @apply prose-headings:my-2 sm:prose-headings:my-4;
   @apply prose-li:my-1 sm:prose-li:my-2;
@@ -101,30 +99,49 @@
   }
 
   pre {
-    @apply rounded-lg overflow-auto p-0 border border-base-content/10;
+    @apply rounded-lg overflow-auto p-0 border-0 bg-transparent;
   }
 
-  code {
-    @apply wrap-break-word;
+  pre:not(.shiki-wrapper) > code {
+    @apply block rounded-lg border border-base-content/10 bg-base-200/60 p-5 text-sm sm:text-base text-base-content;
   }
 
   .shiki-wrapper {
-    @apply rounded-lg overflow-x-auto border border-base-content/10;
+    @apply rounded-lg overflow-hidden p-0 bg-transparent border-0 shadow-none;
   }
 
   .shiki-wrapper pre {
-    @apply p-4 border-0 m-0;
+    @apply p-4 border border-base-content/10 m-0 rounded-lg shadow-none overflow-x-auto;
+    background-color: #121212 !important;
+    line-height: 1.25;
+    font-size: 1rem;
   }
 
-  .shiki-wrapper code {
-    @apply flex;
+  .shiki-wrapper pre > code {
+    @apply block p-0 border-0 m-0;
+    background-color: transparent !important;
+    font-size: 0.95rem;
+    line-height: 1.45;
   }
 
-  .line-number {
-    @apply inline-block w-8 pr-4 text-right text-base-content/40 select-none shrink-0;
+  .shiki-wrapper pre > code .line {
+    @apply block m-0 p-0;
+    line-height: 1.45;
+    white-space: pre;
   }
 
-  /* Ensure tables wrap properly on mobile */
+  .shiki-wrapper pre > code .line-number {
+    display: inline-block;
+    width: 2.5rem;
+    margin-right: 0.75rem;
+    padding-right: 0.75rem;
+    border-right: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+    text-align: right;
+    color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
   table {
     @apply text-sm sm:text-base;
   }

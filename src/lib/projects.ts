@@ -107,7 +107,8 @@ export function fetchProjectsDirect(githubToken: string): Promise<Repository[]> 
 }
 
 export function fetchProjectsCached(githubToken: string): Promise<Repository[]> {
-  return cached("projects", PROJECTS_CACHE_TTL, () => fetchRepositoriesFromGitHub(githubToken)).catch(
-    (_error) => []
-  )
+  return cached("projects", PROJECTS_CACHE_TTL, () => fetchRepositoriesFromGitHub(githubToken))
+    .catch(
+      (_error) => []
+    )
 }

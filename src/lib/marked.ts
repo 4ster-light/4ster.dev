@@ -27,9 +27,15 @@ export default new Marked(gfmHeadingId(), {
             lang: token.lang ?? "plaintext",
             theme: "vitesse-dark"
           })
-          .replace(/>\s+</g, "><")
+          .replace(/<\/span>\s*(?=<span class="line">)/g, "</span>")
 
-        return `<div class="shiki-wrapper">${html}</div>\n`
+        let lineNumber = 0
+        const highlighted = html.replace(/<span class="line">/g, () => {
+          lineNumber += 1
+          return `<span class="line"><span class="line-number">${lineNumber}</span>`
+        })
+
+        return `<div class="shiki-wrapper">${highlighted}</div>\n`
       } catch (_error) {
         return `<pre><code class="shiki-error">${token.text}</code></pre>`
       }

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-external-import
 import { defineCollection, z } from "astro:content"
 
 const postsCollection = defineCollection({

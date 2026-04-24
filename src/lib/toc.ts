@@ -6,11 +6,8 @@ export interface TocItem {
 
 export function extractHeadings(html: string): { html: string; items: TocItem[] } {
   const items: TocItem[] = []
-  let modifiedHtml = html
-
   const headingRegex = /<(h[2-4])(.*?)>(.*?)<\/\1>/gi
-
-  modifiedHtml = modifiedHtml.replace(headingRegex, (match, tag, attrs, content) => {
+  const modifiedHtml = html.replace(headingRegex, (match, tag, attrs, content) => {
     const level = parseInt(tag[1], 10)
     const text = content.replace(/<[^>]*>/g, "")
     const id = text

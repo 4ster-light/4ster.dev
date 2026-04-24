@@ -20,6 +20,7 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Fresh build directory
+# Astro / Deno Deploy build artifacts
+.astro/
 _fresh/
 
