@@ -1,0 +1,46 @@
+backend:
+  name: github
+  repo: "4ster-light/4ster.dev"
+  branch: main
+
+media_folder: "static/uploads"
+public_folder: "/uploads"
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: posts
+    label: Posts
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Description
+        name: description
+        widget: text
+      - label: Date
+        name: date
+        widget: string
+        hint: YYYY-MM-DD
+      - label: Tags
+        name: tags
+        widget: list
+        default: []
+      - label: Preview
+        name: is-preview
+        widget: boolean
+        default: false
+        required: false
+      - label: Header image
+        name: header-image
+        widget: boolean
+        default: false
+        required: false
+      - label: Body
+        name: body
+        widget: markdown

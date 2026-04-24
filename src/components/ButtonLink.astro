@@ -1,0 +1,17 @@
+---
+interface Props {
+  href: string
+  target?: string
+  rel?: string
+}
+
+const {
+  href,
+  target = "_blank",
+  rel = "noopener noreferrer"
+} = Astro.props
+---
+
+<a href={href} target={target} rel={rel} class="btn btn-secondary gap-2">
+  <slot />
+</a>

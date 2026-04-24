@@ -1,0 +1,83 @@
+---
+import leftArrowsIcon from "../../../assets/icons/LeftArrows.svg?url"
+import loveIcon from "../../../assets/icons/Love.svg?url"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import ButtonLink from "../../components/ButtonLink.astro"
+import ReposCard from "../../components/ReposCard.astro"
+import { fetchProjectsDirect } from "../../lib/projects.ts"
+import site, { ogImage } from "../../lib/site.ts"
+
+export const prerender = true
+
+export const getStaticPaths = async () => {
+  const repositories = await fetchProjectsDirect(Deno.env.get("GH_API") || "")
+  return repositories.map((repository) => ({
+    params: { slug: repository.name }
+  }))
+}
+
+const slug = Astro.params.slug || ""
+const repositories = await fetchProjectsDirect(Deno.env.get("GH_API") || "")
+const repository = repositories.find((item) => item.name === slug)
+
+if (!repository) {
+  return Astro.redirect("/projects")
+}
+
+const description = repository.description || `${repository.name} - Open source project`
+---
+
+<BaseLayout
+  title={`${repository.name} - ✰λster✰`}
+  description={description}
+  ogTitle={repository.name}
+  ogDescription={description}
+  ogUrl={repository.url}
+  ogImage={ogImage(repository.name, { subtitle: description, type: "project" })}
+>
+  <article class="flex flex-col gap-8">
+    <h3 class="text-xl font-bold">Repository Information</h3>
+    <div class="overflow-x-auto">
+      <table class="table table-xs sm:table-sm border border-base-200">
+        <tbody>
+          <tr>
+            <th class="text-left">Language</th>
+            <td>{repository.language || "Not specified"}</td>
+          </tr>
+          <tr>
+            <th class="text-left">Stars</th>
+            <td>{repository.stars}</td>
+          </tr>
+          <tr>
+            <th class="text-left">Forks</th>
+            <td>{repository.forks}</td>
+          </tr>
+          <tr>
+            <th class="text-left">Last Updated</th>
+            <td>{repository.updated_at}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a href={repository.url} target="_blank" rel="noopener" class="btn w-full">View on GitHub</a>
+
+    <section
+      class="prose prose-sm sm:prose-base card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
+      set:html={repository.readme || ""}
+    />
+
+    <ReposCard />
+
+    <footer class="flex justify-between items-center gap-4 flex-col sm:flex-row">
+      <div class="flex gap-2 sm:ml-auto">
+        <ButtonLink href={site.projects} target="">
+          <img src={leftArrowsIcon} alt="Left Arrows" width="32" height="32" decoding="async" class="size-8" />
+        </ButtonLink>
+        <ButtonLink href={site.donate}>
+          <img src={loveIcon} alt="Sponsor" width="24" height="24" decoding="async" class="size-6" /> Sponsor
+        </ButtonLink>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>

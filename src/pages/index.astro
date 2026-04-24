@@ -1,0 +1,55 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import PostMeta from "../components/PostMeta.astro"
+import site, { ogImage } from "../lib/site.ts"
+
+const posts = (await getCollection("posts"))
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .filter((post) => !post.data["is-preview"])
+---
+
+<BaseLayout
+  title="✰λster✰"
+  description="Personal blog about programming, technology, and computer science."
+  ogTitle="✰λster✰"
+  ogDescription="Personal blog about programming, technology, and computer science."
+  ogUrl={site.baseUrl}
+  ogImage={ogImage("Aster", { subtitle: "Personal blog about programming, technology, and computer science." })}
+>
+  <section class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center">
+    <picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
+      <source srcset="/pfp-320.webp" type="image/webp" />
+      <img src="/pfp.jpg" alt="Avatar" width="736" height="736" decoding="async" fetchpriority="high" class="w-full h-full object-cover" />
+    </picture>
+    <p class="m-0 text-base-content/80">
+      Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source developer most known as <strong class="text-primary">Aster</strong>, I am a computer engineering undergraduate at <a href={site.uni} target="_blank" rel="noopener">ESI-UCLM</a>. I am very passionate about software and computers in general, I use technologies like Python, TypeScript, Rust, Kotlin and Preact, among others.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
+    <p class="text-base-content/80 leading-relaxed">
+      I also have some open source projects of my own, you can check them out on my <a href={site.projects}>projects page</a>. The most significant ones are pinned on my <a href={site.githubSponsors} target="_blank" rel="noopener noreferrer">GitHub Sponsors Profile</a>.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
+    <p class="text-base-content/80 mb-8">
+      Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to computer science and programming. Know that you can find more (some not published here) posts on my <a href={site.substack} target="_blank" rel="noopener noreferrer">Substack</a> publication.
+    </p>
+
+    {
+      posts.length > 0
+        ? <div class="space-y-10">{posts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}</div>
+        : <p class="text-error text-4xl leading-relaxed">Problem loading posts.</p>
+    }
+  </section>
+
+  <div class="my-8"></div>
+</BaseLayout>
