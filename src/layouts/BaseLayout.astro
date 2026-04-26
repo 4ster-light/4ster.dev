@@ -5,6 +5,7 @@ import linkIcon from "../icons/Link.svg?url"
 import loveIcon from "../icons/Love.svg?url"
 import NavLink from "../components/NavLink.astro"
 import site from "../lib/site.ts"
+import { ClientRouter } from "astro:transitions"
 
 interface Props {
   title?: string
@@ -49,6 +50,7 @@ const navLinks = [
 
 <html lang="en" data-theme="teal_dark">
   <head>
+    <ClientRouter />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
