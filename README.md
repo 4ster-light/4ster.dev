@@ -4,12 +4,12 @@ My personal website.
 
 ## Available Commands
 
-| Command           | Purpose                          |
-| ----------------- | -------------------------------- |
-| `pnpm run dev`   | Start development server         |
-| `pnpm run build` | Build for production             |
+| Command            | Purpose                          |
+| ------------------ | -------------------------------- |
+| `pnpm run dev`     | Start development server         |
+| `pnpm run build`   | Build for production             |
 | `pnpm run preview` | Preview production build locally |
-| `pnpm run lint` | Format, lint, and type check     |
+| `pnpm run lint`    | Format, lint, and type check     |
 
 ## Tech Stack
 

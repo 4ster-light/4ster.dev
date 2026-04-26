@@ -1,5 +1,4 @@
 import marked from "./marked.ts"
-import { cached } from "./cache.ts"
 
 const FEATURED_REPOS = [
   "artscii",
@@ -11,8 +10,6 @@ const FEATURED_REPOS = [
   "py-logic",
   "rshell"
 ] as const
-
-const PROJECTS_CACHE_TTL = 1000 * 60 * 30
 
 export interface Repository {
   name: string
@@ -102,13 +99,6 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
     )
 }
 
-export function fetchProjectsDirect(githubToken: string): Promise<Repository[]> {
-  return fetchRepositoriesFromGitHub(githubToken).catch((_error) => [])
-}
-
-export function fetchProjectsCached(githubToken: string): Promise<Repository[]> {
-  return cached("projects", PROJECTS_CACHE_TTL, () => fetchRepositoriesFromGitHub(githubToken))
-    .catch(
-      (_error) => []
-    )
+export function fetchProjects(githubToken: string): Promise<Repository[]> {
+  return fetchRepositoriesFromGitHub(githubToken)
 }
