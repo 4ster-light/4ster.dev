@@ -9,5 +9,5 @@ import cloudflare from "@astrojs/cloudflare"
 export default defineConfig({
   integrations: [react(), markdoc(), keystatic()],
   adapter: cloudflare({ imageService: { build: "compile", runtime: "cloudflare-binding" } }),
-  vite: { plugins: [tailwindcss()], environments: { ssr: { external: "node:process" } } }
+  vite: { plugins: [tailwindcss()] }
 })

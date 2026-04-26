@@ -1,15 +1,16 @@
 ---
-import leftArrowsIcon from "../../../assets/icons/LeftArrows.svg?url"
-import loveIcon from "../../../assets/icons/Love.svg?url"
+import leftArrowsIcon from "../../icons/LeftArrows.svg?url"
+import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
 import { fetchProjectsDirect } from "../../lib/projects.ts"
 import site, { ogImage } from "../../lib/site.ts"
+import process from "node:process"
 
 export const prerender = true
 
-const repositories = await fetchProjectsDirect(Deno.env.get("GH_API") || "")
+const repositories = await fetchProjectsDirect(process.env.GH_API || "")
 ---
 
 <BaseLayout

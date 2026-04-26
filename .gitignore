@@ -4,6 +4,7 @@ node_modules
 dist
 .*
 !.zed
+!public/.assetsignore
 
 # OS
 .DS_Store

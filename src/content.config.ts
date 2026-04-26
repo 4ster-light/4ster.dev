@@ -6,10 +6,9 @@ const postsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    date: z.string(),
+    date: z.date(),
     tags: z.array(z.string()).default([]),
-    "is-preview": z.boolean().optional().default(false),
-    "header-image": z.boolean().optional().default(false)
+    "is-preview": z.boolean().optional().default(false)
   })
 })
 

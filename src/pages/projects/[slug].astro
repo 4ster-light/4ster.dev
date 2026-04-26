@@ -1,25 +1,24 @@
 ---
-import leftArrowsIcon from "../../../assets/icons/LeftArrows.svg?url"
-import loveIcon from "../../../assets/icons/Love.svg?url"
+import leftArrowsIcon from "../../icons/LeftArrows.svg?url"
+import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
 import { fetchProjectsDirect } from "../../lib/projects.ts"
 import site, { ogImage } from "../../lib/site.ts"
+import process from "node:process"
 
 export const prerender = true
 
 export const getStaticPaths = async () => {
-  const repositories = await fetchProjectsDirect(
-    Deno.env.get("GH_API") || ""
-  )
+  const repositories = await fetchProjectsDirect(process.env.GH_API || "")
   return repositories.map((repository) => ({
     params: { slug: repository.name }
   }))
 }
 
 const slug = Astro.params.slug || ""
-const repositories = await fetchProjectsDirect(Deno.env.get("GH_API") || "")
+const repositories = await fetchProjectsDirect(process.env.GH_API || "")
 const repository = repositories.find((item) => item.name === slug)
 
 if (!repository) {
