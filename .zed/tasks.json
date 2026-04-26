@@ -1,14 +1,20 @@
 [
   {
     "label": "dev",
-    "command": "deno",
-    "args": ["task", "dev"],
-    "hide": "always"
+    "command": "pnpm",
+    "args": ["run", "dev"],
+    "hide": "always",
+  },
+  {
+    "label": "preview",
+    "command": "pnpm",
+    "args": ["run", "preview"],
+    "hide": "always",
   },
   {
     "label": "check",
-    "command": "deno",
-    "args": ["task", "check"],
-    "hide": "on_success"
-  }
+    "command": "pnpm",
+    "args": ["run", "lint"],
+    "hide": "on_success",
+  },
 ]
