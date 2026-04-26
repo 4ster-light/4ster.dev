@@ -1,0 +1,45 @@
+{
+  "exclude": [
+    ".astro",
+    "dist",
+    "node_modules",
+    ".env",
+    ".env.*",
+    ".git",
+    ".gitignore",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    ".*",
+    "worker-configuration.d.ts"
+  ],
+  "unstable": ["fmt-component"],
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 100,
+    "indentWidth": 2,
+    "semiColons": false,
+    "singleQuote": false,
+    "trailingCommas": "never",
+    "proseWrap": "always"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended", "jsx", "react", "workspace", "jsr"],
+      "include": [
+        "eqeqeq",
+        "default-param-last",
+        "guard-for-in",
+        "no-await-in-loop",
+        "no-eval",
+        "no-external-import",
+        "no-non-null-asserted-optional-chain",
+        "no-non-null-assertion",
+        "no-self-compare",
+        "no-undef",
+        "no-useless-rename",
+        "allow"
+      ],
+      "exclude": ["no-external-import"]
+    }
+  }
+}

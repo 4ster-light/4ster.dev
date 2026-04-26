@@ -1,14 +1,13 @@
 import { defineConfig } from "astro/config"
 import tailwindcss from "@tailwindcss/vite"
+import react from "@astrojs/react"
+import markdoc from "@astrojs/markdoc"
+import keystatic from "@keystatic/astro"
+
+import cloudflare from "@astrojs/cloudflare"
 
 export default defineConfig({
-  output: "static",
-  integrations: [],
-  publicDir: "./static",
-  vite: {
-    plugins: [tailwindcss()],
-    server: {
-      allowedHosts: ["aster--local.4ster.deno.net"]
-    }
-  }
+  integrations: [react(), markdoc(), keystatic()],
+  adapter: cloudflare({ imageService: { build: "compile", runtime: "cloudflare-binding" } }),
+  vite: { plugins: [tailwindcss()], environments: { ssr: { external: "node:process" } } }
 })

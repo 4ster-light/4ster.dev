@@ -1,10 +1,9 @@
 node_modules
 
 # Output
-.vite
-.deno-deploy
-.output
 dist
+.*
+!.zed
 
 # OS
 .DS_Store
@@ -23,4 +22,3 @@ vite.config.ts.timestamp-*
 # Astro / Deno Deploy build artifacts
 .astro/
 _fresh/
-
