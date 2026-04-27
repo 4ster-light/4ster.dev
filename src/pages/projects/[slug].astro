@@ -13,13 +13,16 @@ export const prerender = true
 export const getStaticPaths = async () => {
   const repositories = await fetchProjects(process.env.GH_API || "")
   return repositories.map((repository) => ({
-    params: { slug: repository.name }
+    params: { slug: repository.name },
+    props: { repository }
   }))
 }
 
 const slug = Astro.params.slug || ""
-const repositories = await fetchProjects(process.env.GH_API || "")
-const repository = repositories.find((item) => item.name === slug)
+// const repositories = await fetchProjects(process.env.GH_API || "");
+// const repository = repositories.find((item) => item.name === slug);
+
+const repository = Astro.props.repository
 
 if (!repository) {
   return Astro.redirect("/projects")
