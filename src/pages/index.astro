@@ -5,10 +5,8 @@ import PostMeta from "../components/PostMeta.astro"
 import site, { ogImage } from "../lib/site.ts"
 
 const posts = (await getCollection("posts"))
-  .sort(
-    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-  )
   .filter((post) => !post.data["is-preview"])
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
 ---
 
 <BaseLayout
@@ -38,14 +36,10 @@ const posts = (await getCollection("posts"))
     </picture>
     <p class="m-0 text-base-content/80">
       Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source
-      developer most known as <strong
-        class="text-primary"
-      >Aster</strong>, I am a computer engineering undergraduate at <a
-        href={site.uni}
-        target="_blank"
-        rel="noopener"
-      >ESI-UCLM</a>. I am very passionate about software and computers in general, I use
-      technologies like Python, TypeScript, Rust, Kotlin and Preact, among others.
+      developer most known as <strong class="text-primary">Aster</strong>, I am a computer
+      engineering undergraduate at <a href={site.uni} target="_blank" rel="noopener">ESI-UCLM</a>.
+      I am very passionate about software and computers in general, I use technologies like Python,
+      TypeScript, Rust, Kotlin and Preact, among others.
     </p>
   </section>
 
@@ -71,11 +65,8 @@ const posts = (await getCollection("posts"))
     <p class="text-base-content/80 mb-8">
       Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to
       computer science and programming. Know that you can find more (some not published here) posts
-      on my <a
-        href={site.substack}
-        target="_blank"
-        rel="noopener noreferrer"
-      >Substack</a> publication.
+      on my <a href={site.substack} target="_blank" rel="noopener noreferrer">Substack</a>
+      publication.
     </p>
 
     {posts.length > 0 ? (
@@ -83,10 +74,8 @@ const posts = (await getCollection("posts"))
         {posts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
       </div>
     ) : (
-       <p class="text-error text-4xl leading-relaxed">
-         Problem loading posts.
-       </p>
-     )}
+      <p class="text-error text-4xl leading-relaxed">Problem loading posts.</p>
+    )}
   </section>
 
   <div class="my-8"></div>

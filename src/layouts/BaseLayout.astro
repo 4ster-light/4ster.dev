@@ -15,6 +15,8 @@ interface Props {
   ogType?: "website" | "article"
   ogUrl?: string
   ogImage?: string
+  lang?: "en" | "es"
+  ogLocale?: string
 }
 
 const {
@@ -24,7 +26,9 @@ const {
   ogDescription = description,
   ogType = "website",
   ogUrl = site.baseUrl,
-  ogImage
+  ogImage,
+  lang = "en",
+  ogLocale = lang === "es" ? "es_ES" : "en_US"
 } = Astro.props
 
 const navLinks = [
@@ -48,7 +52,7 @@ const navLinks = [
 ]
 ---
 
-<html lang="en" data-theme="teal_dark">
+<html lang={lang} data-theme="teal_dark">
   <head>
     <ClientRouter />
     <meta charset="utf-8" />
@@ -72,7 +76,7 @@ const navLinks = [
     <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="✰λster✰" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={ogLocale} />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <meta name="twitter:title" content={ogTitle} />

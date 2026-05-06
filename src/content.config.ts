@@ -7,6 +7,8 @@ const postsCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.date(),
+    lang: z.enum(["en", "es"]).default("en"),
+    translationKey: z.string().optional(),
     tags: z.array(z.string()).default([]),
     "is-preview": z.boolean().optional().default(false)
   })
