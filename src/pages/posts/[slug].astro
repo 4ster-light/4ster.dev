@@ -17,8 +17,8 @@ const slug = Astro.params.slug || ""
 const targetUrl = `/${lang}/posts/${slug}`
 ---
 
-<!doctype html>
-<html lang={lang}>
+<!DOCTYPE html>
+<html {lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,7 +31,7 @@ const targetUrl = `/${lang}/posts/${slug}`
       This post has moved to <a href={targetUrl}>{targetUrl}</a>.
     </p>
     <script is:inline>
-      window.location.replace(${JSON.stringify(targetUrl)})
+      window.location.replace(JSON.stringify(targetUrl))
     </script>
   </body>
 </html>

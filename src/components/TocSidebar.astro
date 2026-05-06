@@ -9,14 +9,16 @@ interface PostLink {
   slug: string
   title: string
   date: string
+  lang?: "en" | "es"
 }
 
 interface Props {
   items: TocItem[]
   recentPosts?: PostLink[]
+  lang?: "en" | "es"
 }
 
-const { items, recentPosts = [] } = Astro.props
+const { items, recentPosts = [], lang = "en" } = Astro.props
 ---
 
 <aside class="sticky top-8 max-h-[calc(100vh-2rem)] overflow-y-auto space-y-8">
@@ -46,7 +48,7 @@ const { items, recentPosts = [] } = Astro.props
           {recentPosts.map((post) => (
             <li>
               <a
-                href={`/posts/${post.slug}`}
+                href={`/${post.lang || lang}/posts/${post.slug}`}
                 class="link text-sm block text-primary"
               >{post.title}</a>
               <span class="text-xs text-base-content/50">

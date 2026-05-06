@@ -21,7 +21,8 @@ Required / supported fields:
 - Use `lang: "en"` for English posts and `lang: "es"` for Spanish posts.
 - If a post exists in both languages, give both files the same `translationKey`.
 - Locale-aware post URLs are generated automatically.
-- The homepage groups posts into English and Spanish sections so readers can browse each language separately.
+- The homepage groups posts into English and Spanish sections so readers can browse each language
+  separately.
 - Legacy `/posts/[slug]` URLs still redirect to the locale route.
 
 ### Example
@@ -48,7 +49,7 @@ tags: ["personal"]
 
 ## Tech Stack
 
-- **Frontend**: Daisyui 5 + Tailwind CSS 4 + Deno Fresh (Preact)
+- **Frontend**: Daisyui 5 + Tailwind CSS 4 + Astro
 - **Deployment**: Cloudflare Pages
 
 CI/CD handles automatic deployments on push to main.

@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "dev": "wrangler types && astro dev",
-    "build": "wrangler types && astro build",
-    "preview": "wrangler types && astro build && wrangler dev --local",
-    "lint": "wrangler types && deno fmt && deno lint --fix && deno check"
+    "dev": "astro dev",
+    "sync": "wrangler types && astro sync",
+    "build": "pnpm run sync && astro build",
+    "preview": "pnpm run sync && astro build && wrangler dev --local",
+    "lint": "deno fmt && deno lint --fix && deno check"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.13",
