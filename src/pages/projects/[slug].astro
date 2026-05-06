@@ -4,23 +4,27 @@ import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
-import { fetchProjects } from "../../lib/projects.ts"
+import { fetchProjectReadme, fetchProjects } from "../../lib/projects"
 import site, { ogImage } from "../../lib/site.ts"
-import process from "node:process"
 
 export const prerender = true
 
 export const getStaticPaths = async () => {
-  const repositories = await fetchProjects(process.env.GH_API || "")
-  return repositories.map((repository) => ({
-    params: { slug: repository.name },
-    props: { repository }
-  }))
-}
+  const githubToken = globalThis.process?.env?.GH_API ?? ""
+  const repositories = await fetchProjects(githubToken)
 
-const slug = Astro.params.slug || ""
-// const repositories = await fetchProjects(process.env.GH_API || "");
-// const repository = repositories.find((item) => item.name === slug);
+  return await Promise.all(
+    repositories.map(async (repository) => {
+      const [owner, repoName] = repository.full_name.split("/")
+      const readme = await fetchProjectReadme(owner ?? "", repoName ?? "", githubToken)
+
+      return {
+        params: { slug: repository.name },
+        props: { repository: { ...repository, readme } }
+      }
+    })
+  )
+}
 
 const repository = Astro.props.repository
 

@@ -1,4 +1,4 @@
-import marked from "./marked.ts"
+import marked from "./marked"
 
 const FEATURED_REPOS = [
   "artscii",
@@ -13,6 +13,7 @@ const FEATURED_REPOS = [
 
 export interface Repository {
   name: string
+  full_name: string
   url: string
   description?: string
   stars: number
@@ -34,30 +35,44 @@ interface RawRepository {
   updated_at: string
 }
 
+const projectsCache = new Map<string, Promise<Repository[]>>()
+const readmeCache = new Map<string, Promise<string>>()
+
 async function fetchReadme(owner: string, repo: string, token: string): Promise<string> {
-  const headers = new Headers({
-    Accept: "application/vnd.github.v3+json",
-    "User-Agent": "4ster-dev-site"
-  })
+  const cacheKey = `${token || "__no_token__"}:${owner}/${repo}`
+  const cached = readmeCache.get(cacheKey)
+  if (cached) return cached
 
-  if (token) headers.set("Authorization", `Bearer ${token}`)
-
-  return await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-    method: "GET",
-    headers
-  })
-    .then((response) => (response.ok ? response.json() : Promise.reject(response.statusText)))
-    .then(({ content }: { content: string }) => {
-      const decodedContent = atob(content.replace(/\s/g, ""))
-      const bytes = Uint8Array.from(decodedContent, (char) => char.charCodeAt(0))
-      const utf8Content = new TextDecoder("utf-8").decode(bytes)
-      const adjustedContent = utf8Content.replace(
-        /\]\((?!https?:\/\/)([^)]+)\)/g,
-        `](https://github.com/${owner}/${repo}/blob/main/$1)`
-      )
-      return marked.parse(adjustedContent) as string
+  const promise = (async () => {
+    const headers = new Headers({
+      Accept: "application/vnd.github.v3+json",
+      "User-Agent": "4ster-dev-site"
     })
-    .catch((_error) => "")
+
+    if (token) headers.set("Authorization", `Bearer ${token}`)
+
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+      method: "GET",
+      headers
+    })
+
+    if (!response.ok) return ""
+
+    const { content } = (await response.json()) as { content?: string }
+    if (!content) return ""
+
+    const decodedContent = atob(content.replace(/\s/g, ""))
+    const bytes = Uint8Array.from(decodedContent, (char) => char.charCodeAt(0))
+    const utf8Content = new TextDecoder("utf-8").decode(bytes)
+    const adjustedContent = utf8Content.replace(
+      /\]\((?!https?:\/\/)([^)]+)\)/g,
+      `](https://github.com/${owner}/${repo}/blob/main/$1)`
+    )
+    return marked.parse(adjustedContent) as string
+  })().catch(() => "")
+
+  readmeCache.set(cacheKey, promise)
+  return promise
 }
 
 async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Repository[]> {
@@ -68,37 +83,50 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
 
   if (githubToken) headers.set("Authorization", `Bearer ${githubToken}`)
 
-  return await fetch("https://api.github.com/users/4ster-light/repos?per_page=100&sort=updated", {
-    method: "GET",
-    headers
-  })
-    .then((response) => (response.ok ? response.json() : Promise.reject(response.statusText)))
-    .then((data: RawRepository[]) =>
-      Promise.all(
-        data
-          .filter((repo) => FEATURED_REPOS.includes(repo.name as (typeof FEATURED_REPOS)[number]))
-          .sort(
-            (a, b) =>
-              FEATURED_REPOS.indexOf(a.name as (typeof FEATURED_REPOS)[number]) -
-              FEATURED_REPOS.indexOf(b.name as (typeof FEATURED_REPOS)[number])
-          )
-          .map(async (repo) => {
-            const [owner, repoName] = repo.full_name.split("/")
-            return await fetchReadme(owner ?? "", repoName ?? "", githubToken).then((readme) => ({
-              name: repo.name,
-              url: repo.html_url,
-              description: repo.description,
-              stars: repo.stargazers_count,
-              forks: repo.forks,
-              language: repo.language,
-              updated_at: new Date(repo.updated_at).toLocaleDateString(),
-              readme
-            }))
-          })
-      )
+  const response = await fetch(
+    "https://api.github.com/users/4ster-light/repos?per_page=100&sort=updated",
+    {
+      method: "GET",
+      headers
+    }
+  )
+
+  if (!response.ok) return []
+
+  const data = (await response.json()) as RawRepository[]
+  return data
+    .filter((repo) => FEATURED_REPOS.includes(repo.name as (typeof FEATURED_REPOS)[number]))
+    .sort(
+      (a, b) =>
+        FEATURED_REPOS.indexOf(a.name as (typeof FEATURED_REPOS)[number]) -
+        FEATURED_REPOS.indexOf(b.name as (typeof FEATURED_REPOS)[number])
     )
+    .map((repo) => ({
+      name: repo.name,
+      full_name: repo.full_name,
+      url: repo.html_url,
+      description: repo.description,
+      stars: repo.stargazers_count,
+      forks: repo.forks,
+      language: repo.language,
+      updated_at: new Date(repo.updated_at).toLocaleDateString()
+    }))
+}
+
+export async function fetchProjectReadme(
+  owner: string,
+  repo: string,
+  githubToken: string
+): Promise<string> {
+  return await fetchReadme(owner, repo, githubToken)
 }
 
 export function fetchProjects(githubToken: string): Promise<Repository[]> {
-  return fetchRepositoriesFromGitHub(githubToken)
+  const cacheKey = githubToken || "__no_token__"
+  const cached = projectsCache.get(cacheKey)
+  if (cached) return cached
+
+  const promise = fetchRepositoriesFromGitHub(githubToken).catch(() => [])
+  projectsCache.set(cacheKey, promise)
+  return promise
 }

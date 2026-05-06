@@ -4,13 +4,13 @@ import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
-import { fetchProjects } from "../../lib/projects.ts"
+import { fetchProjects } from "../../lib/projects"
 import site, { ogImage } from "../../lib/site.ts"
-import process from "node:process"
 
 export const prerender = true
 
-const repositories = await fetchProjects(process.env.GH_API || "")
+const githubToken = globalThis.process?.env?.GH_API ?? ""
+const repositories = await fetchProjects(githubToken)
 ---
 
 <BaseLayout
