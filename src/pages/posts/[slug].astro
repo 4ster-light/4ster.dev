@@ -5,17 +5,33 @@ export const prerender = true
 
 export const getStaticPaths = async () => {
   const posts = await getCollection("posts")
+
   return posts.map((post) => ({
-    params: { slug: post.slug }
+    params: { slug: post.slug },
+    props: { lang: post.data.lang || "en" }
   }))
 }
 
+const { lang = "en" } = Astro.props as { lang?: "en" | "es" }
 const slug = Astro.params.slug || ""
-const post = (await getCollection("posts")).find((entry) => entry.slug === slug)
+const targetUrl = `/${lang}/posts/${slug}`
+---
 
-if (!post) {
-  return Astro.redirect("/")
-}
-
-const lang = post.data.lang || "en"
-return Astro.redirect(`/${lang}/posts/${post.slug}`)
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${targetUrl}`} />
+    <link rel="canonical" href={targetUrl} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      This post has moved to <a href={targetUrl}>{targetUrl}</a>.
+    </p>
+    <script is:inline>
+      window.location.replace(${JSON.stringify(targetUrl)})
+    </script>
+  </body>
+</html>

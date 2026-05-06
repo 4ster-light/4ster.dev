@@ -10,6 +10,7 @@ const posts = (await getCollection("posts"))
 
 const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
 const esPosts = posts.filter((post) => post.data.lang === "es")
+const initialPosts = enPosts.length > 0 ? "en" : "es"
 ---
 
 <BaseLayout
@@ -22,9 +23,7 @@ const esPosts = posts.filter((post) => post.data.lang === "es")
     subtitle: "Personal blog about programming, technology, and computer science."
   })}
 >
-  <section
-    class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center"
-  >
+  <section class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center">
     <picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
       <source srcset="/pfp-320.webp" type="image/webp" />
       <img
@@ -40,8 +39,8 @@ const esPosts = posts.filter((post) => post.data.lang === "es")
     <p class="m-0 text-base-content/80">
       Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source
       developer most known as <strong class="text-primary">Aster</strong>, I am a computer
-      engineering undergraduate at <a href={site.uni} target="_blank" rel="noopener">ESI-UCLM</a>.
-      I am very passionate about software and computers in general, I use technologies like Python,
+      engineering undergraduate at <a href={site.uni} target="_blank" rel="noopener">ESI-UCLM</a>. I
+      am very passionate about software and computers in general, I use technologies like Python,
       TypeScript, Rust, Kotlin and Preact, among others.
     </p>
   </section>
@@ -72,38 +71,81 @@ const esPosts = posts.filter((post) => post.data.lang === "es")
       publication.
     </p>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <section class="space-y-6">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-          <h3 class="text-xl font-bold text-primary">English posts</h3>
-          <span class="badge badge-soft badge-primary">{enPosts.length}</span>
-        </div>
-
-        {enPosts.length > 0 ? (
-          <div class="space-y-10">
-            {enPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
-          </div>
-        ) : (
-          <p class="text-base-content/60">No English posts yet.</p>
-        )}
-      </section>
-
-      <section class="space-y-6">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-          <h3 class="text-xl font-bold text-secondary">Spanish posts</h3>
-          <span class="badge badge-soft badge-secondary">{esPosts.length}</span>
-        </div>
-
-        {esPosts.length > 0 ? (
-          <div class="space-y-10">
-            {esPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
-          </div>
-        ) : (
-          <p class="text-base-content/60">No Spanish posts yet.</p>
-        )}
-      </section>
+    <div class="flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Blog post language filter">
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        data-post-filter="en"
+        aria-pressed="true"
+      >
+        English posts <span class="ml-1 badge badge-soft badge-primary">{enPosts.length}</span>
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-ghost"
+        data-post-filter="es"
+        aria-pressed="false"
+      >
+        Spanish posts <span class="ml-1 badge badge-soft badge-secondary">{esPosts.length}</span>
+      </button>
     </div>
+
+    <section class="space-y-6" data-post-panel="en">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h3 class="text-xl font-bold text-primary">English posts</h3>
+        <span class="badge badge-soft badge-primary">{enPosts.length}</span>
+      </div>
+
+      {enPosts.length > 0 ? (
+        <div class="space-y-10">
+          {enPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
+        </div>
+      ) : <p class="text-base-content/60">No English posts yet.</p>}
+    </section>
+
+    <section class="space-y-6 hidden" data-post-panel="es">
+      <div class="flex items-center justify-between gap-3 flex-wrap">
+        <h3 class="text-xl font-bold text-secondary">Spanish posts</h3>
+        <span class="badge badge-soft badge-secondary">{esPosts.length}</span>
+      </div>
+
+      {esPosts.length > 0 ? (
+        <div class="space-y-10">
+          {esPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
+        </div>
+      ) : <p class="text-base-content/60">No Spanish posts yet.</p>}
+    </section>
   </section>
+
+  <script is:inline define:vars={{ initialPosts }}>
+    const initBlogLanguageToggle = () => {
+      const buttons = Array.from(document.querySelectorAll("[data-post-filter]"))
+      const panels = Array.from(document.querySelectorAll("[data-post-panel]"))
+
+      if (buttons.length === 0 || panels.length === 0) return
+
+      const showPanel = (lang) => {
+        panels.forEach((panel) => {
+          panel.classList.toggle("hidden", panel.getAttribute("data-post-panel") !== lang)
+        })
+        buttons.forEach((button) => {
+          const active = button.getAttribute("data-post-filter") === lang
+          button.classList.toggle("btn-primary", active)
+          button.classList.toggle("btn-ghost", !active)
+          button.setAttribute("aria-pressed", String(active))
+        })
+      }
+
+      buttons.forEach((button) => {
+        button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
+      })
+
+      showPanel(initialPosts)
+    }
+
+    initBlogLanguageToggle()
+    document.addEventListener("astro:page-load", initBlogLanguageToggle)
+  </script>
 
   <div class="my-8"></div>
 </BaseLayout>
