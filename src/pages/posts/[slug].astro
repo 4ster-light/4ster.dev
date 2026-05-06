@@ -1,100 +1,37 @@
 ---
 import { getCollection } from "astro:content"
-import leftArrowsIcon from "../../icons/LeftArrows.svg?url"
-import loveIcon from "../../icons/Love.svg?url"
-import BaseLayout from "../../layouts/BaseLayout.astro"
-import ButtonLink from "../../components/ButtonLink.astro"
-import PostMeta from "../../components/PostMeta.astro"
-import TocSidebar from "../../components/TocSidebar.astro"
-import marked from "../../lib/marked.ts"
-import site, { ogImage } from "../../lib/site.ts"
-import { extractHeadings } from "../../lib/toc.ts"
 
 export const prerender = true
 
 export const getStaticPaths = async () => {
   const posts = await getCollection("posts")
+
   return posts.map((post) => ({
-    params: { slug: post.slug }
+    params: { slug: post.slug },
+    props: { lang: post.data.lang || "en" }
   }))
 }
 
+const { lang = "en" } = Astro.props as { lang?: "en" | "es" }
 const slug = Astro.params.slug || ""
-const allPosts = (await getCollection("posts")).sort(
-  (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-)
-const post = allPosts.find((entry) => entry.slug === slug)
-
-if (!post) {
-  return Astro.redirect("/")
-}
-
-const parsed = extractHeadings(marked.parse(post.body || "") as string)
-const recentPosts = allPosts
-  .filter((entry) => entry.slug !== post.slug && !entry.data["is-preview"])
-  .slice(0, 5)
-  .map((entry) => ({
-    slug: entry.slug,
-    title: entry.data.title,
-    date: entry.data.date
-  }))
+const targetUrl = `/${lang}/posts/${slug}`
 ---
 
-<BaseLayout
-  title={post.data.title}
-  description={post.data.description}
-  ogTitle={post.data.title}
-  ogDescription={post.data.description}
-  ogType="article"
-  ogUrl={`${site.baseUrl}/posts/${post.slug}`}
-  ogImage={ogImage(post.data.title, {
-    subtitle: post.data.description,
-    type: "post"
-  })}
->
-  <PostMeta post={{ slug: post.slug, ...post.data }} header />
-
-  <div class="divider mb-12"></div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-6 gap-8">
-    <main class="-mt-6 prose lg:col-span-4" set:html={parsed.html} />
-
-    <div
-      class="lg:col-span-2 lg:border-l lg:border-base-300 lg:pl-8 hidden lg:block"
-    >
-      <TocSidebar
-        items={parsed.items.map((item) => ({
-          depth: item.level,
-          slug: item.id,
-          text: item.text
-        }))}
-        {recentPosts}
-      />
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <footer class="flex justify-end gap-4 sm:flex-row">
-    <ButtonLink href={site.url} target="">
-      <img
-        src={leftArrowsIcon}
-        alt="Left Arrows"
-        width="32"
-        height="32"
-        decoding="async"
-        class="size-8"
-      />
-    </ButtonLink>
-    <ButtonLink href={site.donate}>
-      <img
-        src={loveIcon}
-        alt="Sponsor"
-        width="24"
-        height="24"
-        decoding="async"
-        class="size-6"
-      /> Sponsor
-    </ButtonLink>
-  </footer>
-</BaseLayout>
+<!DOCTYPE html>
+<html {lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${targetUrl}`} />
+    <link rel="canonical" href={targetUrl} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      This post has moved to <a href={targetUrl}>{targetUrl}</a>.
+    </p>
+    <script is:inline>
+      window.location.replace(JSON.stringify(targetUrl))
+    </script>
+  </body>
+</html>
