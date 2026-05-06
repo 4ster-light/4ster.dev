@@ -30,6 +30,15 @@ if (!post) {
   return Astro.redirect("/")
 }
 
+const translatedPost = post.data.translationKey
+  ? allPosts.find(
+      (entry) =>
+        entry.slug !== post.slug &&
+        entry.data.translationKey === post.data.translationKey &&
+        (entry.data.lang || "en") !== lang
+    )
+  : undefined
+
 const parsed = extractHeadings(marked.parse(post.body || "") as string)
 const recentPosts = allPosts
   .filter(
@@ -45,6 +54,9 @@ const recentPosts = allPosts
     date: entry.data.date,
     lang: entry.data.lang || "en"
   }))
+
+const switchLabel = lang === "es" ? "Read in English" : "Leer en español"
+const switchHref = translatedPost ? `/${translatedPost.data.lang || "en"}/posts/${translatedPost.slug}` : undefined
 ---
 
 <BaseLayout
@@ -62,6 +74,12 @@ const recentPosts = allPosts
   })}
 >
   <PostMeta post={{ slug: post.slug, ...post.data }} header />
+
+  {switchHref && (
+    <div class="mt-6">
+      <ButtonLink href={switchHref}>{switchLabel}</ButtonLink>
+    </div>
+  )}
 
   <div class="divider mb-12"></div>
 
