@@ -17,6 +17,8 @@ interface Props {
   ogImage?: string
   lang?: "en" | "es"
   ogLocale?: string
+  canonicalUrl?: string
+  alternateUrls?: Array<{ lang: "en" | "es"; href: string }>
 }
 
 const {
@@ -28,7 +30,9 @@ const {
   ogUrl = site.baseUrl,
   ogImage,
   lang = "en",
-  ogLocale = lang === "es" ? "es_ES" : "en_US"
+  ogLocale = lang === "es" ? "es_ES" : "en_US",
+  canonicalUrl,
+  alternateUrls
 } = Astro.props
 
 const navLinks = [
@@ -77,6 +81,10 @@ const navLinks = [
     <meta property="og:url" content={ogUrl} />
     <meta property="og:site_name" content="✰λster✰" />
     <meta property="og:locale" content={ogLocale} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {alternateUrls?.map((alternate) => (
+      <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
+    ))}
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <meta name="twitter:title" content={ogTitle} />

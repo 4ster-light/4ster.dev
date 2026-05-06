@@ -57,6 +57,18 @@ const recentPosts = allPosts
 
 const switchLabel = lang === "es" ? "Read in English" : "Leer en español"
 const switchHref = translatedPost ? `/${translatedPost.data.lang || "en"}/posts/${translatedPost.slug}` : undefined
+const canonicalUrl = `${site.baseUrl}/${lang}/posts/${post.slug}`
+const alternateUrls = [
+  { lang, href: canonicalUrl },
+  ...(translatedPost
+    ? [
+        {
+          lang: translatedPost.data.lang || "en",
+          href: `${site.baseUrl}/${translatedPost.data.lang || "en"}/posts/${translatedPost.slug}`
+        }
+      ]
+    : [])
+]
 ---
 
 <BaseLayout
@@ -67,7 +79,9 @@ const switchHref = translatedPost ? `/${translatedPost.data.lang || "en"}/posts/
   ogType="article"
   lang={lang}
   ogLocale={lang === "es" ? "es_ES" : "en_US"}
-  ogUrl={`${site.baseUrl}/${lang}/posts/${post.slug}`}
+  ogUrl={canonicalUrl}
+  canonicalUrl={canonicalUrl}
+  alternateUrls={alternateUrls}
   ogImage={ogImage(post.data.title, {
     subtitle: post.data.description,
     type: "post"
