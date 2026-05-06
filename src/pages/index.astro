@@ -7,6 +7,9 @@ import site, { ogImage } from "../lib/site.ts"
 const posts = (await getCollection("posts"))
   .filter((post) => !post.data["is-preview"])
   .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+
+const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
+const esPosts = posts.filter((post) => post.data.lang === "es")
 ---
 
 <BaseLayout
@@ -69,13 +72,37 @@ const posts = (await getCollection("posts"))
       publication.
     </p>
 
-    {posts.length > 0 ? (
-      <div class="space-y-10">
-        {posts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
-      </div>
-    ) : (
-      <p class="text-error text-4xl leading-relaxed">Problem loading posts.</p>
-    )}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <section class="space-y-6">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <h3 class="text-xl font-bold text-primary">English posts</h3>
+          <span class="badge badge-soft badge-primary">{enPosts.length}</span>
+        </div>
+
+        {enPosts.length > 0 ? (
+          <div class="space-y-10">
+            {enPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
+          </div>
+        ) : (
+          <p class="text-base-content/60">No English posts yet.</p>
+        )}
+      </section>
+
+      <section class="space-y-6">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <h3 class="text-xl font-bold text-secondary">Spanish posts</h3>
+          <span class="badge badge-soft badge-secondary">{esPosts.length}</span>
+        </div>
+
+        {esPosts.length > 0 ? (
+          <div class="space-y-10">
+            {esPosts.map((post) => <PostMeta post={{ slug: post.slug, ...post.data }} />)}
+          </div>
+        ) : (
+          <p class="text-base-content/60">No Spanish posts yet.</p>
+        )}
+      </section>
+    </div>
   </section>
 
   <div class="my-8"></div>
