@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro"
 import { fetchProjects } from "../../lib/projects"
 
+export const prerender = false
+
 export const GET: APIRoute = async () => {
   const projects = await fetchProjects(globalThis.process?.env?.GH_API ?? "")
   return new Response(JSON.stringify({ projects }), {

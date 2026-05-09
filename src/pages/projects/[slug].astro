@@ -33,21 +33,43 @@ if (!repository) {
 }
 
 const description = repository.description || `${repository.name} - Open source project`
+const canonicalUrl = `${site.baseUrl}/projects/${repository.name}`
 ---
 
 <BaseLayout
-  title={`${repository.name} - ✰λster✰`}
+  title={`${repository.name} | Aster`}
   {description}
   ogTitle={repository.name}
   ogDescription={description}
-  ogUrl={repository.url}
+  ogUrl={canonicalUrl}
+  canonicalUrl={canonicalUrl}
   ogImage={ogImage(repository.name, {
     subtitle: description,
     type: "project"
   })}
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: site.baseUrl },
+        { "@type": "ListItem", position: 2, name: "Projects", item: `${site.baseUrl}/projects` },
+        { "@type": "ListItem", position: 3, name: repository.name, item: canonicalUrl }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: repository.name,
+      url: canonicalUrl,
+      description
+    }
+  ]}
 >
   <article class="flex flex-col gap-8">
-    <h3 class="text-xl font-bold">Repository Information</h3>
+    <h1 class="text-3xl font-bold text-secondary">{repository.name}</h1>
+    <p class="text-base-content/70">{description}</p>
+    <h2 class="text-xl font-bold">Repository Information</h2>
     <div class="overflow-x-auto">
       <table class="table table-xs sm:table-sm border border-base-200">
         <tbody>

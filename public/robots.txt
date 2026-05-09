@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://4ster.dev/sitemap.xml

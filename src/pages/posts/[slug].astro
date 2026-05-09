@@ -22,6 +22,7 @@ const targetUrl = `/${lang}/posts/${slug}`
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
     <meta http-equiv="refresh" content={`0; url=${targetUrl}`} />
     <link rel="canonical" href={targetUrl} />
     <title>Redirecting…</title>
@@ -30,8 +31,8 @@ const targetUrl = `/${lang}/posts/${slug}`
     <p>
       This post has moved to <a href={targetUrl}>{targetUrl}</a>.
     </p>
-    <script is:inline>
-      window.location.replace(JSON.stringify(targetUrl))
+    <script is:inline define:vars={{ targetUrl }}>
+      window.location.replace(targetUrl)
     </script>
   </body>
 </html>

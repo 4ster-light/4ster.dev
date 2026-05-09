@@ -14,22 +14,41 @@ const repositories = await fetchProjects(githubToken)
 ---
 
 <BaseLayout
-  title="Projects - ✰λster✰"
-  description="Open source projects by Aster"
-  ogTitle="Projects - ✰λster✰"
-  ogDescription="Open source projects by Aster"
+  title="Open Source Projects | Aster"
+  description="Open source projects by Aster, including libraries, tools, and experiments."
+  ogTitle="Open Source Projects | Aster"
+  ogDescription="Open source projects by Aster, including libraries, tools, and experiments."
   ogUrl={`${site.baseUrl}/projects`}
   ogImage={ogImage("Projects", {
     subtitle: "Open source projects by Aster",
     type: "project"
   })}
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: site.baseUrl },
+        { "@type": "ListItem", position: 2, name: "Projects", item: `${site.baseUrl}/projects` }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Open Source Projects",
+      url: `${site.baseUrl}/projects`,
+      description: "Open source projects by Aster, including libraries, tools, and experiments."
+    }
+  ]}
 >
+  <h1 class="sr-only">Open Source Projects</h1>
+
   {!repositories.length ? (
     <>
       <div class="text-center py-16">
-        <h1 class="text-3xl font-bold mb-4 text-error">
+        <h2 class="text-3xl font-bold mb-4 text-error">
           Projects Not Found
-        </h1>
+        </h2>
         <p class="text-base-content/70 mb-6">
           The projects you're looking for aren't loading right now.
         </p>
@@ -48,9 +67,9 @@ const repositories = await fetchProjects(githubToken)
     </>
   ) : (
      <>
-       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-         {repositories.map((repo) => (
-           <article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {repositories.map((repo) => (
+            <article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
              <div class="card-body p-5">
                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
                  <h3 class="card-title text-lg m-0">

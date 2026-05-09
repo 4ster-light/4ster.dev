@@ -19,6 +19,8 @@ interface Props {
   ogLocale?: string
   canonicalUrl?: string
   alternateUrls?: Array<{ lang: "en" | "es"; href: string }>
+  robots?: string
+  jsonLd?: Array<Record<string, unknown>>
 }
 
 const {
@@ -27,13 +29,18 @@ const {
   ogTitle = title,
   ogDescription = description,
   ogType = "website",
-  ogUrl = site.baseUrl,
+  ogUrl,
   ogImage,
   lang = "en",
   ogLocale = lang === "es" ? "es_ES" : "en_US",
   canonicalUrl,
-  alternateUrls
+  alternateUrls,
+  robots = "index,follow,max-image-preview:large",
+  jsonLd = []
 } = Astro.props
+
+const canonical = canonicalUrl ?? new URL(Astro.url.pathname, site.baseUrl).href
+const openGraphUrl = ogUrl ?? canonical
 
 const navLinks = [
   {
@@ -73,15 +80,16 @@ const navLinks = [
     />
     <meta name="color-scheme" content="dark light" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <meta name="author" content="David Vivar Bogónez" />
 
     <meta property="og:title" content={ogTitle} />
     <meta property="og:type" content={ogType} />
     <meta property="og:description" content={ogDescription} />
-    <meta property="og:url" content={ogUrl} />
+    <meta property="og:url" content={openGraphUrl} />
     <meta property="og:site_name" content="✰λster✰" />
     <meta property="og:locale" content={ogLocale} />
-    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <link rel="canonical" href={canonical} />
     {alternateUrls?.map((alternate) => (
       <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
     ))}
@@ -99,6 +107,9 @@ const navLinks = [
     <link rel="icon" href="/pfp.jpg" />
     <link rel="preconnect" href="https://github.com" />
     <link rel="preconnect" href="https://avatars.githubusercontent.com" />
+    {jsonLd.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
   </head>
   <body class="min-h-screen flex flex-col bg-base-100 text-base-content">
     <header class="border-b border-base-300 bg-base-200/30">

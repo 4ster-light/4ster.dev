@@ -88,6 +88,25 @@ const alternateUrls = [
     subtitle: post.data.description,
     type: "post"
   })}
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: post.data.title,
+      description: post.data.description,
+      datePublished: post.data.date.toISOString(),
+      dateModified: post.data.date.toISOString(),
+      author: { "@type": "Person", name: "David Vivar Bogónez" },
+      publisher: {
+        "@type": "Organization",
+        name: "✰λster✰",
+        url: site.baseUrl,
+        logo: { "@type": "ImageObject", url: `${site.baseUrl}/pfp.jpg` }
+      },
+      mainEntityOfPage: canonicalUrl,
+      image: `${site.baseUrl}/banner.png`
+    }
+  ]}
 >
   <PostMeta post={{ slug: post.slug, ...post.data }} header />
 

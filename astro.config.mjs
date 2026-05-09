@@ -6,6 +6,7 @@ import keystatic from "@keystatic/astro"
 import cloudflare from "@astrojs/cloudflare"
 
 export default defineConfig({
+  site: "https://4ster.dev",
   integrations: [react(), markdoc(), keystatic()],
   adapter: cloudflare({ imageService: { build: "compile", runtime: "cloudflare-binding" } }),
   vite: { plugins: [tailwindcss()] }

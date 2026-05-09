@@ -1,6 +1,6 @@
 import marked from "./marked"
 
-const FEATURED_REPOS = [
+export const FEATURED_REPOS = [
   "artscii",
   "sentinel",
   "perlin",
