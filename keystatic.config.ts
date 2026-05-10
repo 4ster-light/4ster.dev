@@ -21,6 +21,17 @@ export default config({
         date: fields.date({
           label: "Date"
         }),
+        lang: fields.select({
+          label: "Language",
+          options: [
+            { label: "English", value: "en" },
+            { label: "Spanish", value: "es" }
+          ],
+          defaultValue: "en"
+        }),
+        translationKey: fields.text({
+          label: "Translation Key"
+        }),
         tags: fields.array(fields.text({ label: "Tag" }), {
           label: "Tags",
           itemLabel: (props) => props.value || "Tag"
