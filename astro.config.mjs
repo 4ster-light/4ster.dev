@@ -8,6 +8,9 @@ import cloudflare from "@astrojs/cloudflare"
 export default defineConfig({
   site: "https://4ster.dev",
   integrations: [react(), markdoc(), keystatic()],
-  adapter: cloudflare({ imageService: { build: "compile", runtime: "cloudflare-binding" } }),
-  vite: { plugins: [tailwindcss()] }
+  adapter: cloudflare({ imageService: "passthrough" }),
+  vite: {
+    plugins: [tailwindcss()],
+    build: { chunkSizeWarningLimit: 3000 } // Silence Keystatic bundle size warning
+  }
 })

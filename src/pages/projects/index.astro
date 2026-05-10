@@ -4,7 +4,7 @@ import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
-import { fetchProjects } from "../../lib/projects"
+import { fetchProjects } from "../../lib/projects.ts"
 import site, { ogImage } from "../../lib/site.ts"
 
 export const prerender = true
@@ -52,10 +52,10 @@ const repositories = await fetchProjects(githubToken)
         <p class="text-base-content/70 mb-6">
           The projects you're looking for aren't loading right now.
         </p>
-        <ButtonLink href={site.url} target="">
+        <ButtonLink href={site.url} target="" ariaLabel="Back to home">
           <img
             src={leftArrowsIcon}
-            alt="Left Arrows"
+            alt=""
             width="32"
             height="32"
             decoding="async"
@@ -67,9 +67,9 @@ const repositories = await fetchProjects(githubToken)
     </>
   ) : (
      <>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {repositories.map((repo) => (
-            <article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
+       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+         {repositories.map((repo) => (
+           <article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
              <div class="card-body p-5">
                <div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
                  <h3 class="card-title text-lg m-0">
@@ -122,18 +122,18 @@ const repositories = await fetchProjects(githubToken)
        <div class="my-8" />
 
        <footer class="border-base-300 flex justify-end items-center gap-4 flex-col sm:flex-row">
-         <ButtonLink href={site.url} target="">
+         <ButtonLink href={site.url} target="" ariaLabel="Back to home">
            <img
              src={leftArrowsIcon}
-             alt="Left Arrows"
+             alt=""
              width="32"
              height="32"
              decoding="async"
              class="size-8"
            />
          </ButtonLink>
-         <ButtonLink href={site.githubSponsors}>
-           <img src={loveIcon} alt="Sponsor" class="size-6" />{" "}
+         <ButtonLink href={site.githubSponsors} ariaLabel="Sponsor me on GitHub Sponsors">
+           <img src={loveIcon} alt="" class="size-6" />{" "}
            Sponsor
          </ButtonLink>
        </footer>

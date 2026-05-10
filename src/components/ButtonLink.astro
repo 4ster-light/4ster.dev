@@ -3,15 +3,17 @@ interface Props {
   href: string
   target?: string
   rel?: string
+  ariaLabel?: string
 }
 
 const {
   href,
   target = "_blank",
-  rel = "noopener noreferrer"
+  rel = "noopener noreferrer",
+  ariaLabel
 } = Astro.props
 ---
 
-<a {href} {target} {rel} class="btn btn-secondary gap-2">
+<a {href} {target} {rel} aria-label={ariaLabel} class="btn btn-secondary gap-2">
   <slot />
 </a>

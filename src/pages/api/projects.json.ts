@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro"
-import { fetchProjects } from "../../lib/projects"
+import { fetchProjects } from "../../lib/projects.ts"
 
 export const prerender = false
 

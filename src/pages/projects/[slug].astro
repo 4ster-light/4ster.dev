@@ -4,7 +4,7 @@ import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
-import { fetchProjectReadme, fetchProjects } from "../../lib/projects"
+import { fetchProjectReadme, fetchProjects } from "../../lib/projects.ts"
 import site, { ogImage } from "../../lib/site.ts"
 
 export const prerender = true
@@ -42,7 +42,7 @@ const canonicalUrl = `${site.baseUrl}/projects/${repository.name}`
   ogTitle={repository.name}
   ogDescription={description}
   ogUrl={canonicalUrl}
-  canonicalUrl={canonicalUrl}
+  {canonicalUrl}
   ogImage={ogImage(repository.name, {
     subtitle: description,
     type: "project"
@@ -111,20 +111,20 @@ const canonicalUrl = `${site.baseUrl}/projects/${repository.name}`
       class="flex justify-between items-center gap-4 flex-col sm:flex-row"
     >
       <div class="flex gap-2 sm:ml-auto">
-        <ButtonLink href={site.projects} target="">
+        <ButtonLink href={site.projects} target="" ariaLabel="Back to projects">
           <img
             src={leftArrowsIcon}
-            alt="Left Arrows"
+            alt=""
             width="32"
             height="32"
             decoding="async"
             class="size-8"
           />
         </ButtonLink>
-        <ButtonLink href={site.donate}>
+        <ButtonLink href={site.donate} ariaLabel="Sponsor me">
           <img
             src={loveIcon}
-            alt="Sponsor"
+            alt=""
             width="24"
             height="24"
             decoding="async"

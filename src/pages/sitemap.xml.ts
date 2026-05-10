@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content"
-import { FEATURED_REPOS } from "../lib/projects"
-import site from "../lib/site"
+import { FEATURED_REPOS } from "../lib/projects.ts"
+import site from "../lib/site.ts"
 
 export const prerender = true
 
@@ -19,8 +19,10 @@ function escapeXml(value: string): string {
 }
 
 function renderUrl(entry: SitemapEntry): string {
-  const lastmod = entry.lastmod ? `
-    <lastmod>${escapeXml(entry.lastmod)}</lastmod>` : ""
+  const lastmod = entry.lastmod
+    ? `
+    <lastmod>${escapeXml(entry.lastmod)}</lastmod>`
+    : ""
 
   return `  <url>
     <loc>${escapeXml(entry.url)}</loc>${lastmod}
@@ -51,7 +53,7 @@ for (const project of FEATURED_REPOS) {
   })
 }
 
-export async function GET() {
+export function GET() {
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(renderUrl).join("\n")}

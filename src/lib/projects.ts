@@ -1,4 +1,4 @@
-import marked from "./marked"
+import marked from "./marked.ts"
 
 export const FEATURED_REPOS = [
   "artscii",
@@ -38,7 +38,7 @@ interface RawRepository {
 const projectsCache = new Map<string, Promise<Repository[]>>()
 const readmeCache = new Map<string, Promise<string>>()
 
-async function fetchReadme(owner: string, repo: string, token: string): Promise<string> {
+function fetchReadme(owner: string, repo: string, token: string): Promise<string> {
   const cacheKey = `${token || "__no_token__"}:${owner}/${repo}`
   const cached = readmeCache.get(cacheKey)
   if (cached) return cached
@@ -113,12 +113,12 @@ async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Reposit
     }))
 }
 
-export async function fetchProjectReadme(
+export function fetchProjectReadme(
   owner: string,
   repo: string,
   githubToken: string
 ): Promise<string> {
-  return await fetchReadme(owner, repo, githubToken)
+  return fetchReadme(owner, repo, githubToken)
 }
 
 export function fetchProjects(githubToken: string): Promise<Repository[]> {
