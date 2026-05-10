@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro"
-import site, { ogImage } from "../lib/site.ts"
+import site from "../lib/site.ts"
 
 const cryptoAddresses = {
   BTC: "3LdNwreu7xAoK5hjGRiPae8fE3mtRcbBg4",
@@ -16,9 +16,6 @@ const cryptoAddresses = {
   ogTitle="Support My Work | Aster"
   ogDescription="Support Aster's work through GitHub Sponsors, Substack, or cryptocurrency donations."
   ogUrl={`${site.baseUrl}/sponsor`}
-  ogImage={ogImage("Support", {
-    subtitle: "Support my work by donating or subscribing"
-  })}
   jsonLd={[
     {
       "@context": "https://schema.org",

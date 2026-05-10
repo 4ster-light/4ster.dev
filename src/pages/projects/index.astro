@@ -5,7 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro"
 import ButtonLink from "../../components/ButtonLink.astro"
 import ReposCard from "../../components/ReposCard.astro"
 import { fetchProjects } from "../../lib/projects.ts"
-import site, { ogImage } from "../../lib/site.ts"
+import site from "../../lib/site.ts"
 
 export const prerender = true
 
@@ -19,10 +19,6 @@ const repositories = await fetchProjects(githubToken)
   ogTitle="Open Source Projects | Aster"
   ogDescription="Open source projects by Aster, including libraries, tools, and experiments."
   ogUrl={`${site.baseUrl}/projects`}
-  ogImage={ogImage("Projects", {
-    subtitle: "Open source projects by Aster",
-    type: "project"
-  })}
   jsonLd={[
     {
       "@context": "https://schema.org",

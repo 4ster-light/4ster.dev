@@ -30,7 +30,7 @@ const {
   ogDescription = description,
   ogType = "website",
   ogUrl,
-  ogImage,
+  ogImage = `${site.baseUrl}${site.ogImage}`,
   lang = "en",
   ogLocale = lang === "es" ? "es_ES" : "en_US",
   canonicalUrl,
@@ -93,15 +93,16 @@ const navLinks = [
     {alternateUrls?.map((alternate) => (
       <link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
     ))}
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={ogImage} />
 
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@4ster_light" />
     <meta name="twitter:site" content="@4ster_light" />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
-    {ogImage && <meta property="twitter:image:height" content="600" />}
-    {ogImage && <meta property="twitter:image:width" content="1200" />}
+    <meta name="twitter:image" content={ogImage} />
+    <meta property="twitter:image:height" content="600" />
+    <meta property="twitter:image:width" content="1200" />
 
     <title>{title}</title>
     <link rel="icon" href="/pfp.jpg" />

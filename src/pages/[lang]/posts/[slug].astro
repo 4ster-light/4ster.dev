@@ -7,7 +7,7 @@ import ButtonLink from "../../../components/ButtonLink.astro"
 import PostMeta from "../../../components/PostMeta.astro"
 import TocSidebar from "../../../components/TocSidebar.astro"
 import marked from "../../../lib/marked.ts"
-import site, { ogImage } from "../../../lib/site.ts"
+import site from "../../../lib/site.ts"
 import { extractHeadings } from "../../../lib/toc.ts"
 
 export const prerender = true
@@ -84,10 +84,6 @@ const alternateUrls = [
   ogUrl={canonicalUrl}
   {canonicalUrl}
   {alternateUrls}
-  ogImage={ogImage(post.data.title, {
-    subtitle: post.data.description,
-    type: "post"
-  })}
   jsonLd={[
     {
       "@context": "https://schema.org",
@@ -104,7 +100,7 @@ const alternateUrls = [
         logo: { "@type": "ImageObject", url: `${site.baseUrl}/pfp.jpg` }
       },
       mainEntityOfPage: canonicalUrl,
-      image: `${site.baseUrl}/banner.png`
+      image: `${site.baseUrl}/og.png`
     }
   ]}
 >
