@@ -1,0 +1,143 @@
+---
+title: "Github immutable tags are insane"
+description: "How Github's unacceptable feature design can ruin your versioning"
+date: 2026-05-06
+lang: "en"
+tags: ["rant", "github", "issue", "developer-experience"]
+---
+
+There is a feature on GitHub designed to protect you. Instead, it punishes you, **permanently**,
+silently, and without appeal. It is called **Immutable Releases**, and if you are reading this
+because you are currently locked out of your own repository tag, welcome to the club. Pull up a
+chair. You are not getting that tag back.
+
+---
+
+## What Happened
+
+My `4ster-light/sentinel` repository, public project hit this wall just today. A
+release was created for tag `v0.2.1`. It was a mistake. The release was deleted. The tag was deleted
+locally and on the remote. Clean slate, right?
+
+**Wrong**
+
+Attempting to recreate the tag:
+
+```bash
+git tag v0.2.1 && git push origin v0.2.1 --force
+```
+
+GitHub responded with this:
+
+```text
+remote: error: GH013: Repository rule violations found for refs/tags/v0.2.1.
+remote: Review all repository rules at https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1
+remote:
+remote: - Cannot create ref due to creations being restricted.
+remote:
+To github.com:4ster-light/sentinel.git
+ ! [remote rejected] v0.2.1 -> v0.2.1 (push declined due to repository rule violations)
+```
+
+The tag does not exist on remote or local. The release does not exist. But GitHub simply says no.
+
+---
+
+## The Debugging Nightmare
+
+[https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1](https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1)
+
+The error message points to a "rules" page. Naturally, the first instinct is to go check the rules.
+The rules page shows literally **nothing**. No rulesets. No branch protection rules. No tag
+protection rules. Just an empty page mocking you with a "New ruleset" button.
+
+Fine. Maybe it is somewhere else. Check **Settings → Branches**. Nothing relevant. Check **Settings
+→ Tags**. Nothing. Check **Settings → Rules → Rulesets**. Nothing. At this point, in desperation,
+the nuclear option: clicking **"Disable branch protection rules"** which explicitly warns about
+disabling all enforcement. Done. Push again.
+
+Same error. Same wall. Laughing at you.
+
+The error message is _actively lying_ by pointing to rules that do not exist and a rules page that
+shows nothing. It is a dead end dressed up as a diagnostic tool.
+
+---
+
+## The Actual Cause: A Feature GitHub Buried in the Fine Print
+
+GitHub shipped **Immutable Releases** as a general availability feature in October 2025. The pitch
+is reasonable: once a release is published and marked immutable, its tag and assets cannot be
+silently swapped out. This is a real supply chain security concern and it is great that they cared
+to bring a counter-measure.
+
+But buried deep in the documentation is this sentence:
+[https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases)
+
+> _"If you delete the immutable release, you can delete the tag, but you cannot reuse the same tag
+> name."_
+
+And this one:
+[https://github.blog/changelog/2025-10-28-immutable-releases-are-now-generally-available/](https://github.blog/changelog/2025-10-28-immutable-releases-are-now-generally-available/)
+
+> _"Disabling immutability doesn't affect releases created while it was enabled — they remain
+> immutable."_
+
+So if `v0.2.1` was ever associated with an immutable release, even for five minutes, even
+accidentally, even if the release is now completely gone. The tag name `v0.2.1` is **permanently
+blacklisted**. No API. No admin override. No support ticket. No exception. Forever.
+
+---
+
+## Why This Design Is Inexcusable
+
+## There Is No Warning
+
+When a release is marked as immutable, GitHub does not say: _"Warning: deleting this release will
+permanently blacklist this tag name across your entire repository, forever, with no recovery path."_
+It just... does it. Silently. The consequence is permanent and irreversible, and the user is given
+zero indication of this at the moment it matters.
+
+## The Error Message Is Useless
+
+`GH013: Repository rule violations found for refs/tags/v0.2.1` is probably one of the most
+misleading error messages I can think of in modern software. It points to rules. There are no rules.
+The actual cause, an immutable release record, is never mentioned. A developer debugging this blind
+would spend hours checking protection rules, rulesets, organization policies, and API permissions
+before stumbling on the real answer, if they ever do.
+
+## There Is No Admin Override
+
+This is a personal repository. `4ster-light`, **ME**, is the sole owner, admin, and contributor.
+There is no organization policy being enforced here, no compliance requirement, no external
+authority. The repository owner should have the absolute right to modify as pleased. Instead, GitHub
+has decided that a deleted release ghost takes precedence over the living, breathing, human owner of
+the repository. That is an obscene inversion of user control.
+
+## "Security Feature" Does Not Mean "Punish Mistakes"
+
+The legitimate use case for immutable releases is preventing tampering with _intentionally
+published_ artifacts. It is not meant to trap developers who accidentally clicked the wrong button.
+A sane implementation would include:
+
+- A grace period (e.g., 24 hours) before immutability locks in
+- An explicit confirmation warning: _"This action is permanent and cannot be undone"_
+- An admin/owner escape hatch for personal repositories
+- An honest error message that names the actual cause
+
+None of these exist. _**GitHub shipped the lock and forgot to ship the key**_.
+
+---
+
+## The Community Has Noticed
+
+The `semantic-release` project hit this exact wall in 2026, their automated release tooling kept
+trying to push a tag that had been used by an immutable release, creating an unrecoverable loop.
+This is not an edge case. Any CI/CD pipeline that creates and then cleans up releases will
+eventually walk into this trap.
+
+> [https://github.com/semantic-release/semantic-release/issues/4147](https://github.com/semantic-release/semantic-release/issues/4147)
+
+Community discussion on GitHub's own forums confirms that even the people who _like_ immutable
+releases find the lack of a recovery path baffling.
+
+> [https://news.ycombinator.com/item?id=45772064](https://news.ycombinator.com/item?id=45772064)
