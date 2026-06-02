@@ -1,15 +1,16 @@
 ---
-title: "Github immutable tags are insane"
-description: "How Github's unacceptable feature design can ruin your versioning"
+title: Github immutable tags are insane
+description: How Github's unacceptable feature design can ruin your versioning
 date: 2026-05-06
-lang: "en"
-tags: ["rant", "github", "issue", "developer-experience"]
+lang: en
+tags:
+  - rant
+  - github
+  - issue
+  - developer-experience
+is-preview: false
 ---
-
-There is a feature on GitHub designed to protect you. Instead, it punishes you, **permanently**,
-silently, and without appeal. It is called **Immutable Releases**, and if you are reading this
-because you are currently locked out of your own repository tag, welcome to the club. Pull up a
-chair. You are not getting that tag back.
+There is a feature on GitHub designed to protect you. Instead, it punishes you, **permanently**, and without appeal. It is called **Immutable Releases**, and if you are reading this because you are currently locked out of your own repository tag, welcome to the club. Pull up a chair. You are not getting that tag back.
 
 ---
 
@@ -51,14 +52,14 @@ The error message points to a "rules" page. Naturally, the first instinct is to 
 The rules page shows literally **nothing**. No rulesets. No branch protection rules. No tag
 protection rules. Just an empty page mocking you with a "New ruleset" button.
 
-Fine. Maybe it is somewhere else. Check **Settings → Branches**. Nothing relevant. Check **Settings
-→ Tags**. Nothing. Check **Settings → Rules → Rulesets**. Nothing. At this point, in desperation,
+Fine. Maybe it is somewhere else. Check **Settings → Branches**. Nothing relevant. Check **Settings**
+**→ Tags**. Nothing. Check **Settings → Rules → Rulesets**. Nothing. At this point, in desperation,
 the nuclear option: clicking **"Disable branch protection rules"** which explicitly warns about
 disabling all enforcement. Done. Push again.
 
 Same error. Same wall. Laughing at you.
 
-The error message is _actively lying_ by pointing to rules that do not exist and a rules page that
+The error message is *actively lying* by pointing to rules that do not exist and a rules page that
 shows nothing. It is a dead end dressed up as a diagnostic tool.
 
 ---
@@ -73,18 +74,18 @@ to bring a counter-measure.
 But buried deep in the documentation is this sentence:
 [https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases)
 
-> _"If you delete the immutable release, you can delete the tag, but you cannot reuse the same tag
-> name."_
+> *"If you delete the immutable release, you can delete the tag, but you cannot reuse the same tag*
+*name."*
 
 And this one:
 [https://github.blog/changelog/2025-10-28-immutable-releases-are-now-generally-available/](https://github.blog/changelog/2025-10-28-immutable-releases-are-now-generally-available/)
 
-> _"Disabling immutability doesn't affect releases created while it was enabled — they remain
-> immutable."_
+> *"Disabling immutability doesn't affect releases created while it was enabled — they remain*
+*immutable."*
 
 So if `v0.2.1` was ever associated with an immutable release, even for five minutes, even
-accidentally, even if the release is now completely gone. The tag name `v0.2.1` is **permanently
-blacklisted**. No API. No admin override. No support ticket. No exception. Forever.
+accidentally, even if the release is now completely gone. The tag name `v0.2.1` is **permanently**
+**blacklisted**. No API. No admin override. No support ticket. No exception. Forever.
 
 ---
 
@@ -92,8 +93,8 @@ blacklisted**. No API. No admin override. No support ticket. No exception. Forev
 
 ## There Is No Warning
 
-When a release is marked as immutable, GitHub does not say: _"Warning: deleting this release will
-permanently blacklist this tag name across your entire repository, forever, with no recovery path."_
+When a release is marked as immutable, GitHub does not say: *"Warning: deleting this release will*
+*permanently blacklist this tag name across your entire repository, forever, with no recovery path."*
 It just... does it. Silently. The consequence is permanent and irreversible, and the user is given
 zero indication of this at the moment it matters.
 
@@ -115,16 +116,16 @@ the repository. That is an obscene inversion of user control.
 
 ## "Security Feature" Does Not Mean "Punish Mistakes"
 
-The legitimate use case for immutable releases is preventing tampering with _intentionally
-published_ artifacts. It is not meant to trap developers who accidentally clicked the wrong button.
+The legitimate use case for immutable releases is preventing tampering with *intentionally*
+*published* artifacts. It is not meant to trap developers who accidentally clicked the wrong button.
 A sane implementation would include:
 
 - A grace period (e.g., 24 hours) before immutability locks in
-- An explicit confirmation warning: _"This action is permanent and cannot be undone"_
+- An explicit confirmation warning: *"This action is permanent and cannot be undone"*
 - An admin/owner escape hatch for personal repositories
 - An honest error message that names the actual cause
 
-None of these exist. _**GitHub shipped the lock and forgot to ship the key**_.
+None of these exist. ***GitHub shipped the lock and forgot to ship the key***.
 
 ---
 
@@ -137,7 +138,7 @@ eventually walk into this trap.
 
 > [https://github.com/semantic-release/semantic-release/issues/4147](https://github.com/semantic-release/semantic-release/issues/4147)
 
-Community discussion on GitHub's own forums confirms that even the people who _like_ immutable
+Community discussion on GitHub's own forums confirms that even the people who *like* immutable
 releases find the lack of a recovery path baffling.
 
 > [https://news.ycombinator.com/item?id=45772064](https://news.ycombinator.com/item?id=45772064)
