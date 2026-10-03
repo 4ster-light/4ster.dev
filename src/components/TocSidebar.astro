@@ -29,7 +29,7 @@ const { items, recentPosts = [], lang = "en" } = Astro.props
             <ul class="space-y-2">
                 {items.map((item) => (
                     <li
-                        style={{ paddingLeft: ;`${(item.depth - 2) * 0.75}rem` }}
+                        style={{ paddingLeft: `${(item.depth - 2) * 0.75}rem` }}
                     >
                         <a
                             href={`#${item.slug}`}

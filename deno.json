@@ -14,6 +14,7 @@
   ],
   "unstable": ["fmt-component"],
   "fmt": {
+    "exclude": ["**/*.astro"],
     "useTabs": false,
     "lineWidth": 100,
     "indentWidth": 2,
