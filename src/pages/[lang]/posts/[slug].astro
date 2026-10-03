@@ -72,7 +72,6 @@ const alternateUrls = [
     : [])
 ]
 ---
-
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
@@ -99,6 +98,7 @@ const alternateUrls = [
         url: site.baseUrl,
         logo: { "@type": "ImageObject", url: `${site.baseUrl}/pfp.jpg` }
       },
+      license: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
       mainEntityOfPage: canonicalUrl,
       image: `${site.baseUrl}/og.png`
     }
@@ -131,6 +131,28 @@ const alternateUrls = [
   </div>
 
   <div class="divider"></div>
+
+  <div class="mt-8 text-sm text-base-content/70 border-l-2 border-primary pl-4">
+    {lang === "es"
+      ? (
+        <>
+          Texto y contenido de este artículo licenciados bajo{" "}
+          <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es"
+            class="link link-hover link-primary"
+            rel="license">CC BY-NC-SA 4.0</a>.
+        </>
+      )
+      : (
+        <>
+          Text and content of this article licensed under{" "}
+          <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+            class="link link-hover link-primary"
+            rel="license">CC BY-NC-SA 4.0</a>.
+        </>
+      )}
+  </div>
 
   <footer class="flex justify-end gap-4 sm:flex-row">
     <ButtonLink href={site.url} target="" ariaLabel="Back to home">

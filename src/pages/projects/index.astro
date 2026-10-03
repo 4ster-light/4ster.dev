@@ -12,7 +12,6 @@ export const prerender = true
 const githubToken = globalThis.process?.env?.GH_API ?? ""
 const repositories = await fetchProjects(githubToken)
 ---
-
 <BaseLayout
   title="Open Source Projects | Aster"
   description="Open source projects by Aster, including libraries, tools, and experiments."

@@ -1,0 +1,94 @@
+---
+export const prerender = true
+
+import BaseLayout from "../layouts/BaseLayout.astro"
+import site from "../lib/site.ts"
+---
+<BaseLayout
+  title="Licensing | ✰λster✰"
+  description="Licensing terms for this website's content and source code."
+  ogTitle="Licensing | ✰λster✰"
+  ogDescription="Licensing terms for this website's content and source code."
+  canonicalUrl={`${site.baseUrl}/license`}
+  ogUrl={`${site.baseUrl}/license`}
+>
+  <h1 class="text-3xl md:text-4xl font-bold mb-8">Licensing</h1>
+
+  <div class="prose prose-invert max-w-none">
+    <h2>Blog content</h2>
+    <p>
+            All blog posts, their text and content, in both English and Spanish
+            that are published on this site are licensed under the
+            <a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                rel="license"
+                class="link link-primary"
+            >
+                Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+                International (CC BY-NC-SA 4.0)
+            </a>{" "}
+            license.
+        </p>
+    <p>
+            This means you are free to share and adapt the material for
+            non-commercial purposes, provided that you give appropriate credit,
+            link to the license, indicate if changes were made, and distribute
+            your contributions under the same license. © 2024 –
+            {new Date().getFullYear()} David Vivar Bogónez (✰λster✰).
+        </p>
+    <p style="text-align: center;">
+      <a
+        rel="license"
+        href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        class="link link-primary"
+      >
+        <img
+          src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-nc-sa.svg"
+          alt="CC BY-NC-SA 4.0"
+          width="150"
+          height="150"
+          loading="lazy"
+          decoding="async"
+          class="inline-block border rounded"
+        />
+      </a>
+    </p>
+
+    <h2>Source code</h2>
+    <p>
+            The source code powering this website (the contents of the
+            <a
+                href="https://github.com/4ster-light/4ster.dev"
+                class="link link-primary"
+            >
+                4ster-light/4ster.dev
+            </a>{" "}
+            repository, excluding the contents of
+            <code>src/content/posts/*</code>, is licensed under the
+            <a
+                href="https://www.apache.org/licenses/LICENSE-2.0"
+                class="link link-primary"
+            >
+                Apache License 2.0
+            </a>
+            . A copy is included in the repository's `LICENSE` file.
+        </p>
+
+    <h2>Trademarks and third-party assets</h2>
+    <p>
+            Trademarks, logos, and project names belonging to third parties
+            remain the property of their respective owners. Fetched content
+            shown on the projects pages (e.g., README files and repository
+            metadata) remains the property of its original authors and is
+            subject to those projects' own licenses.
+        </p>
+
+    <div class="divider mt-12"></div>
+
+    <footer class="flex justify-end gap-4 sm:flex-row">
+      <a href="/" class="link link-hover">
+                ← Back to home
+            </a>
+    </footer>
+  </div>
+</BaseLayout>

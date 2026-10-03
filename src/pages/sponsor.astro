@@ -9,7 +9,6 @@ const cryptoAddresses = {
   SUI: "0xcbb0bb734638770cac5b28d69caa6899bcf54cc6eba37347746b4b6f33e4dffe"
 } as const
 ---
-
 <BaseLayout
   title="Support My Work | Aster"
   description="Support Aster's work through GitHub Sponsors, Substack, or cryptocurrency donations."
@@ -85,17 +84,17 @@ const cryptoAddresses = {
   </div>
 
   <script>
-    document.querySelectorAll("[data-copy-address]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const target = button.getAttribute("data-copy-address") || ""
-        navigator.clipboard.writeText(target).then(() => {
-          const previous = button.textContent
-          button.textContent = "✓"
-          setTimeout(() => {
-            button.textContent = previous
-          }, 1000)
-        })
+  document.querySelectorAll("[data-copy-address]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.getAttribute("data-copy-address") || ""
+      navigator.clipboard.writeText(target).then(() => {
+        const previous = button.textContent
+        button.textContent = "✓"
+        setTimeout(() => {
+          button.textContent = previous
+        }, 1000)
       })
     })
+  })
   </script>
 </BaseLayout>

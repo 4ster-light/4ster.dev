@@ -14,7 +14,6 @@ const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
 const esPosts = posts.filter((post) => post.data.lang === "es")
 const initialPosts = enPosts.length > 0 ? "en" : "es"
 ---
-
 <BaseLayout
   title="✰λster✰ | Programming, Computer Science, and Open Source"
   description="David Vivar Bogónez's blog about programming, computer science, and open source projects."
@@ -149,40 +148,40 @@ const initialPosts = enPosts.length > 0 ? "en" : "es"
   </section>
 
   <script is:inline define:vars={{ initialPosts }}>
-    const initBlogLanguageToggle = () => {
-      const buttons = Array.from(
-        document.querySelectorAll("[data-post-filter]")
-      )
-      const panels = Array.from(
-        document.querySelectorAll("[data-post-panel]")
-      )
+  const initBlogLanguageToggle = () => {
+    const buttons = Array.from(
+      document.querySelectorAll("[data-post-filter]")
+    )
+    const panels = Array.from(
+      document.querySelectorAll("[data-post-panel]")
+    )
 
-      if (buttons.length === 0 || panels.length === 0) return
+    if (buttons.length === 0 || panels.length === 0) return
 
-      const showPanel = (lang) => {
-        panels.forEach((panel) => {
-          panel.classList.toggle(
-            "hidden",
-            panel.getAttribute("data-post-panel") !== lang
-          )
-        })
-        buttons.forEach((button) => {
-          const active = button.getAttribute("data-post-filter") === lang
-          button.classList.toggle("btn-primary", active)
-          button.classList.toggle("btn-ghost", !active)
-          button.setAttribute("aria-pressed", String(active))
-        })
-      }
-
-      buttons.forEach((button) => {
-        button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
+    const showPanel = (lang) => {
+      panels.forEach((panel) => {
+        panel.classList.toggle(
+          "hidden",
+          panel.getAttribute("data-post-panel") !== lang
+        )
       })
-
-      showPanel(initialPosts)
+      buttons.forEach((button) => {
+        const active = button.getAttribute("data-post-filter") === lang
+        button.classList.toggle("btn-primary", active)
+        button.classList.toggle("btn-ghost", !active)
+        button.setAttribute("aria-pressed", String(active))
+      })
     }
 
-    initBlogLanguageToggle()
-    document.addEventListener("astro:page-load", initBlogLanguageToggle)
+    buttons.forEach((button) => {
+      button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
+    })
+
+    showPanel(initialPosts)
+  }
+
+  initBlogLanguageToggle()
+  document.addEventListener("astro:page-load", initBlogLanguageToggle)
   </script>
 
   <div class="my-8"></div>

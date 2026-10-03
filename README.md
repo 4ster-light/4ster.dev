@@ -56,4 +56,7 @@ CI/CD handles automatic deployments on push to main.
 
 ## License
 
-Apache 2.0
+- **Site content** (blog posts, `src/content/posts/*`, in both English and Spanish):
+  [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). See
+  <https://4ster.dev/license> for details.
+- **Source code** (everything else in this repository): Apache 2.0, see `LICENSE`.

@@ -27,6 +27,8 @@
 - Blog posts use frontmatter with `title`, `description`, `date`, `lang`, optional `translationKey`,
   optional `tags`, and optional `is-preview`.
 - `lang` is only `en` or `es`.
+- All blog post text and content (`src/content/posts/*`) is licensed under CC BY-NC-SA 4.0; do not
+  introduce content under a different license.
 - If a post exists in both languages, both files must share the same `translationKey`.
 - Legacy `/posts/[slug]` URLs redirect to `/{lang}/posts/[slug]`.
 
