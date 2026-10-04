@@ -6,7 +6,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro"
 import ButtonLink from "../../../components/ButtonLink.astro"
 import PostMeta from "../../../components/PostMeta.astro"
 import TocSidebar from "../../../components/TocSidebar.astro"
-import marked from "../../../lib/marked.ts"
+import marked, { preloadHighlightLanguages } from "../../../lib/marked.ts"
 import site from "../../../lib/site.ts"
 import { extractHeadings } from "../../../lib/toc.ts"
 
@@ -39,6 +39,7 @@ const translatedPost = post.data.translationKey
   )
   : undefined
 
+await preloadHighlightLanguages(post.body || "")
 const parsed = extractHeadings(marked.parse(post.body || "") as string)
 const recentPosts = allPosts
   .filter(

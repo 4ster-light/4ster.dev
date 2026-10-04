@@ -1,4 +1,4 @@
-import marked from "./marked.ts"
+import marked, { preloadHighlightLanguages } from "./marked.ts"
 
 export const FEATURED_REPOS = [
   "artscii",
@@ -68,6 +68,7 @@ function fetchReadme(owner: string, repo: string, token: string): Promise<string
       /\]\((?!https?:\/\/)([^)]+)\)/g,
       `](https://github.com/${owner}/${repo}/blob/main/$1)`
     )
+    await preloadHighlightLanguages(adjustedContent)
     return marked.parse(adjustedContent) as string
   })().catch(() => "")
 
