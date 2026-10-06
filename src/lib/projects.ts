@@ -4,8 +4,8 @@ export const FEATURED_REPOS = [
   "artscii",
   "sentinel",
   "http",
-  "pmatrix",
   "go-pane",
+  "pmatrix",
   "bfcompiler",
   "perlin",
   "py-logic"
@@ -38,23 +38,41 @@ interface RawRepository {
 const projectsCache = new Map<string, Promise<Repository[]>>()
 const readmeCache = new Map<string, Promise<string>>()
 
+function githubHeaders(token: string): Headers {
+  const headers = new Headers({
+    Accept: "application/vnd.github.v3+json",
+    "User-Agent": "4ster-dev-site"
+  })
+
+  if (token) headers.set("Authorization", `Bearer ${token}`)
+  return headers
+}
+
+async function fetchGitHub(url: string, token: string): Promise<Response> {
+  const headers = githubHeaders(token)
+  const response = await fetch(url, { method: "GET", headers })
+
+  // A missing, expired or revoked token must never take the projects routes
+  // down. Retry anonymously so a stale `GH_API` still returns data within the
+  // lower unauthenticated rate limit.
+  if (token && (response.status === 401 || response.status === 403)) {
+    headers.delete("Authorization")
+    return await fetch(url, { method: "GET", headers })
+  }
+
+  return response
+}
+
 function fetchReadme(owner: string, repo: string, token: string): Promise<string> {
   const cacheKey = `${token || "__no_token__"}:${owner}/${repo}`
   const cached = readmeCache.get(cacheKey)
   if (cached) return cached
 
   const promise = (async () => {
-    const headers = new Headers({
-      Accept: "application/vnd.github.v3+json",
-      "User-Agent": "4ster-dev-site"
-    })
-
-    if (token) headers.set("Authorization", `Bearer ${token}`)
-
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
-      method: "GET",
-      headers
-    })
+    const response = await fetchGitHub(
+      `https://api.github.com/repos/${owner}/${repo}/readme`,
+      token
+    )
 
     if (!response.ok) return ""
 
@@ -77,22 +95,12 @@ function fetchReadme(owner: string, repo: string, token: string): Promise<string
 }
 
 async function fetchRepositoriesFromGitHub(githubToken: string): Promise<Repository[]> {
-  const headers = new Headers({
-    Accept: "application/vnd.github.v3+json",
-    "User-Agent": "4ster-dev-site"
-  })
-
-  if (githubToken) headers.set("Authorization", `Bearer ${githubToken}`)
-
-  const response = await fetch(
+  const response = await fetchGitHub(
     "https://api.github.com/users/4ster-light/repos?per_page=100&sort=updated",
-    {
-      method: "GET",
-      headers
-    }
+    githubToken
   )
 
-  if (!response.ok) return []
+  if (!response.ok) throw new Error(`GitHub API responded with ${response.status}`)
 
   const data = (await response.json()) as RawRepository[]
   return data
@@ -127,7 +135,13 @@ export function fetchProjects(githubToken: string): Promise<Repository[]> {
   const cached = projectsCache.get(cacheKey)
   if (cached) return cached
 
-  const promise = fetchRepositoriesFromGitHub(githubToken).catch(() => [])
+  const promise = fetchRepositoriesFromGitHub(githubToken).catch((error) => {
+    // Do not cache failures, otherwise a transient GitHub error would keep the
+    // projects routes empty for the lifetime of the process.
+    projectsCache.delete(cacheKey)
+    console.error(`Failed to fetch GitHub repositories: ${error}`)
+    return []
+  })
   projectsCache.set(cacheKey, promise)
   return promise
 }

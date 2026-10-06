@@ -1,6 +1,7 @@
 import { Lexer, Marked, type Tokens } from "marked"
 import { gfmHeadingId } from "marked-gfm-heading-id"
 import {
+  type BundledLanguage,
   bundledLanguages,
   createHighlighter,
   createJavaScriptRegexEngine,
@@ -22,7 +23,7 @@ const shiki = await createHighlighter({
 // parsing. Call `preloadHighlightLanguages` before `marked.parse` (both are
 // cheap when there is nothing new to load).
 export async function preloadHighlightLanguages(markdown: string): Promise<void> {
-  const langs = new Set<string>()
+  const langs = new Set<BundledLanguage>()
   const walk = (tokens: Tokens.Generic[]) => {
     for (const token of tokens) {
       if (token.type === "code") {
@@ -43,11 +44,11 @@ export async function preloadHighlightLanguages(markdown: string): Promise<void>
   )
 }
 
-function langId(lang?: string): string | undefined {
+function langId(lang?: string): BundledLanguage | undefined {
   // `token.lang` is the full info string (e.g. `toml title="x"`); shiki only
   // accepts the first word, and unknown languages must fall back to plaintext.
   const id = (lang ?? "").trim().split(/\s+/)[0]?.toLowerCase()
-  return id && id in bundledLanguages ? id : undefined
+  return id && id in bundledLanguages ? (id as BundledLanguage) : undefined
 }
 
 function highlight(highlighter: Highlighter, code: string, lang?: string): string {
