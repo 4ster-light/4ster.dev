@@ -3,12 +3,12 @@ import marked, { preloadHighlightLanguages } from "./marked.ts"
 export const FEATURED_REPOS = [
   "artscii",
   "sentinel",
-  "perlin",
   "http",
   "pmatrix",
+  "go-pane",
   "bfcompiler",
-  "py-logic",
-  "rshell"
+  "perlin",
+  "py-logic"
 ] as const
 
 export interface Repository {
