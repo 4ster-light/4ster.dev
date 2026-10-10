@@ -1,9 +1,10 @@
 {
 	"scripts": {
 		"dev": "astro dev",
-		"build": "pnpm run sync && astro build",
-		"preview": "pnpm run sync && astro build && wrangler dev --local",
-		"sync": "wrangler types && astro sync",
+		"sync": "astro sync",
+		"types": "wrangler types",
+		"build": "pnpm run sync && astro build && pnpm run types",
+		"preview": "pnpm run build && wrangler dev --local",
 		"fmt": "biome format --write .",
 		"lint": "biome check --fix .",
 		"check": "pnpm run sync && astro check"

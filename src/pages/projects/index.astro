@@ -9,7 +9,7 @@ import site from "../../lib/site.ts"
 
 export const prerender = true
 
-const githubToken = globalThis.process?.env?.GH_API ?? ""
+const githubToken = import.meta.env.GH_API ?? ""
 const repositories = await fetchProjects(githubToken)
 ---
 <BaseLayout

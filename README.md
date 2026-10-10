@@ -43,12 +43,13 @@ tags: ["personal"]
 | Command            | Purpose                                             |
 | ------------------ | --------------------------------------------------- |
 | `pnpm run dev`     | Start development server                            |
-| `pnpm run build`   | Sync types/content and build for production         |
-| `pnpm run preview` | Sync and preview the production build locally       |
+| `pnpm run build`   | Sync content, build, and regenerate worker types    |
+| `pnpm run preview` | Build and preview the production build locally      |
 | `pnpm run fmt`     | Format files with Biome                             |
 | `pnpm run lint`    | Lint and apply safe fixes with Biome                |
-| `pnpm run check`   | Sync types/content and run `astro check`            |
-| `pnpm run sync`    | Regenerate worker types and Astro content           |
+| `pnpm run check`   | Sync content and run `astro check`                  |
+| `pnpm run sync`    | Regenerate Astro content types                      |
+| `pnpm run types`   | Regenerate worker types (run after a build)         |
 
 Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
 pnpm.

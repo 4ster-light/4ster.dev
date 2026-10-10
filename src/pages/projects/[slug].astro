@@ -10,7 +10,7 @@ import site from "../../lib/site.ts"
 export const prerender = true
 
 export const getStaticPaths = async () => {
-	const githubToken = globalThis.process?.env?.GH_API ?? ""
+	const githubToken = import.meta.env.GH_API ?? ""
 	const repositories = await fetchProjects(githubToken)
 
 	return await Promise.all(
