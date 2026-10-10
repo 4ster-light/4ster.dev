@@ -1,65 +1,65 @@
 ---
 import "../styles/global.css"
+import { ClientRouter } from "astro:transitions"
+import NavLink from "../components/NavLink.astro"
 import codeIcon from "../icons/Code.svg?url"
 import linkIcon from "../icons/Link.svg?url"
 import loveIcon from "../icons/Love.svg?url"
-import NavLink from "../components/NavLink.astro"
 import site from "../lib/site.ts"
-import { ClientRouter } from "astro:transitions"
 
 interface Props {
-  title?: string
-  description?: string
-  ogTitle?: string
-  ogDescription?: string
-  ogType?: "website" | "article"
-  ogUrl?: string
-  ogImage?: string
-  lang?: "en" | "es"
-  ogLocale?: string
-  canonicalUrl?: string
-  alternateUrls?: Array<{ lang: "en" | "es"; href: string }>
-  robots?: string
-  jsonLd?: Array<Record<string, unknown>>
+	title?: string
+	description?: string
+	ogTitle?: string
+	ogDescription?: string
+	ogType?: "website" | "article"
+	ogUrl?: string
+	ogImage?: string
+	lang?: "en" | "es"
+	ogLocale?: string
+	canonicalUrl?: string
+	alternateUrls?: Array<{ lang: "en" | "es"; href: string }>
+	robots?: string
+	jsonLd?: Array<Record<string, unknown>>
 }
 
 const {
-  title = "✰λster✰",
-  description = "Personal blog about programming, technology, and computer science.",
-  ogTitle = title,
-  ogDescription = description,
-  ogType = "website",
-  ogUrl,
-  ogImage = `${site.baseUrl}${site.ogImage}`,
-  lang = "en",
-  ogLocale = lang === "es" ? "es_ES" : "en_US",
-  canonicalUrl,
-  alternateUrls,
-  robots = "index,follow,max-image-preview:large",
-  jsonLd = []
+	title = "✰λster✰",
+	description = "Personal blog about programming, technology, and computer science.",
+	ogTitle = title,
+	ogDescription = description,
+	ogType = "website",
+	ogUrl,
+	ogImage = `${site.baseUrl}${site.ogImage}`,
+	lang = "en",
+	ogLocale = lang === "es" ? "es_ES" : "en_US",
+	canonicalUrl,
+	alternateUrls,
+	robots = "index,follow,max-image-preview:large",
+	jsonLd = []
 } = Astro.props
 
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, site.baseUrl).href
 const openGraphUrl = ogUrl ?? canonical
 
 const navLinks = [
-  {
-    href: site.bio,
-    label: "Link Tree",
-    icon: linkIcon
-  },
-  {
-    href: site.projects,
-    label: "Projects",
-    icon: codeIcon,
-    target: ""
-  },
-  {
-    href: site.donate,
-    label: "Support Me",
-    icon: loveIcon,
-    target: ""
-  }
+	{
+		href: site.bio,
+		label: "Link Tree",
+		icon: linkIcon
+	},
+	{
+		href: site.projects,
+		label: "Projects",
+		icon: codeIcon,
+		target: ""
+	},
+	{
+		href: site.donate,
+		label: "Support Me",
+		icon: loveIcon,
+		target: ""
+	}
 ]
 ---
 <html {lang} data-theme="teal_dark">

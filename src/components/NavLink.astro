@@ -1,18 +1,18 @@
 ---
 interface Props {
-  href: string
-  target?: string
-  rel?: string
-  icon: string
-  label: string
+	href: string
+	target?: string
+	rel?: string
+	icon: string
+	label: string
 }
 
 const {
-  href,
-  target = "_blank",
-  rel = "noopener noreferrer",
-  icon,
-  label
+	href,
+	target = "_blank",
+	rel = "noopener noreferrer",
+	icon,
+	label
 } = Astro.props
 ---
 <a {href} {target} {rel} class="btn gap-2">

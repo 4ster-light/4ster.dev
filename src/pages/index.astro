@@ -1,14 +1,14 @@
 ---
 import { getCollection } from "astro:content"
-import BaseLayout from "../layouts/BaseLayout.astro"
 import PostMeta from "../components/PostMeta.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
 import site from "../lib/site.ts"
 
 const posts = (await getCollection("posts"))
-  .filter((post) => !post.data["is-preview"])
-  .sort(
-    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-  )
+	.filter((post) => !post.data["is-preview"])
+	.sort(
+		(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+	)
 
 const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
 const esPosts = posts.filter((post) => post.data.lang === "es")

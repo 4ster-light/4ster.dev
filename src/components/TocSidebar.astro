@@ -1,21 +1,21 @@
 ---
 interface TocItem {
-  depth: number
-  slug: string
-  text: string
+	depth: number
+	slug: string
+	text: string
 }
 
 interface PostLink {
-  slug: string
-  title: string
-  date: string
-  lang?: "en" | "es"
+	slug: string
+	title: string
+	date: string
+	lang?: "en" | "es"
 }
 
 interface Props {
-  items: TocItem[]
-  recentPosts?: PostLink[]
-  lang?: "en" | "es"
+	items: TocItem[]
+	recentPosts?: PostLink[]
+	lang?: "en" | "es"
 }
 
 const { items, recentPosts = [], lang = "en" } = Astro.props

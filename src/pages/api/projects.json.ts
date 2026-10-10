@@ -4,9 +4,9 @@ import { fetchProjects } from "../../lib/projects.ts"
 export const prerender = false
 
 export const GET: APIRoute = async () => {
-  const projects = await fetchProjects(globalThis.process?.env?.GH_API ?? "")
-  return new Response(JSON.stringify({ projects }), {
-    status: 200,
-    headers: new Headers({ "Content-Type": "application/json" })
-  })
+	const projects = await fetchProjects(globalThis.process?.env?.GH_API ?? "")
+	return new Response(JSON.stringify({ projects }), {
+		status: 200,
+		headers: new Headers({ "Content-Type": "application/json" })
+	})
 }

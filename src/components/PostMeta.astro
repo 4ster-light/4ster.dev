@@ -1,16 +1,16 @@
 ---
 interface PostData {
-  slug?: string
-  title: string
-  description: string
-  date: string
-  lang?: "en" | "es"
-  tags?: string[]
+	slug?: string
+	title: string
+	description: string
+	date: string
+	lang?: "en" | "es"
+	tags?: string[]
 }
 
 interface Props {
-  post: PostData
-  header?: boolean
+	post: PostData
+	header?: boolean
 }
 
 const { post, header = false } = Astro.props

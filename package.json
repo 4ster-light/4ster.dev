@@ -1,31 +1,38 @@
 {
-  "scripts": {
-    "dev": "astro dev",
-    "sync": "wrangler types && astro sync",
-    "build": "pnpm run sync && astro build",
-    "preview": "pnpm run sync && astro build && wrangler dev --local",
-    "lint": "deno fmt && deno lint --fix && deno check"
-  },
-  "dependencies": {
-    "@astrojs/cloudflare": "^12.6.13",
-    "@astrojs/markdoc": "^0.14.2",
-    "@astrojs/react": "^4.4.2",
-    "@keystatic/astro": "^5.0.6",
-    "@keystatic/core": "^0.5.50",
-    "@tailwindcss/typography": "^0.5.19",
-    "@tailwindcss/vite": "^4.2.4",
-    "@types/node": "^25.6.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^5.18.1",
-    "daisyui": "^5.5.19",
-    "flourite": "^1.3.0",
-    "marked": "^15.0.12",
-    "marked-gfm-heading-id": "^4.1.4",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "shiki": "^1.29.2",
-    "tailwindcss": "^4.2.4",
-    "wrangler": "^4.85.0"
-  }
+	"scripts": {
+		"dev": "astro dev",
+		"build": "pnpm run sync && astro build",
+		"preview": "pnpm run sync && astro build && wrangler dev --local",
+		"sync": "wrangler types && astro sync",
+		"fmt": "biome format --write .",
+		"lint": "biome check --fix .",
+		"check": "pnpm run sync && astro check"
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "^12.6.13",
+		"@astrojs/markdoc": "^0.14.2",
+		"@astrojs/react": "^4.4.2",
+		"@keystatic/astro": "^5.2.0",
+		"@keystatic/core": "^0.5.51",
+		"@tailwindcss/typography": "^0.5.20",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/node": "^25.9.9",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"astro": "^5.18.2",
+		"daisyui": "^5.7.47",
+		"flourite": "^1.3.0",
+		"marked": "^15.0.12",
+		"marked-gfm-heading-id": "^4.1.4",
+		"react": "^19.3.0",
+		"react-dom": "^19.3.0",
+		"shiki": "^1.29.2",
+		"tailwindcss": "^4.3.3"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.10",
+		"@biomejs/biome": "^2.5.15",
+		"typescript": "^6.0.3",
+		"wrangler": "^4.149.0"
+	}
 }
