@@ -10,7 +10,7 @@ import site from "../../lib/site.ts"
 export const prerender = true
 
 const githubToken = import.meta.env.GH_API ?? ""
-const repositories = await fetchProjects(githubToken)
+const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 ---
 <BaseLayout
   title="Open Source Projects | Aster"

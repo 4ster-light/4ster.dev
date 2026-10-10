@@ -11,7 +11,9 @@ export const prerender = true
 
 export const getStaticPaths = async () => {
 	const githubToken = import.meta.env.GH_API ?? ""
-	const repositories = await fetchProjects(githubToken)
+	const repositories = await fetchProjects(githubToken, {
+		fallbackToSite: true
+	})
 
 	return await Promise.all(
 		repositories.map(async (repository) => {
