@@ -6,7 +6,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["**", "!!**/dist", "!!**/worker-configuration.d.ts"]
+		"includes": ["**", "!!**/worker-configuration.d.ts"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -30,6 +30,12 @@
 			"tailwindDirectives": true
 		}
 	},
+	"html": {
+		"experimentalFullSupportEnabled": true,
+		"formatter": {
+			"enabled": true
+		}
+	},
 	"assist": {
 		"enabled": true,
 		"actions": {
@@ -43,6 +49,10 @@
 			"includes": ["**/*.astro"],
 			"linter": {
 				"rules": {
+					"style": {
+						"useConst": "off",
+						"useImportType": "off"
+					},
 					"correctness": {
 						"noUnusedVariables": "off",
 						"noUnusedImports": "off"

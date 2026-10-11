@@ -13,6 +13,8 @@ const {
 	ariaLabel
 } = Astro.props
 ---
+
+<!-- biome-ignore lint/a11y/useAnchorContent: Biome fails to detect anchor content since it's inside a slot -->
 <a {href} {target} {rel} aria-label={ariaLabel} class="btn btn-secondary gap-2">
-  <slot />
+	<slot />
 </a>

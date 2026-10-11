@@ -14,175 +14,177 @@ const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
 const esPosts = posts.filter((post) => post.data.lang === "es")
 const initialPosts = enPosts.length > 0 ? "en" : "es"
 ---
+
 <BaseLayout
-  title="✰λster✰ | Programming, Computer Science, and Open Source"
-  description="David Vivar Bogónez's blog about programming, computer science, and open source projects."
-  ogTitle="David Vivar Bogónez | Software Developer & Programming Blog"
-  ogDescription="David Vivar Bogónez's blog about programming, computer science, and open source projects."
-  ogUrl={site.baseUrl}
-  jsonLd={[
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "✰λster✰",
-      url: site.baseUrl,
-      description:
-        "David Vivar Bogónez's blog about programming, computer science, and open source projects."
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "✰λster✰",
-      url: site.baseUrl,
-      logo: `${site.baseUrl}/pfp.jpg`,
-      sameAs: [site.substack, site.githubSponsors, site.bio]
-    }
-  ]}
+	title="✰λster✰ | Programming, Computer Science, and Open Source"
+	description="David Vivar Bogónez's blog about programming, computer science, and open source projects."
+	ogTitle="David Vivar Bogónez | Software Developer & Programming Blog"
+	ogDescription="David Vivar Bogónez's blog about programming, computer science, and open source projects."
+	ogUrl={site.baseUrl}
+	jsonLd={[
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			name: "✰λster✰",
+			url: site.baseUrl,
+			description:
+				"David Vivar Bogónez's blog about programming, computer science, and open source projects."
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			name: "✰λster✰",
+			url: site.baseUrl,
+			logo: `${site.baseUrl}/pfp.jpg`,
+			sameAs: [site.substack, site.githubSponsors, site.bio]
+		}
+	]}
 >
-  <h1 class="sr-only">David Vivar Bogónez, software developer and programmer</h1>
+	<h1 class="sr-only">
+		David Vivar Bogónez, software developer and programmer
+	</h1>
 
-  <section
-    class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center"
-  >
-    <picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
-      <source srcset="/pfp-320.webp" type="image/webp" />
-      <img
-        src="/pfp.jpg"
-        alt="Avatar"
-        width="736"
-        height="736"
-        decoding="async"
-        fetchpriority="high"
-        class="w-full h-full object-cover"
-      />
-    </picture>
-    <p class="m-0 text-base-content/80">
-      Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a Spanish open source
-      developer most known as <strong class="text-primary">Aster</strong>, I am a computer
-      engineering undergraduate at <a href={site.uni} target="_blank" rel="noopener noreferrer"
-      >ESI-UCLM</a>. I am very passionate about software and computers in general, I use
-      technologies like Python, TypeScript, Rust, Kotlin and Preact, among others.
-    </p>
-  </section>
+	<section
+		class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center"
+	>
+		<picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
+			<source srcset="/pfp-320.webp" type="image/webp">
+			<img
+				src="/pfp.jpg"
+				alt="Avatar"
+				width="736"
+				height="736"
+				decoding="async"
+				fetchpriority="high"
+				class="w-full h-full object-cover"
+			>
+		</picture>
+		<p class="m-0 text-base-content/80">
+			Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a
+			Spanish open source developer most known as
+			<strong class="text-primary">Aster</strong>, I am a computer engineering
+			undergraduate at
+			<a href={site.uni} target="_blank" rel="noopener noreferrer">ESI-UCLM</a>.
+			I am very passionate about software and computers in general, I use
+			technologies like Python, TypeScript, Rust, Kotlin and Preact, among
+			others.
+		</p>
+	</section>
 
-  <div class="divider"></div>
+	<div class="divider"></div>
 
-  <section>
-    <h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
-    <p class="text-base-content/80 leading-relaxed">
-      I also have some open source projects of my own, you can check them out on my <a
-        href={site.projects}
-      >projects page</a>. The most significant ones are pinned on my <a
-        href={site.githubSponsors}
-        target="_blank"
-        rel="noopener noreferrer"
-      >GitHub Sponsors Profile</a>.
-    </p>
-  </section>
+	<section>
+		<h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
+		<p class="text-base-content/80 leading-relaxed">
+			I also have some open source projects of my own, you can check them out on
+			my <a href={site.projects}>projects page</a>. The most significant ones
+			are pinned on my
+			<a href={site.githubSponsors} target="_blank" rel="noopener noreferrer"
+				>GitHub Sponsors Profile</a
+			>.
+		</p>
+	</section>
 
-  <div class="divider"></div>
+	<div class="divider"></div>
 
-  <section>
-    <h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
-    <p class="text-base-content/80 mb-8">
-      Hey! Welcome to my blog. Here you'll find articles about all sorts of topics related to
-      computer science and programming. Know that you can find more (some not published here) posts
-      on my <a
-        href={site.substack}
-        target="_blank"
-        rel="noopener noreferrer"
-      >Substack</a>
-      publication.
-    </p>
+	<section>
+		<h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
+		<p class="text-base-content/80 mb-8">
+			Hey! Welcome to my blog. Here you'll find articles about all sorts of
+			topics related to computer science and programming. Know that you can find
+			more (some not published here) posts on my
+			<a href={site.substack} target="_blank" rel="noopener noreferrer"
+				>Substack</a
+			>
+			publication.
+		</p>
 
-    <div
-      class="flex flex-wrap gap-2 mb-8"
-      role="tablist"
-      aria-label="Blog post language filter"
-    >
-      <button
-        type="button"
-        class="btn btn-sm btn-primary"
-        data-post-filter="en"
-        aria-pressed="true"
-      >
-        English 🇬🇧 <span class="ml-1 badge badge-soft badge-primary">{enPosts.length}</span>
-      </button>
-      <button
-        type="button"
-        class="btn btn-sm btn-ghost"
-        data-post-filter="es"
-        aria-pressed="false"
-      >
-        Español 🇪🇸 <span class="ml-1 badge badge-soft badge-secondary">{esPosts.length}</span>
-      </button>
-    </div>
+		<div
+			class="flex flex-wrap gap-2 mb-8"
+			role="tablist"
+			aria-label="Blog post language filter"
+		>
+			<button
+				type="button"
+				class="btn btn-sm btn-primary"
+				data-post-filter="en"
+				aria-pressed="true"
+			>
+				English 🇬🇧
+				<span class="ml-1 badge badge-soft badge-primary"
+					>{enPosts.length}</span
+				>
+			</button>
+			<button
+				type="button"
+				class="btn btn-sm btn-ghost"
+				data-post-filter="es"
+				aria-pressed="false"
+			>
+				Español 🇪🇸
+				<span class="ml-1 badge badge-soft badge-secondary"
+					>{esPosts.length}</span
+				>
+			</button>
+		</div>
 
-    <section class="space-y-6" data-post-panel="en">
-      {enPosts.length > 0 ? (
-        <div class="space-y-10">
-          {enPosts.map((post) => (
-            <PostMeta
-              post={{ slug: post.slug, ...post.data }}
-            />
-          ))}
-        </div>
-      ) : <p class="text-base-content/60">No English posts yet.</p>}
-    </section>
+		<section class="space-y-6" data-post-panel="en">
+			{enPosts.length > 0 ? (
+				<div class="space-y-10">
+					{enPosts.map((post) => (
+						<PostMeta post={{ slug: post.slug, ...post.data }} />
+					))}
+				</div>
+			) : (
+				<p class="text-base-content/60">No English posts yet.</p>
+			)}
+		</section>
 
-    <section class="space-y-6 hidden" data-post-panel="es">
-      {esPosts.length > 0 ? (
-        <div class="space-y-10">
-          {esPosts.map((post) => (
-            <PostMeta
-              post={{ slug: post.slug, ...post.data }}
-            />
-          ))}
-        </div>
-      ) : (
-         <p class="text-base-content/60">
-           Ningún post en Español por ahora...
-         </p>
-       )}
-    </section>
-  </section>
+		<section class="space-y-6 hidden" data-post-panel="es">
+			{esPosts.length > 0 ? (
+				<div class="space-y-10">
+					{esPosts.map((post) => (
+						<PostMeta post={{ slug: post.slug, ...post.data }} />
+					))}
+				</div>
+			) : (
+				<p class="text-base-content/60">Ningún post en Español por ahora...</p>
+			)}
+		</section>
+	</section>
 
-  <script is:inline define:vars={{ initialPosts }}>
-  const initBlogLanguageToggle = () => {
-    const buttons = Array.from(
-      document.querySelectorAll("[data-post-filter]")
-    )
-    const panels = Array.from(
-      document.querySelectorAll("[data-post-panel]")
-    )
+	<script is:inline define:vars={{ initialPosts }}>
+	const initBlogLanguageToggle = () => {
+		const buttons = Array.from(document.querySelectorAll("[data-post-filter]"))
+		const panels = Array.from(document.querySelectorAll("[data-post-panel]"))
 
-    if (buttons.length === 0 || panels.length === 0) return
+		if (buttons.length === 0 || panels.length === 0) return
 
-    const showPanel = (lang) => {
-      panels.forEach((panel) => {
-        panel.classList.toggle(
-          "hidden",
-          panel.getAttribute("data-post-panel") !== lang
-        )
-      })
-      buttons.forEach((button) => {
-        const active = button.getAttribute("data-post-filter") === lang
-        button.classList.toggle("btn-primary", active)
-        button.classList.toggle("btn-ghost", !active)
-        button.setAttribute("aria-pressed", String(active))
-      })
-    }
+		const showPanel = (lang) => {
+			panels.forEach((panel) => {
+				panel.classList.toggle(
+					"hidden",
+					panel.getAttribute("data-post-panel") !== lang
+				)
+			})
+			buttons.forEach((button) => {
+				const active = button.getAttribute("data-post-filter") === lang
+				button.classList.toggle("btn-primary", active)
+				button.classList.toggle("btn-ghost", !active)
+				button.setAttribute("aria-pressed", String(active))
+			})
+		}
 
-    buttons.forEach((button) => {
-      button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
-    })
+		buttons.forEach((button) => {
+			button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
+		})
 
-    showPanel(initialPosts)
-  }
+		showPanel(initialPosts)
+	}
 
-  initBlogLanguageToggle()
-  document.addEventListener("astro:page-load", initBlogLanguageToggle)
-  </script>
+	initBlogLanguageToggle()
+	document.addEventListener("astro:page-load", initBlogLanguageToggle)
+	</script>
 
-  <div class="my-8"></div>
+	<div class="my-8"></div>
 </BaseLayout>

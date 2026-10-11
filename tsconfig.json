@@ -2,7 +2,9 @@
 	"extends": "astro/tsconfigs/base",
 	"compilerOptions": {
 		"jsx": "react-jsx",
-		"jsxImportSource": "react"
+		"jsxImportSource": "react",
+		"allowImportingTsExtensions": true,
+		"noEmit": true
 	},
 	"include": ["./worker-configuration.d.ts"]
 }

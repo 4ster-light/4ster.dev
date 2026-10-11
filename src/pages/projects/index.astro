@@ -12,126 +12,129 @@ export const prerender = true
 const githubToken = import.meta.env.GH_API ?? ""
 const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 ---
+
 <BaseLayout
-  title="Open Source Projects | Aster"
-  description="Open source projects by Aster, including libraries, tools, and experiments."
-  ogTitle="Open Source Projects | Aster"
-  ogDescription="Open source projects by Aster, including libraries, tools, and experiments."
-  ogUrl={`${site.baseUrl}/projects`}
-  jsonLd={[
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: site.baseUrl },
-        { "@type": "ListItem", position: 2, name: "Projects", item: `${site.baseUrl}/projects` }
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      name: "Open Source Projects",
-      url: `${site.baseUrl}/projects`,
-      description: "Open source projects by Aster, including libraries, tools, and experiments."
-    }
-  ]}
+	title="Open Source Projects | Aster"
+	description="Open source projects by Aster, including libraries, tools, and experiments."
+	ogTitle="Open Source Projects | Aster"
+	ogDescription="Open source projects by Aster, including libraries, tools, and experiments."
+	ogUrl={`${site.baseUrl}/projects`}
+	jsonLd={[
+		{
+			"@context": "https://schema.org",
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{ "@type": "ListItem", position: 1, name: "Home", item: site.baseUrl },
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Projects",
+					item: `${site.baseUrl}/projects`
+				}
+			]
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			name: "Open Source Projects",
+			url: `${site.baseUrl}/projects`,
+			description:
+				"Open source projects by Aster, including libraries, tools, and experiments."
+		}
+	]}
 >
-  <h1 class="sr-only">Open Source Projects</h1>
+	<h1 class="sr-only">Open Source Projects</h1>
 
-  {!repositories.length ? (
-    <>
-      <div class="text-center py-16">
-        <h2 class="text-3xl font-bold mb-4 text-error">
-          Projects Not Found
-        </h2>
-        <p class="text-base-content/70 mb-6">
-          The projects you're looking for aren't loading right now.
-        </p>
-        <ButtonLink href={site.url} target="" ariaLabel="Back to home">
-          <img
-            src={leftArrowsIcon}
-            alt=""
-            width="32"
-            height="32"
-            decoding="async"
-            class="size-8"
-          />
-        </ButtonLink>
-      </div>
-      <ReposCard />
-    </>
-  ) : (
-     <>
-       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-         {repositories.map((repo) => (
-           <article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
-             <div class="card-body p-5">
-               <div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
-                 <h3 class="card-title text-lg m-0">
-                   <a
-                     href={`/projects/${repo.name}`}
-                     class="link link-hover link-primary"
-                   >
-                     {repo.name}
-                   </a>
-                 </h3>
-                 <div class="flex gap-4 text-sm font-mono text-base-content/60">
-                   <span>{repo.stars} ⭐</span>
-                   <span>{repo.forks} forks</span>
-                 </div>
-               </div>
+	{!repositories.length ? (
+		<>
+			<div class="text-center py-16">
+				<h2 class="text-3xl font-bold mb-4 text-error">Projects Not Found</h2>
+				<p class="text-base-content/70 mb-6">
+					The projects you're looking for aren't loading right now.
+				</p>
+				<ButtonLink href={site.url} target="" ariaLabel="Back to home">
+					<img
+						src={leftArrowsIcon}
+						alt=""
+						width="32"
+						height="32"
+						decoding="async"
+						class="size-8"
+					/>
+				</ButtonLink>
+			</div>
+			<ReposCard />
+		</>
+	) : (
+		<>
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				{repositories.map((repo) => (
+					<article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
+						<div class="card-body p-5">
+							<div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
+								<h3 class="card-title text-lg m-0">
+									<a
+										href={`/projects/${repo.name}`}
+										class="link link-hover link-primary"
+									>
+										{repo.name}
+									</a>
+								</h3>
+								<div class="flex gap-4 text-sm font-mono text-base-content/60">
+									<span>{repo.stars} ⭐</span>
+									<span>{repo.forks} forks</span>
+								</div>
+							</div>
 
-               {repo.description && (
-                 <p class="text-sm text-base-content/70">
-                   {repo.description}
-                 </p>
-               )}
+							{repo.description && (
+								<p class="text-sm text-base-content/70">{repo.description}</p>
+							)}
 
-               <div
-                 class="flex gap-2 text-xs font-mono text-base-content/60 flex-wrap items-center"
-               >
-                 {repo.language && (
-                   <span class="badge badge-sm badge-outline">
-                     {repo.language}
-                   </span>
-                 )}
-                 <span>Updated at {repo.updated_at}</span>
-                 <a
-                   href={repo.url}
-                   target="_blank"
-                   rel="noopener"
-                   class="btn btn-ghost btn-sm ml-auto"
-                 >
-                   View on GitHub
-                 </a>
-               </div>
-             </div>
-           </article>
-         ))}
-       </div>
+							<div class="flex gap-2 text-xs font-mono text-base-content/60 flex-wrap items-center">
+								{repo.language && (
+									<span class="badge badge-sm badge-outline">
+										{repo.language}
+									</span>
+								)}
+								<span>Updated at {repo.updated_at}</span>
+								<a
+									href={repo.url}
+									target="_blank"
+									rel="noopener"
+									class="btn btn-ghost btn-sm ml-auto"
+								>
+									View on GitHub
+								</a>
+							</div>
+						</div>
+					</article>
+				))}
+			</div>
 
-       <div class="my-8" />
+			<div class="my-8" />
 
-       <ReposCard />
+			<ReposCard />
 
-       <div class="my-8" />
+			<div class="my-8" />
 
-       <footer class="border-base-300 flex justify-end items-center gap-4 flex-col sm:flex-row">
-         <ButtonLink href={site.url} target="" ariaLabel="Back to home">
-           <img
-             src={leftArrowsIcon}
-             alt=""
-             width="32"
-             height="32"
-             decoding="async"
-             class="size-8"
-           />
-         </ButtonLink>
-         <ButtonLink href={site.githubSponsors} ariaLabel="Sponsor me on GitHub Sponsors">
-           <img src={loveIcon} alt="" class="size-6" />{" "}
-           Sponsor
-         </ButtonLink>
-       </footer>
-     </>
-   )}
+			<footer class="border-base-300 flex justify-end items-center gap-4 flex-col sm:flex-row">
+				<ButtonLink href={site.url} target="" ariaLabel="Back to home">
+					<img
+						src={leftArrowsIcon}
+						alt=""
+						width="32"
+						height="32"
+						decoding="async"
+						class="size-8"
+					/>
+				</ButtonLink>
+				<ButtonLink
+					href={site.githubSponsors}
+					ariaLabel="Sponsor me on GitHub Sponsors"
+				>
+					<img src={loveIcon} alt="" class="size-6" /> Sponsor
+				</ButtonLink>
+			</footer>
+		</>
+	)}
 </BaseLayout>
