@@ -1,6 +1,17 @@
+<div align="center">
+
 # [4ster.dev](https://4ster.dev)
 
-My personal website.
+[![CI](https://github.com/4ster-light/4ster.dev/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/4ster-light/http/actions/workflows/ci.yml)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-EA4AAA?logo=githubsponsors)](https://github.com/sponsors/4ster-light)
+[![Other sponsorship options](https://img.shields.io/badge/Other%20Sponsorship%20options-%204ster.dev-blue)](https://4ster.dev/sponsor)
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/80x15.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+</div>
+
+<br />
 
 ## Blog content conventions
 
