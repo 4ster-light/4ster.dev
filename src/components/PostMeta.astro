@@ -3,7 +3,7 @@ interface PostData {
 	slug?: string
 	title: string
 	description: string
-	date: string
+	date: Date
 	lang?: "en" | "es"
 	tags?: string[]
 }
@@ -35,7 +35,7 @@ const href = post.slug ? `/${post.lang || "en"}/posts/${post.slug}` : "/"
 
 	<p class="text-base-content/70 text-sm leading-relaxed">{post.description}</p>
 
-	<time datetime={post.date}>
+	<time datetime={post.date.toISOString()}>
 		{new Date(post.date).toLocaleDateString("en-US", {
 			year: "numeric",
 			month: "long",

@@ -4,6 +4,7 @@ node_modules
 dist
 .*
 !public/.assetsignore
+!.github/
 
 # OS
 .DS_Store
