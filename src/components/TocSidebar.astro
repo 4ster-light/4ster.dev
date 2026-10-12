@@ -21,16 +21,19 @@ interface Props {
 const { items, recentPosts = [], lang = "en" } = Astro.props
 ---
 
-<aside class="sticky top-8 max-h-[calc(100vh-2rem)] overflow-y-auto space-y-8">
+<aside class="sticky top-24 max-h-[calc(100vh-7rem)] space-y-8 overflow-y-auto">
 	{items.length > 0 && (
-		<nav class="space-y-2">
-			<h2 class="text-xs font-semibold text-base-content/70 uppercase tracking-widest mb-4">
+		<nav class="space-y-3">
+			<h2 class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-base-content/50">
 				On this page
 			</h2>
-			<ul class="space-y-2">
+			<ul class="space-y-2 border-l border-base-300">
 				{items.map((item) => (
 					<li style={{ paddingLeft: `${(item.depth - 2) * 0.75}rem` }}>
-						<a href={`#${item.slug}`} class="link link-hover text-sm">
+						<a
+							href={`#${item.slug}`}
+							class="-ml-px block border-l border-transparent pl-3 text-sm text-base-content/70 transition-colors hover:border-primary hover:text-primary"
+						>
 							{item.text}
 						</a>
 					</li>
@@ -41,21 +44,21 @@ const { items, recentPosts = [], lang = "en" } = Astro.props
 
 	{recentPosts.length > 0 && (
 		<>
-			{items.length > 0 && <div class="divider my-4" />}
-			<nav class="space-y-2">
-				<h2 class="text-xs font-semibold text-base-content/70 uppercase tracking-widest mb-4">
-					Recent Posts
+			{items.length > 0 && <div class="divider my-2" />}
+			<nav class="space-y-3">
+				<h2 class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-base-content/50">
+					Recent posts
 				</h2>
-				<ul class="space-y-3">
+				<ul class="space-y-4">
 					{recentPosts.map((post) => (
-						<li>
+						<li class="flex flex-col gap-0.5">
 							<a
 								href={`/${post.lang || lang}/posts/${post.slug}`}
-								class="link text-sm block text-primary"
+								class="text-sm font-medium text-base-content/80 transition-colors hover:text-primary"
 							>
 								{post.title}
 							</a>
-							<span class="text-xs text-base-content/50">
+							<span class="font-mono text-xs text-base-content/50">
 								{new Date(post.date).toLocaleDateString("en-US", {
 									year: "numeric",
 									month: "short",

@@ -74,6 +74,16 @@ const alternateUrls = [
 			]
 		: [])
 ]
+
+const langPosts = allPosts.filter(
+	(entry) => (entry.data.lang || "en") === lang && !entry.data["is-preview"]
+)
+const currentIndex = langPosts.findIndex((entry) => entry.slug === post.slug)
+const newerPost = currentIndex > 0 ? langPosts[currentIndex - 1] : undefined
+const olderPost =
+	currentIndex >= 0 && currentIndex < langPosts.length - 1
+		? langPosts[currentIndex + 1]
+		: undefined
 ---
 
 <BaseLayout
@@ -108,7 +118,7 @@ const alternateUrls = [
 		}
 	]}
 >
-	<PostMeta post={{ slug: post.slug, ...post.data }} header />
+	<PostMeta post={{ slug: post.slug, ...post.data, body: post.body }} header />
 
 	{switchHref && (
 		<div class="mt-6">
@@ -118,7 +128,7 @@ const alternateUrls = [
 		</div>
 	)}
 
-	<div class="divider mb-12"></div>
+	<div class="divider my-10"></div>
 
 	<div class="grid grid-cols-1 lg:grid-cols-6 gap-8">
 		<main class="-mt-6 prose lg:col-span-4" set:html={parsed.html} />
@@ -138,9 +148,47 @@ const alternateUrls = [
 		</div>
 	</div>
 
+	{(olderPost || newerPost) && (
+		<nav
+			class="mt-12 grid gap-4 border-t border-base-300 pt-8 sm:grid-cols-2"
+			aria-label="More posts"
+		>
+			{olderPost ? (
+				<a
+					href={`/${lang}/posts/${olderPost.slug}`}
+					class="group flex flex-col gap-1 rounded-xl border border-base-300 p-4 transition-colors hover:border-primary/40 hover:bg-base-200/40"
+				>
+					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">
+						← Older
+					</span>
+					<span class="font-semibold transition-colors group-hover:text-primary">
+						{olderPost.data.title}
+					</span>
+				</a>
+			) : (
+				<span />
+			)}
+			{newerPost ? (
+				<a
+					href={`/${lang}/posts/${newerPost.slug}`}
+					class="group flex flex-col items-end gap-1 rounded-xl border border-base-300 p-4 text-right transition-colors hover:border-primary/40 hover:bg-base-200/40 sm:col-start-2"
+				>
+					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">
+						Newer →
+					</span>
+					<span class="font-semibold transition-colors group-hover:text-primary">
+						{newerPost.data.title}
+					</span>
+				</a>
+			) : (
+				<span />
+			)}
+		</nav>
+	)}
+
 	<div class="divider"></div>
 
-	<div class="mt-8 text-sm text-base-content/70 border-l-2 border-primary pl-4">
+	<div class="mt-8 border-l-2 border-primary pl-4 text-sm text-base-content/70">
 		{lang === "es" ? (
 			<>
 				Texto y contenido de este artículo licenciados bajo{" "}
@@ -168,8 +216,8 @@ const alternateUrls = [
 		)}
 	</div>
 
-	<footer class="flex justify-end gap-4 sm:flex-row">
-		<ButtonLink href={site.url} target="" ariaLabel="Back to home">
+	<footer class="mt-10 flex flex-wrap items-center justify-between gap-4">
+		<ButtonLink href={site.blog} target="" ariaLabel="Back to all posts">
 			<img
 				src={leftArrowsIcon}
 				alt=""
@@ -178,6 +226,7 @@ const alternateUrls = [
 				decoding="async"
 				class="size-8"
 			>
+			All posts
 		</ButtonLink>
 		<ButtonLink href={site.donate} ariaLabel="Sponsor me">
 			<img
@@ -192,3 +241,46 @@ const alternateUrls = [
 		</ButtonLink>
 	</footer>
 </BaseLayout>
+
+<script>
+const enhanceCodeBlocks = () => {
+	const blocks = document.querySelectorAll<HTMLElement>(".shiki-wrapper")
+	for (const wrapper of blocks) {
+		if (wrapper.querySelector(".code-copy")) continue
+
+		const button = document.createElement("button")
+		button.type = "button"
+		button.className = "code-copy"
+		button.textContent = "Copy"
+		button.setAttribute("aria-label", "Copy code to clipboard")
+
+		button.addEventListener("click", async () => {
+			const lines = Array.from(
+				wrapper.querySelectorAll<HTMLElement>("code .line")
+			)
+			const text = lines
+				.map((line) => {
+					const clone = line.cloneNode(true) as HTMLElement
+					clone.querySelector(".line-number")?.remove()
+					return clone.textContent ?? ""
+				})
+				.join("\n")
+
+			try {
+				await navigator.clipboard.writeText(text)
+				button.textContent = "Copied"
+			} catch (_error) {
+				button.textContent = "Error"
+			}
+			window.setTimeout(() => {
+				button.textContent = "Copy"
+			}, 1500)
+		})
+
+		wrapper.appendChild(button)
+	}
+}
+
+document.addEventListener("astro:page-load", enhanceCodeBlocks)
+enhanceCodeBlocks()
+</script>
