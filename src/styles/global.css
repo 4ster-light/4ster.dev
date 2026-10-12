@@ -2,6 +2,22 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
+@font-face {
+	font-family: "Inter";
+	src: url("/fonts/Inter-Regular.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("/fonts/Inter-Bold.ttf") format("truetype");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
 @plugin "daisyui/theme" {
 	name: "teal_dark";
 	default: true;
@@ -10,28 +26,28 @@
 
 	--color-base-100: #0f1419;
 	--color-base-200: #1a2028;
-	--color-base-300: #252d38;
+	--color-base-300: #27303c;
 	--color-base-content: #dce8ea;
-	--color-primary: #45a293;
-	--color-primary-content: #0d1f1c;
-	--color-secondary: #3d8c7e;
-	--color-secondary-content: #e8f4f5;
-	--color-accent: #8b4a52;
-	--color-accent-content: #fef5f6;
+	--color-primary: #4fb3a2;
+	--color-primary-content: #06201c;
+	--color-secondary: #6cc4b4;
+	--color-secondary-content: #06201c;
+	--color-accent: #e08a92;
+	--color-accent-content: #210d0f;
 	--color-neutral: #1f2730;
 	--color-neutral-content: #c8d8da;
-	--color-info: #5499b8;
-	--color-info-content: #0d1f1c;
-	--color-success: #45a88f;
-	--color-success-content: #0d1f1c;
-	--color-warning: #d4a574;
-	--color-warning-content: #1a2028;
-	--color-error: #c94b54;
-	--color-error-content: #fef5f6;
+	--color-info: #6cb6d4;
+	--color-info-content: #07171f;
+	--color-success: #5cc9a7;
+	--color-success-content: #06201c;
+	--color-warning: #e0b483;
+	--color-warning-content: #1f1508;
+	--color-error: #e06a72;
+	--color-error-content: #210d0f;
 
 	--radius-selector: 1rem;
 	--radius-field: 0.5rem;
-	--radius-box: 0.5rem;
+	--radius-box: 0.75rem;
 
 	--size-selector: 0.25rem;
 	--size-field: 0.25rem;
@@ -48,30 +64,30 @@
 	prefersdark: false;
 	color-scheme: light;
 
-	--color-base-100: #f5fafa;
-	--color-base-200: #e8f4f5;
-	--color-base-300: #d4e8e9;
+	--color-base-100: #f7fbfb;
+	--color-base-200: #eaf4f4;
+	--color-base-300: #cfe3e3;
 	--color-base-content: #1a2028;
-	--color-primary: #3a9d8f;
-	--color-primary-content: #f5fafa;
-	--color-secondary: #4db8a8;
-	--color-secondary-content: #f5fafa;
-	--color-accent: #a85860;
-	--color-accent-content: #f5fafa;
-	--color-neutral: #e8f4f5;
+	--color-primary: #1f7a6e;
+	--color-primary-content: #f7fbfb;
+	--color-secondary: #256f66;
+	--color-secondary-content: #f7fbfb;
+	--color-accent: #9e4048;
+	--color-accent-content: #f7fbfb;
+	--color-neutral: #eaf4f4;
 	--color-neutral-content: #2a3340;
-	--color-info: #5ba3c4;
-	--color-info-content: #f5fafa;
-	--color-success: #52c4a0;
-	--color-success-content: #1a2028;
-	--color-warning: #d4a574;
-	--color-warning-content: #1a2028;
-	--color-error: #c94b54;
-	--color-error-content: #f5fafa;
+	--color-info: #2f7d9c;
+	--color-info-content: #f7fbfb;
+	--color-success: #1f7a5e;
+	--color-success-content: #f7fbfb;
+	--color-warning: #8a5a1f;
+	--color-warning-content: #f7fbfb;
+	--color-error: #b3393f;
+	--color-error-content: #f7fbfb;
 
 	--radius-selector: 1rem;
 	--radius-field: 0.5rem;
-	--radius-box: 0.5rem;
+	--radius-box: 0.75rem;
 
 	--size-selector: 0.25rem;
 	--size-field: 0.25rem;
@@ -82,24 +98,143 @@
 	--noise: 0;
 }
 
+@theme {
+	--font-sans:
+		"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+		sans-serif;
+	--font-mono:
+		ui-monospace, "SFMono-Regular", "JetBrains Mono", "Fira Code",
+		"Cascadia Code", Menlo, Consolas, monospace;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		scroll-padding-top: 6rem;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		font-family: var(--font-sans);
+		line-height: 1.65;
+		text-rendering: optimizeLegibility;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4 {
+		scroll-margin-top: 6rem;
+		text-wrap: balance;
+	}
+
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+		border-radius: 0.25rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			/* biome-ignore lint/complexity/noImportantStyles: required to override motion for reduced-motion users */
+			animation-duration: 0.01ms !important;
+			/* biome-ignore lint/complexity/noImportantStyles: required to override motion for reduced-motion users */
+			animation-iteration-count: 1 !important;
+			/* biome-ignore lint/complexity/noImportantStyles: required to override motion for reduced-motion users */
+			transition-duration: 0.01ms !important;
+		}
+	}
+}
+
 ::selection {
-	@apply bg-primary/25;
+	background: color-mix(in oklab, var(--color-primary) 30%, transparent);
 }
 
 p a {
 	@apply link link-hover link-primary;
 }
 
+/* Small caps mono label used for section eyebrows and metadata. */
+.eyebrow {
+	@apply font-mono text-xs tracking-[0.2em] uppercase text-primary;
+}
+
+/* Card used for post lists and project entries. */
+.card-interactive {
+	@apply transition duration-200 ease-out;
+}
+
+.card-interactive:hover {
+	@apply border-primary/40 bg-base-200/40;
+}
+
+/* Independent masonry columns so each column flows at its own height. */
+.masonry {
+	columns: 1;
+	column-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+	.masonry {
+		columns: 2;
+	}
+}
+
+.masonry > * {
+	break-inside: avoid;
+	margin-bottom: 1rem;
+}
+
 .prose {
 	@apply max-w-none;
 	@apply prose-p:my-2 sm:prose-p:my-4;
 	@apply prose-headings:my-2 sm:prose-headings:my-4;
+	@apply prose-headings:font-bold prose-headings:tracking-tight;
 	@apply prose-li:my-1 sm:prose-li:my-2;
 	@apply prose-blockquote:my-2 sm:prose-blockquote:my-4;
 	@apply prose-pre:my-2 sm:prose-pre:my-4;
 
 	a {
-		@apply link link-hover link-secondary;
+		@apply link link-hover link-primary underline-offset-2;
+	}
+
+	strong {
+		@apply text-base-content;
+	}
+
+	code.shiki-inline {
+		@apply rounded bg-base-200/80 px-1.5 py-0.5 font-mono text-[0.85em] border border-base-content/10 before:content-none after:content-none;
+	}
+
+	blockquote {
+		@apply border-l-2 border-primary bg-primary/5 py-1 pr-4 not-italic font-normal rounded-r-lg;
+	}
+
+	blockquote p::before,
+	blockquote p::after {
+		@apply content-none;
+	}
+
+	img,
+	video {
+		@apply rounded-lg border border-base-300;
+	}
+
+	hr {
+		@apply border-base-300;
 	}
 
 	pre {
@@ -107,7 +242,7 @@ p a {
 	}
 
 	.shiki-wrapper {
-		@apply rounded-lg overflow-hidden p-0 bg-transparent border-0 shadow-none;
+		@apply relative rounded-lg overflow-hidden p-0 bg-transparent border-0 shadow-none;
 	}
 
 	.shiki-wrapper pre {
@@ -155,4 +290,45 @@ p a {
 	ol {
 		@apply pl-4 sm:pl-6;
 	}
+}
+
+/* Theme toggle icons: show the sun in dark mode and the moon in light mode. */
+.theme-icon-moon {
+	display: none;
+}
+
+.theme-icon-sun {
+	display: block;
+}
+
+[data-theme="teal_light"] .theme-icon-sun {
+	display: none;
+}
+
+[data-theme="teal_light"] .theme-icon-moon {
+	display: block;
+}
+
+@media (prefers-color-scheme: light) {
+	:root:not([data-theme]) .theme-icon-sun {
+		display: none;
+	}
+
+	:root:not([data-theme]) .theme-icon-moon {
+		display: block;
+	}
+}
+
+/* Copy-to-clipboard control injected into highlighted code blocks. */
+.code-copy {
+	@apply absolute top-2 right-2 z-10 rounded-md border border-white/15 bg-white/10 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-white/80 opacity-60 backdrop-blur transition;
+}
+
+.shiki-wrapper:hover .code-copy,
+.code-copy:focus-visible {
+	@apply opacity-100;
+}
+
+.code-copy:hover {
+	@apply bg-white/20 text-white;
 }

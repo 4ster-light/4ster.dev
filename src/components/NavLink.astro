@@ -1,4 +1,6 @@
 ---
+import { svgMaskUrl } from "../lib/icon.ts"
+
 interface Props {
 	href: string
 	target?: string
@@ -14,17 +16,32 @@ const {
 	icon,
 	label
 } = Astro.props
+
+const mask = svgMaskUrl(icon)
+
+const isInternal = href.startsWith("/")
+const currentPath = Astro.url.pathname
+const isActive =
+	isInternal && (currentPath === href || currentPath.startsWith(`${href}/`))
 ---
 
-<a {href} {target} {rel} class="btn gap-2">
-	<img
-		src={icon}
-		alt=""
+<a
+	{href}
+	{target}
+	{rel}
+	aria-label={label}
+	aria-current={isActive ? "page" : undefined}
+	class:list={[
+		"inline-flex items-center gap-2 rounded-lg px-3 py-2 font-mono text-xs tracking-wide transition-colors",
+		isActive
+			? "bg-primary/10 text-primary"
+			: "text-base-content/70 hover:bg-base-200 hover:text-base-content"
+	]}
+>
+	<span
 		aria-hidden="true"
-		width="24"
-		height="24"
-		decoding="async"
-		class="size-6 brightness-200"
-	>
+		class="inline-block size-4 bg-current"
+		style={`-webkit-mask-image:${mask};mask-image:${mask};-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`}
+	></span>
 	<span class="hidden sm:inline">{label}</span>
 </a>

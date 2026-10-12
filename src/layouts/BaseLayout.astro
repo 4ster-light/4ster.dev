@@ -2,9 +2,11 @@
 import "../styles/global.css"
 import { ClientRouter } from "astro:transitions"
 import NavLink from "../components/NavLink.astro"
-import codeIcon from "../icons/Code.svg?url"
-import linkIcon from "../icons/Link.svg?url"
-import loveIcon from "../icons/Love.svg?url"
+import articleIcon from "../icons/Article.svg?raw"
+import codeIcon from "../icons/Code.svg?raw"
+import loveIcon from "../icons/Love.svg?raw"
+import rssIcon from "../icons/Rss.svg?raw"
+import { svgMaskUrl } from "../lib/icon.ts"
 import site from "../lib/site.ts"
 
 interface Props {
@@ -41,12 +43,14 @@ const {
 
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, site.baseUrl).href
 const openGraphUrl = ogUrl ?? canonical
+const rssMask = svgMaskUrl(rssIcon)
 
 const navLinks = [
 	{
-		href: site.bio,
-		label: "Link Tree",
-		icon: linkIcon
+		href: site.blog,
+		label: "Blog",
+		icon: articleIcon,
+		target: ""
 	},
 	{
 		href: site.projects,
@@ -56,14 +60,14 @@ const navLinks = [
 	},
 	{
 		href: site.donate,
-		label: "Support Me",
+		label: "Support",
 		icon: loveIcon,
 		target: ""
 	}
 ]
 ---
 
-<html {lang} data-theme="teal_dark">
+<html {lang}>
 	<head>
 		<ClientRouter />
 		<meta charset="utf-8">
@@ -75,7 +79,7 @@ const navLinks = [
 		>
 		<meta
 			name="theme-color"
-			content="#f5fafa"
+			content="#f7fbfb"
 			media="(prefers-color-scheme: light)"
 		>
 		<meta name="color-scheme" content="dark light">
@@ -106,11 +110,50 @@ const navLinks = [
 
 		<title>{title}</title>
 		<link rel="icon" href="/pfp.jpg">
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="✰λster✰"
+			href={`${site.baseUrl}${site.rss}`}
+		>
 		<link rel="preconnect" href="https://github.com">
 		<link rel="preconnect" href="https://avatars.githubusercontent.com">
+		<link
+			rel="preload"
+			href="/fonts/Inter-Regular.ttf"
+			as="font"
+			type="font/ttf"
+			crossorigin
+		>
+		<link
+			rel="preload"
+			href="/fonts/Inter-Bold.ttf"
+			as="font"
+			type="font/ttf"
+			crossorigin
+		>
 		{jsonLd.map((schema) => (
 			<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 		))}
+		<script is:inline>
+		;(() => {
+			try {
+				const stored = localStorage.getItem("theme")
+				const prefersDark = window.matchMedia(
+					"(prefers-color-scheme: dark)"
+				).matches
+				const theme =
+					stored === "teal_light" || stored === "teal_dark"
+						? stored
+						: prefersDark
+							? "teal_dark"
+							: "teal_light"
+				document.documentElement.setAttribute("data-theme", theme)
+			} catch (_error) {
+				// Private mode or blocked storage: rely on the media query default.
+			}
+		})()
+		</script>
 	</head>
 	<body class="min-h-screen flex flex-col bg-base-100 text-base-content">
 		<a
@@ -120,36 +163,153 @@ const navLinks = [
 			Skip to content
 		</a>
 
-		<header class="border-b border-base-300 bg-base-200/30">
+		<header
+			class="sticky top-0 z-40 border-b border-base-300 bg-base-100/80 backdrop-blur"
+		>
 			<nav
-				class="max-w-4xl mx-auto p-4 lg:px-0 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4"
+				class="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-6 lg:px-0"
 			>
-				<a href={site.url} class="text-3xl link-hover font-bold text-secondary"
-					>✰λster✰</a
+				<a
+					href={site.url}
+					class="text-2xl font-bold tracking-tight text-primary transition-colors hover:text-secondary"
+					aria-label="✰λster✰ home"
 				>
+					✰λster✰
+				</a>
 
-				<div
-					class="flex flex-wrap items-center justify-center md:justify-end gap-2"
-				>
-					{navLinks.map((entry) => <NavLink {...entry} />)}
+				<div class="flex flex-1 items-center justify-end gap-1">
+					<div class="flex items-center gap-1">
+						{navLinks.map((entry) => <NavLink {...entry} />)}
+					</div>
+
+					<a
+						href={site.rss}
+						class="inline-flex size-9 items-center justify-center rounded-lg text-base-content/70 transition-colors hover:bg-base-200 hover:text-base-content"
+						aria-label="Subscribe via RSS"
+						title="RSS feed"
+					>
+						<span
+							aria-hidden="true"
+							class="inline-block size-[18px] bg-current"
+							style={`-webkit-mask-image:${rssMask};mask-image:${rssMask};-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`}
+						></span>
+						<span class="sr-only">RSS</span>
+					</a>
+
+					<button
+						type="button"
+						data-theme-toggle
+						class="inline-flex size-9 items-center justify-center rounded-lg text-base-content/70 transition-colors hover:bg-base-200 hover:text-base-content"
+						aria-label="Toggle color theme"
+					>
+						<svg
+							class="theme-icon theme-icon-sun size-[18px]"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<circle cx="12" cy="12" r="4"></circle>
+							<path
+								d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+							></path>
+						</svg>
+						<svg
+							class="theme-icon theme-icon-moon size-[18px]"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+						</svg>
+					</button>
 				</div>
 			</nav>
 		</header>
 
 		<main
 			id="main-content"
-			class="max-w-4xl mx-auto p-4 sm:p-8 lg:px-0 flex-1 w-full"
+			class="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-8 sm:px-6 sm:py-12 lg:px-0"
 		>
 			<slot />
 		</main>
 
 		<footer class="border-t border-base-300 bg-base-200/40">
-			<div class="max-w-4xl mx-auto py-4 text-center text-base-content/70">
-				<p>
-					© {new Date().getFullYear()} ✰λster✰ ·{" "}
+			<div
+				class="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 px-4 py-8 text-center font-mono text-xs text-base-content/60 sm:flex-row sm:px-6 sm:text-left lg:px-0"
+			>
+				<p>© {new Date().getFullYear()} ✰λster✰ · David Vivar Bogónez</p>
+				<nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+					<a href={site.blog} class="link link-hover">Blog</a>
+					<a href={site.projects} class="link link-hover">Projects</a>
+					<a href={site.rss} class="link link-hover">RSS</a>
 					<a href="/license" class="link link-hover">Licensing</a>
-				</p>
+				</nav>
 			</div>
 		</footer>
 	</body>
 </html>
+
+<script>
+const applyStoredTheme = () => {
+	try {
+		const stored = localStorage.getItem("theme")
+		if (stored === "teal_light" || stored === "teal_dark") {
+			document.documentElement.setAttribute("data-theme", stored)
+		}
+	} catch (_error) {
+		// Storage unavailable: keep the current theme.
+	}
+}
+
+const updateThemeToggle = () => {
+	const button = document.querySelector("[data-theme-toggle]")
+	if (!button) return
+	const isDark =
+		document.documentElement.getAttribute("data-theme") === "teal_dark"
+	const label = isDark ? "Switch to light theme" : "Switch to dark theme"
+	button.setAttribute("aria-label", label)
+	button.setAttribute("title", label)
+}
+
+const toggleTheme = () => {
+	const root = document.documentElement
+	const isDark = root.getAttribute("data-theme") === "teal_dark"
+	const theme = isDark ? "teal_light" : "teal_dark"
+	root.setAttribute("data-theme", theme)
+	try {
+		localStorage.setItem("theme", theme)
+	} catch (_error) {
+		// Storage unavailable: the preference simply won't persist.
+	}
+	updateThemeToggle()
+}
+
+document.addEventListener("click", (event) => {
+	const target = event.target as Element | null
+	if (!target?.closest("[data-theme-toggle]")) return
+	toggleTheme()
+})
+
+// The ClientRouter rebuilds the <html> attributes from each page, so re-apply
+// the stored preference right after every swap (and on initial load).
+document.addEventListener("astro:after-swap", () => {
+	applyStoredTheme()
+	updateThemeToggle()
+})
+
+document.addEventListener("astro:page-load", () => {
+	applyStoredTheme()
+	updateThemeToggle()
+})
+
+applyStoredTheme()
+updateThemeToggle()
+</script>
