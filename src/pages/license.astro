@@ -13,9 +13,12 @@ import site from "../lib/site.ts"
 	canonicalUrl={`${site.baseUrl}/license`}
 	ogUrl={`${site.baseUrl}/license`}
 >
-	<h1 class="text-3xl md:text-4xl font-bold mb-8">Licensing</h1>
+	<header class="mb-8 flex flex-col gap-3 border-b border-base-300 pb-8">
+		<p class="eyebrow">Legal</p>
+		<h1 class="text-3xl font-bold tracking-tight md:text-4xl">Licensing</h1>
+	</header>
 
-	<div class="prose prose-invert max-w-none">
+	<div class="prose max-w-[72ch]">
 		<h2>Blog content</h2>
 		<p>
 			All blog posts, their text and content, in both English and Spanish that
@@ -34,8 +37,7 @@ import site from "../lib/site.ts"
 			This means you are free to share and adapt the material for non-commercial
 			purposes, provided that you give appropriate credit, link to the license,
 			indicate if changes were made, and distribute your contributions under the
-			same license. © 2024 –
-			{new Date().getFullYear()}
+			same license. © 2024-{new Date().getFullYear()}
 			David Vivar Bogónez (✰λster✰).
 		</p>
 		<p style="text-align: center;">
