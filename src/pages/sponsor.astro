@@ -32,50 +32,66 @@ const cryptoAddresses = {
 		}
 	]}
 >
-	<div class="space-y-8">
-		<h1 class="text-4xl font-bold text-secondary mb-8">Support Me</h1>
-		<section>
-			<h3 class="text-xl font-semibold mb-4">Github Sponsors</h3>
-			<div class="flex justify-center overflow-x-auto">
+	<div class="flex flex-col gap-12">
+		<header class="flex flex-col gap-3 border-b border-base-300 pb-8">
+			<p class="eyebrow">Support</p>
+			<h1 class="text-3xl font-bold tracking-tight md:text-4xl">
+				Support my work
+			</h1>
+			<p class="max-w-[70ch] text-base-content/70">
+				Everything I publish is free and open source. If it has been useful to
+				you, here are a few ways you can support it.
+			</p>
+		</header>
+
+		<section class="flex flex-col gap-4">
+			<h2 class="text-xl font-semibold tracking-tight">GitHub Sponsors</h2>
+			<div class="flex justify-center">
 				<iframe
 					src="https://github.com/sponsors/4ster-light/card"
 					title="Sponsor 4ster-light"
-					class="h-62.5 md:h-31.25 w-full border border-primary rounded-lg"
+					width="600"
+					height="150"
+					class="w-full max-w-150 rounded-lg border border-primary/30"
 				></iframe>
 			</div>
 		</section>
 
-		<section>
-			<h3 class="text-xl font-semibold mb-4">Subscribe to My Substack</h3>
+		<section class="flex flex-col gap-4">
+			<h2 class="text-xl font-semibold tracking-tight">
+				Subscribe on Substack
+			</h2>
 			<div class="flex justify-center overflow-x-auto">
 				<iframe
 					src="https://4sterlight.substack.com/embed"
 					height="320"
 					title="Subscribe to my Substack publication"
-					class="w-full border border-primary rounded-lg"
+					class="w-full border border-primary/30 rounded-lg"
 				></iframe>
 			</div>
 		</section>
 
-		<section>
-			<h3 class="text-xl font-semibold mb-4">Cryptocurrency Donations</h3>
-			<p class="mb-6">
+		<section class="flex flex-col gap-4">
+			<h2 class="text-xl font-semibold tracking-tight">
+				Cryptocurrency donations
+			</h2>
+			<p class="max-w-[70ch] text-base-content/70">
 				You can also send cryptocurrency to any of the following wallet
-				addresses if preferred:
+				addresses if preferred.
 			</p>
-			<ul class="space-y-4">
+			<ul class="flex flex-col gap-3">
 				{Object.entries(cryptoAddresses).map(([coin, address]) => (
 					<li class="flex items-center gap-3 font-mono text-sm">
-						<strong class="w-10">{coin}:</strong>
+						<strong class="w-10 text-base-content/70">{coin}</strong>
 						<code
-							class="text-xs bg-base-200 px-2 py-1 rounded border border-base-300 flex-1 truncate"
+							class="flex-1 truncate rounded-md border border-base-300 bg-base-200/60 px-2 py-1 text-xs"
 							title={address}
 						>
-							{address.slice(0, 6)}...{address.slice(-4)}
+							{address}
 						</code>
 						<button
 							type="button"
-							class="btn btn-sm btn-outline btn-primary"
+							class="btn btn-sm btn-outline"
 							data-copy-address={address}
 						>
 							Copy
@@ -87,17 +103,19 @@ const cryptoAddresses = {
 	</div>
 
 	<script>
-	document.querySelectorAll("[data-copy-address]").forEach((button) => {
-		button.addEventListener("click", () => {
-			const target = button.getAttribute("data-copy-address") || ""
-			navigator.clipboard.writeText(target).then(() => {
-				const previous = button.textContent
-				button.textContent = "✓"
-				setTimeout(() => {
-					button.textContent = previous
-				}, 1000)
+	document
+		.querySelectorAll<HTMLButtonElement>("[data-copy-address]")
+		.forEach((button) => {
+			button.addEventListener("click", () => {
+				const target = button.getAttribute("data-copy-address") || ""
+				navigator.clipboard.writeText(target).then(() => {
+					const previous = button.textContent
+					button.textContent = "Copied"
+					setTimeout(() => {
+						button.textContent = previous
+					}, 1200)
+				})
 			})
 		})
-	})
 	</script>
 </BaseLayout>
