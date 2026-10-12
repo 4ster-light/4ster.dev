@@ -1,0 +1,102 @@
+---
+import { getCollection } from "astro:content"
+import LanguageFilter from "../../components/LanguageFilter.astro"
+import PostMeta from "../../components/PostMeta.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import site from "../../lib/site.ts"
+
+export const prerender = true
+
+const posts = (await getCollection("posts"))
+	.filter((post) => !post.data["is-preview"])
+	.sort(
+		(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
+	)
+
+const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
+const esPosts = posts.filter((post) => post.data.lang === "es")
+const initialPosts = enPosts.length > 0 ? "en" : "es"
+
+const toCard = (post: (typeof posts)[number]) => ({
+	slug: post.slug,
+	...post.data,
+	body: post.body
+})
+
+const canonicalUrl = `${site.baseUrl}${site.blog}`
+---
+
+<BaseLayout
+	title="Blog | ✰λster✰"
+	description="Articles about programming, computer science, interpreters, and open source by David Vivar Bogónez (Aster)."
+	ogTitle="Blog | ✰λster✰"
+	ogDescription="Articles about programming, computer science, interpreters, and open source by David Vivar Bogónez (Aster)."
+	ogUrl={canonicalUrl}
+	{canonicalUrl}
+	jsonLd={[
+		{
+			"@context": "https://schema.org",
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{ "@type": "ListItem", position: 1, name: "Home", item: site.baseUrl },
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Blog",
+					item: canonicalUrl
+				}
+			]
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "Blog",
+			name: "✰λster✰ blog",
+			url: canonicalUrl,
+			description:
+				"Articles about programming, computer science, interpreters, and open source by David Vivar Bogónez (Aster)."
+		}
+	]}
+>
+	<div class="flex flex-col gap-10">
+		<header class="flex flex-col gap-3 border-b border-base-300 pb-8">
+			<p class="eyebrow">Writing</p>
+			<h1 class="text-3xl font-bold tracking-tight md:text-4xl">
+				Notes on programming and computer science
+			</h1>
+			<p class="max-w-[70ch] text-base-content/70">
+				I write about the things I am learning and building: interpreters,
+				procedural generation, tooling, and whatever else catches my attention.
+				Some posts are in English and some in Spanish, so use the buttons below
+				to switch.
+			</p>
+		</header>
+
+		<LanguageFilter
+			enCount={enPosts.length}
+			esCount={esPosts.length}
+			initial={initialPosts}
+		/>
+
+		<section
+			data-post-panel="en"
+			class:list={["masonry", initialPosts !== "en" && "hidden"]}
+		>
+			{enPosts.length > 0 ? (
+				enPosts.map((post) => <PostMeta post={toCard(post)} headingLevel={2} />)
+			) : (
+				<p class="text-base-content/60">No English posts yet.</p>
+			)}
+		</section>
+
+		<section
+			data-post-panel="es"
+			class:list={["masonry", initialPosts !== "es" && "hidden"]}
+		>
+			{esPosts.length > 0 ? (
+				esPosts.map((post) => <PostMeta post={toCard(post)} headingLevel={2} />)
+			) : (
+				<p class="text-base-content/60">Ningún post en Español por ahora...</p>
+			)}
+		</section>
+	</div>
+</BaseLayout>

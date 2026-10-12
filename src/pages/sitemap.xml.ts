@@ -33,6 +33,7 @@ const posts = await getCollection("posts")
 
 const urls: SitemapEntry[] = [
 	{ url: site.baseUrl },
+	{ url: `${site.baseUrl}/blog` },
 	{ url: `${site.baseUrl}/projects` },
 	{ url: `${site.baseUrl}/sponsor` }
 ]
