@@ -4,6 +4,8 @@ import ReposCard from "../../components/ReposCard.astro"
 import leftArrowsIcon from "../../icons/LeftArrows.svg?url"
 import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
+import { formatUpdated } from "../../lib/format.ts"
+import { languageColor } from "../../lib/languages.ts"
 import { fetchProjects } from "../../lib/projects.ts"
 import site from "../../lib/site.ts"
 
@@ -11,6 +13,8 @@ export const prerender = true
 
 const githubToken = import.meta.env.GH_API ?? ""
 const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
+
+const canonicalUrl = `${site.baseUrl}/projects`
 ---
 
 <BaseLayout
@@ -18,7 +22,8 @@ const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 	description="Open source projects by Aster, including libraries, tools, and experiments."
 	ogTitle="Open Source Projects | Aster"
 	ogDescription="Open source projects by Aster, including libraries, tools, and experiments."
-	ogUrl={`${site.baseUrl}/projects`}
+	ogUrl={canonicalUrl}
+	{canonicalUrl}
 	jsonLd={[
 		{
 			"@context": "https://schema.org",
@@ -29,7 +34,7 @@ const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 					"@type": "ListItem",
 					position: 2,
 					name: "Projects",
-					item: `${site.baseUrl}/projects`
+					item: canonicalUrl
 				}
 			]
 		},
@@ -37,19 +42,17 @@ const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 			"@context": "https://schema.org",
 			"@type": "CollectionPage",
 			name: "Open Source Projects",
-			url: `${site.baseUrl}/projects`,
+			url: canonicalUrl,
 			description:
 				"Open source projects by Aster, including libraries, tools, and experiments."
 		}
 	]}
 >
-	<h1 class="sr-only">Open Source Projects</h1>
-
 	{!repositories.length ? (
 		<>
-			<div class="text-center py-16">
-				<h2 class="text-3xl font-bold mb-4 text-error">Projects Not Found</h2>
-				<p class="text-base-content/70 mb-6">
+			<div class="py-16 text-center">
+				<h1 class="mb-4 text-3xl font-bold text-error">Projects Not Found</h1>
+				<p class="mb-6 text-base-content/70">
 					The projects you're looking for aren't loading right now.
 				</p>
 				<ButtonLink href={site.url} target="" ariaLabel="Back to home">
@@ -66,58 +69,103 @@ const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 			<ReposCard />
 		</>
 	) : (
-		<>
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+		<div class="flex flex-col gap-10">
+			<header class="flex flex-col gap-3">
+				<p class="eyebrow">Open source</p>
+				<h1 class="text-3xl font-bold tracking-tight md:text-4xl">Projects</h1>
+				<p class="max-w-[70ch] text-base-content/70">
+					Some of the open source projects I maintain. Pick one to read its
+					README, or head over to GitHub to see everything else.
+				</p>
+			</header>
+
+			<div class="masonry">
 				{repositories.map((repo) => (
-					<article class="card card-border bg-base-100 hover:bg-base-200/40 transition-colors">
-						<div class="card-body p-5">
-							<div class="flex flex-col md:flex-row md:justify-between md:items-baseline gap-3">
-								<h3 class="card-title text-lg m-0">
-									<a
-										href={`/projects/${repo.name}`}
-										class="link link-hover link-primary"
-									>
-										{repo.name}
-									</a>
-								</h3>
-								<div class="flex gap-4 text-sm font-mono text-base-content/60">
-									<span>{repo.stars} ⭐</span>
-									<span>{repo.forks} forks</span>
-								</div>
-							</div>
-
-							{repo.description && (
-								<p class="text-sm text-base-content/70">{repo.description}</p>
-							)}
-
-							<div class="flex gap-2 text-xs font-mono text-base-content/60 flex-wrap items-center">
-								{repo.language && (
-									<span class="badge badge-sm badge-outline">
-										{repo.language}
-									</span>
-								)}
-								<span>Updated at {repo.updated_at}</span>
+					<article class="card-interactive group relative rounded-xl border border-base-300 bg-base-100 p-5">
+						<div class="flex items-start justify-between gap-3">
+							<h2 class="text-lg font-semibold tracking-tight">
 								<a
-									href={repo.url}
-									target="_blank"
-									rel="noopener"
-									class="btn btn-ghost btn-sm ml-auto"
+									href={`/projects/${repo.name}`}
+									class="relative z-10 transition-colors after:absolute after:inset-0 group-hover:text-primary"
 								>
-									View on GitHub
+									{repo.name}
 								</a>
+							</h2>
+							<div class="flex shrink-0 items-center gap-3 font-mono text-xs text-base-content/60">
+								<span class="inline-flex items-center gap-1">
+									<svg
+										class="size-3.5"
+										viewBox="0 0 24 24"
+										fill="currentColor"
+										aria-hidden="true"
+									>
+										<path d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"></path>
+									</svg>
+									{repo.stars}
+								</span>
+								<span class="inline-flex items-center gap-1">
+									<svg
+										class="size-3.5"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										aria-hidden="true"
+									>
+										<circle cx="6" cy="6" r="2.5"></circle>
+										<circle cx="18" cy="6" r="2.5"></circle>
+										<circle cx="12" cy="18" r="2.5"></circle>
+										<path d="M6 8.5V13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8.5M12 15v.5"></path>
+									</svg>
+									{repo.forks}
+								</span>
 							</div>
+						</div>
+
+						{repo.description && (
+							<p class="mt-2 text-sm text-base-content/70 leading-relaxed">
+								{repo.description}
+							</p>
+						)}
+
+						{repo.topics && repo.topics.length > 0 && (
+							<ul class="mt-3 flex flex-wrap gap-1.5">
+								{repo.topics.slice(0, 4).map((topic) => (
+									<li class="rounded bg-base-200 px-1.5 py-0.5 font-mono text-[0.65rem] text-base-content/60">
+										{topic}
+									</li>
+								))}
+							</ul>
+						)}
+
+						<div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-base-content/50">
+							{repo.language && (
+								<span class="inline-flex items-center gap-1.5">
+									<span
+										class="inline-block size-2.5 rounded-full"
+										style={`background-color:${languageColor(repo.language)}`}
+										aria-hidden="true"
+									/>
+									{repo.language}
+								</span>
+							)}
+							<span>{formatUpdated(repo.updated_at)}</span>
+							<a
+								href={repo.url}
+								target="_blank"
+								rel="noopener"
+								class="relative z-20 ml-auto link link-hover link-primary"
+							>
+								GitHub ↗
+							</a>
 						</div>
 					</article>
 				))}
 			</div>
 
-			<div class="my-8" />
-
 			<ReposCard />
 
-			<div class="my-8" />
-
-			<footer class="border-base-300 flex justify-end items-center gap-4 flex-col sm:flex-row">
+			<footer class="flex flex-col items-center justify-end gap-4 sm:flex-row">
 				<ButtonLink href={site.url} target="" ariaLabel="Back to home">
 					<img
 						src={leftArrowsIcon}
@@ -127,14 +175,16 @@ const repositories = await fetchProjects(githubToken, { fallbackToSite: true })
 						decoding="async"
 						class="size-8"
 					/>
+					Home
 				</ButtonLink>
 				<ButtonLink
 					href={site.githubSponsors}
 					ariaLabel="Sponsor me on GitHub Sponsors"
 				>
-					<img src={loveIcon} alt="" class="size-6" /> Sponsor
+					<img src={loveIcon} alt="" class="size-6" />
+					Sponsor
 				</ButtonLink>
 			</footer>
-		</>
+		</div>
 	)}
 </BaseLayout>

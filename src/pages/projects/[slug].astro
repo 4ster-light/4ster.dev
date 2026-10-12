@@ -4,6 +4,8 @@ import ReposCard from "../../components/ReposCard.astro"
 import leftArrowsIcon from "../../icons/LeftArrows.svg?url"
 import loveIcon from "../../icons/Love.svg?url"
 import BaseLayout from "../../layouts/BaseLayout.astro"
+import { formatUpdated } from "../../lib/format.ts"
+import { languageColor } from "../../lib/languages.ts"
 import { fetchProjectReadme, fetchProjects } from "../../lib/projects.ts"
 import site from "../../lib/site.ts"
 
@@ -72,77 +74,109 @@ const canonicalUrl = `${site.baseUrl}/projects/${repository.name}`
 		},
 		{
 			"@context": "https://schema.org",
-			"@type": "CollectionPage",
+			"@type": "SoftwareSourceCode",
 			name: repository.name,
 			url: canonicalUrl,
-			description
+			description,
+			codeRepository: repository.url,
+			programmingLanguage: repository.language
 		}
 	]}
 >
 	<article class="flex flex-col gap-8">
-		<h1 class="text-3xl font-bold text-secondary">{repository.name}</h1>
-		<p class="text-base-content/70">{description}</p>
-		<h2 class="text-xl font-bold">Repository Information</h2>
-		<div class="overflow-x-auto">
-			<table class="table table-xs sm:table-sm border border-base-200">
-				<tbody>
-					<tr>
-						<th class="text-left">Language</th>
-						<td>{repository.language || "Not specified"}</td>
-					</tr>
-					<tr>
-						<th class="text-left">Stars</th>
-						<td>{repository.stars}</td>
-					</tr>
-					<tr>
-						<th class="text-left">Forks</th>
-						<td>{repository.forks}</td>
-					</tr>
-					<tr>
-						<th class="text-left">Last Updated</th>
-						<td>{repository.updated_at}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<header class="flex flex-col gap-3 border-b border-base-300 pb-8">
+			<p class="eyebrow">Project</p>
+			<h1 class="text-3xl font-bold tracking-tight md:text-4xl">
+				{repository.name}
+			</h1>
+			<p class="max-w-[70ch] text-base-content/70">{description}</p>
+			<div
+				class="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-base-content/60"
+			>
+				{repository.language && (
+					<span class="inline-flex items-center gap-1.5">
+						<span
+							class="inline-block size-2.5 rounded-full"
+							style={`background-color:${languageColor(repository.language)}`}
+							aria-hidden="true"
+						/>
+						{repository.language}
+					</span>
+				)}
+				<span class="inline-flex items-center gap-1.5">
+					<svg
+						class="size-3.5"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						aria-hidden="true"
+					>
+						<path
+							d="m12 2 3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"
+						></path>
+					</svg>
+					{repository.stars}
+				</span>
+				<span class="inline-flex items-center gap-1.5">
+					<svg
+						class="size-3.5"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						aria-hidden="true"
+					>
+						<circle cx="6" cy="6" r="2.5"></circle>
+						<circle cx="18" cy="6" r="2.5"></circle>
+						<circle cx="12" cy="18" r="2.5"></circle>
+						<path
+							d="M6 8.5V13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8.5M12 15v.5"
+						></path>
+					</svg>
+					{repository.forks}
+				</span>
+				<span>{formatUpdated(repository.updated_at)}</span>
+			</div>
+		</header>
 
-		<a href={repository.url} target="_blank" rel="noopener" class="btn w-full"
-			>View on GitHub</a
+		<a
+			href={repository.url}
+			target="_blank"
+			rel="noopener"
+			class="btn btn-primary gap-2 self-start"
 		>
+			View on GitHub ↗
+		</a>
 
 		<section
-			class="prose prose-sm sm:prose-base card card-border rounded-2xl p-4 sm:p-8 bg-info/5 overflow-hidden"
-			set:html={repository.readme || ""}
+			class="prose card card-border rounded-2xl bg-base-200/20 p-5 sm:p-8 overflow-hidden"
+			set:html={repository.readme || "<p>No README available.</p>"}
 		/>
 
 		<ReposCard />
 
-		<footer
-			class="flex justify-between items-center gap-4 flex-col sm:flex-row"
-		>
-			<div class="flex gap-2 sm:ml-auto">
-				<ButtonLink href={site.projects} target="" ariaLabel="Back to projects">
-					<img
-						src={leftArrowsIcon}
-						alt=""
-						width="32"
-						height="32"
-						decoding="async"
-						class="size-8"
-					>
-				</ButtonLink>
-				<ButtonLink href={site.donate} ariaLabel="Sponsor me">
-					<img
-						src={loveIcon}
-						alt=""
-						width="24"
-						height="24"
-						decoding="async"
-						class="size-6"
-					>
-					Sponsor
-				</ButtonLink>
-			</div>
+		<footer class="flex flex-col items-center justify-end gap-4 sm:flex-row">
+			<ButtonLink href={site.projects} target="" ariaLabel="Back to projects">
+				<img
+					src={leftArrowsIcon}
+					alt=""
+					width="32"
+					height="32"
+					decoding="async"
+					class="size-8"
+				>
+				Projects
+			</ButtonLink>
+			<ButtonLink href={site.donate} ariaLabel="Sponsor me">
+				<img
+					src={loveIcon}
+					alt=""
+					width="24"
+					height="24"
+					decoding="async"
+					class="size-6"
+				>
+				Sponsor
+			</ButtonLink>
 		</footer>
 	</article>
 </BaseLayout>

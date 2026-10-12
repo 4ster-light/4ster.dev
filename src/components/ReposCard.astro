@@ -1,18 +1,28 @@
-<div
-	class="alert alert-info bg-primary/10 border-primary/20 p-5 flex justify-center"
+---
+interface Props {
+	href?: string
+	label?: string
+	text?: string
+}
+
+const {
+	href = "https://github.com/4ster-light?tab=repositories",
+	label = "View all repositories on GitHub",
+	text = "Want to see more? Visit my GitHub profile for all of my repositories and contributions."
+} = Astro.props
+---
+
+<section
+	class="rounded-xl border border-primary/20 bg-primary/5 p-6 text-center"
 >
-	<div class="gap-3 items-center text-center">
-		<p class="text-base-content/80 mb-2">
-			Want to see more? Visit my GitHub page for all my repositories and
-			contributions.
-		</p>
-		<a
-			href="https://github.com/4ster-light?tab=repositories"
-			target="_blank"
-			rel="noopener"
-			class="btn btn-sm btn-primary"
-		>
-			View All Repositories on GitHub →
-		</a>
-	</div>
-</div>
+	<p class="text-base-content/80">{text}</p>
+	<a
+		href={href}
+		target="_blank"
+		rel="noopener"
+		class="btn btn-sm btn-primary mt-4 gap-2"
+	>
+		{label}
+		<span aria-hidden="true">→</span>
+	</a>
+</section>

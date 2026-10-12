@@ -19,6 +19,7 @@ export interface Repository {
 	stars: number
 	forks: number
 	language?: string
+	topics?: string[]
 	updated_at: string
 	readme?: string
 }
@@ -32,6 +33,7 @@ interface RawRepository {
 	stargazers_count: number
 	forks: number
 	language?: string
+	topics?: string[]
 	updated_at: string
 }
 
@@ -157,7 +159,8 @@ async function fetchRepositoriesFromGitHub(
 			stars: repo.stargazers_count,
 			forks: repo.forks,
 			language: repo.language,
-			updated_at: new Date(repo.updated_at).toLocaleDateString()
+			topics: repo.topics ?? [],
+			updated_at: repo.updated_at
 		}))
 }
 
