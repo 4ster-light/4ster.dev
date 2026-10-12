@@ -65,6 +65,19 @@ tags: ["personal"]
 Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
 pnpm.
 
+## Social preview image
+
+`public/og.png` is generated from `src/assets/og.svg`. Social platforms don't render SVG
+`og:image` files, so the raster version is the one that is served. To regenerate it after editing
+the SVG:
+
+```sh
+# Inter is served from public/fonts; install it so the renderer can use it
+cp public/fonts/Inter-*.ttf ~/.local/share/fonts/ && fc-cache -f
+firefox --headless --window-size=1200,630 \
+  --screenshot=public/og.png "file://$PWD/src/assets/og.svg"
+```
+
 ## Tech Stack
 
 - **Frontend**: Daisyui 5 + Tailwind CSS 4 + Astro

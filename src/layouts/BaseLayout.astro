@@ -98,6 +98,9 @@ const navLinks = [
 			<link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
 		))}
 		<meta property="og:image" content={ogImage}>
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:image:alt" content={`${ogTitle} preview card`}>
 
 		<meta name="twitter:title" content={ogTitle}>
 		<meta name="twitter:description" content={ogDescription}>
@@ -105,7 +108,7 @@ const navLinks = [
 		<meta name="twitter:creator" content="@4ster_light">
 		<meta name="twitter:site" content="@4ster_light">
 		<meta name="twitter:image" content={ogImage}>
-		<meta property="twitter:image:height" content="600">
+		<meta property="twitter:image:height" content="630">
 		<meta property="twitter:image:width" content="1200">
 
 		<title>{title}</title>
@@ -190,7 +193,7 @@ const navLinks = [
 					>
 						<span
 							aria-hidden="true"
-							class="inline-block size-[18px] bg-current"
+							class="inline-block size-4.5 bg-current"
 							style={`-webkit-mask-image:${rssMask};mask-image:${rssMask};-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`}
 						></span>
 						<span class="sr-only">RSS</span>
@@ -203,7 +206,7 @@ const navLinks = [
 						aria-label="Toggle color theme"
 					>
 						<svg
-							class="theme-icon theme-icon-sun size-[18px]"
+							class="theme-icon theme-icon-sun size-4.5"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
@@ -218,7 +221,7 @@ const navLinks = [
 							></path>
 						</svg>
 						<svg
-							class="theme-icon theme-icon-moon size-[18px]"
+							class="theme-icon theme-icon-moon size-4.5"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
