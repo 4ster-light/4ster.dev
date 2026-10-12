@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content"
+import LanguageFilter from "../components/LanguageFilter.astro"
 import PostMeta from "../components/PostMeta.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
+import { FEATURED_REPOS } from "../lib/projects.ts"
 import site from "../lib/site.ts"
 
 const posts = (await getCollection("posts"))
@@ -13,6 +15,15 @@ const posts = (await getCollection("posts"))
 const enPosts = posts.filter((post) => (post.data.lang || "en") === "en")
 const esPosts = posts.filter((post) => post.data.lang === "es")
 const initialPosts = enPosts.length > 0 ? "en" : "es"
+const recentLimit = 4
+
+const toCard = (post: (typeof posts)[number]) => ({
+	slug: post.slug,
+	...post.data,
+	body: post.body
+})
+
+const featured = FEATURED_REPOS.slice(0, 6)
 ---
 
 <BaseLayout
@@ -36,155 +47,239 @@ const initialPosts = enPosts.length > 0 ? "en" : "es"
 			name: "✰λster✰",
 			url: site.baseUrl,
 			logo: `${site.baseUrl}/pfp.jpg`,
-			sameAs: [site.substack, site.githubSponsors, site.bio]
+			sameAs: [
+				site.github,
+				site.linkedin,
+				site.substack,
+				site.githubSponsors,
+				site.bio
+			]
 		}
 	]}
 >
-	<h1 class="sr-only">
-		David Vivar Bogónez, software developer and programmer
-	</h1>
-
-	<section
-		class="flex gap-4 items-center md:flex-row flex-col md:text-left text-center"
-	>
-		<picture class="w-24 h-24 shrink-0 block overflow-hidden rounded-lg">
-			<source srcset="/pfp-320.webp" type="image/webp">
-			<img
-				src="/pfp.jpg"
-				alt="Avatar"
-				width="736"
-				height="736"
-				decoding="async"
-				fetchpriority="high"
-				class="w-full h-full object-cover"
-			>
-		</picture>
-		<p class="m-0 text-base-content/80">
-			Hi, I am <strong class="text-primary">David Vivar Bogónez</strong>, a
-			Spanish open source developer most known as
-			<strong class="text-primary">Aster</strong>, I am a computer engineering
-			undergraduate at
-			<a href={site.uni} target="_blank" rel="noopener noreferrer">ESI-UCLM</a>.
-			I am very passionate about software and computers in general, I use
-			technologies like Python, TypeScript, Rust, Kotlin and Preact, among
-			others.
-		</p>
-	</section>
-
-	<div class="divider"></div>
-
-	<section>
-		<h2 class="text-2xl font-bold mb-4 text-secondary">Projects</h2>
-		<p class="text-base-content/80 leading-relaxed">
-			I also have some open source projects of my own, you can check them out on
-			my <a href={site.projects}>projects page</a>. The most significant ones
-			are pinned on my
-			<a href={site.githubSponsors} target="_blank" rel="noopener noreferrer"
-				>GitHub Sponsors Profile</a
-			>.
-		</p>
-	</section>
-
-	<div class="divider"></div>
-
-	<section>
-		<h2 class="text-2xl font-bold text-secondary mb-6">Blog Posts</h2>
-		<p class="text-base-content/80 mb-8">
-			Hey! Welcome to my blog. Here you'll find articles about all sorts of
-			topics related to computer science and programming. Know that you can find
-			more (some not published here) posts on my
-			<a href={site.substack} target="_blank" rel="noopener noreferrer"
-				>Substack</a
-			>
-			publication.
-		</p>
-
-		<div
-			class="flex flex-wrap gap-2 mb-8"
-			role="tablist"
-			aria-label="Blog post language filter"
+	<div class="flex flex-col gap-16">
+		<section
+			class="flex flex-col items-start gap-6 sm:flex-row sm:items-center"
 		>
-			<button
-				type="button"
-				class="btn btn-sm btn-primary"
-				data-post-filter="en"
-				aria-pressed="true"
+			<picture
+				class="block size-28 shrink-0 overflow-hidden rounded-2xl ring-2 ring-primary/30 ring-offset-2 ring-offset-base-100"
 			>
-				English 🇬🇧
-				<span class="ml-1 badge badge-soft badge-primary"
-					>{enPosts.length}</span
+				<source srcset="/pfp-320.webp" type="image/webp">
+				<img
+					src="/pfp.jpg"
+					alt="Portrait of David Vivar Bogónez"
+					width="736"
+					height="736"
+					decoding="async"
+					fetchpriority="high"
+					class="h-full w-full object-cover"
 				>
-			</button>
-			<button
-				type="button"
-				class="btn btn-sm btn-ghost"
-				data-post-filter="es"
-				aria-pressed="false"
-			>
-				Español 🇪🇸
-				<span class="ml-1 badge badge-soft badge-secondary"
-					>{esPosts.length}</span
-				>
-			</button>
-		</div>
+			</picture>
 
-		<section class="space-y-6" data-post-panel="en">
-			{enPosts.length > 0 ? (
-				<div class="space-y-10">
-					{enPosts.map((post) => (
-						<PostMeta post={{ slug: post.slug, ...post.data }} />
-					))}
+			<div class="flex flex-col gap-4">
+				<div>
+					<p class="eyebrow">Open source developer</p>
+					<h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+						David Vivar Bogónez
+						<span class="text-base-content/40">/ Aster</span>
+					</h1>
+					<p class="mt-2 font-mono text-sm text-base-content/60">
+						Python · Rust · TypeScript · SQL · Docker/Podman · Java
+					</p>
 				</div>
-			) : (
-				<p class="text-base-content/60">No English posts yet.</p>
-			)}
+
+				<div class="flex flex-wrap gap-2">
+					<a
+						href={site.github}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn btn-sm btn-outline gap-2"
+					>
+						<svg
+							class="size-4"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.35.78 1.05.78 2.12v3.14c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"
+							></path>
+						</svg>
+						GitHub
+					</a>
+					<a
+						href={site.linkedin}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn btn-sm btn-outline gap-2"
+					>
+						<svg
+							class="size-4"
+							viewBox="0 0 24 24"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM3 8.5h3.9V21H3V8.5Zm6.5 0h3.74v1.71h.05c.52-.98 1.8-2.02 3.7-2.02C21.4 8.19 22 10.5 22 13.6V21h-3.9v-6.56c0-1.56-.03-3.57-2.18-3.57-2.18 0-2.51 1.7-2.51 3.46V21H9.5V8.5Z"
+							></path>
+						</svg>
+						LinkedIn
+					</a>
+					<a
+						href={site.bio}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="btn btn-sm btn-outline gap-2"
+					>
+						<svg
+							class="size-4"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							aria-hidden="true"
+						>
+							<path
+								d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+							></path>
+							<path
+								d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+							></path>
+						</svg>
+						Linktree
+					</a>
+					<a href={site.projects} class="btn btn-sm btn-primary gap-2">
+						Projects
+					</a>
+				</div>
+			</div>
 		</section>
 
-		<section class="space-y-6 hidden" data-post-panel="es">
-			{esPosts.length > 0 ? (
-				<div class="space-y-10">
-					{esPosts.map((post) => (
-						<PostMeta post={{ slug: post.slug, ...post.data }} />
-					))}
-				</div>
-			) : (
-				<p class="text-base-content/60">Ningún post en Español por ahora...</p>
-			)}
+		<section class="max-w-[70ch]">
+			<p class="text-base text-base-content/80 leading-relaxed md:text-lg">
+				Hi, I am
+				<strong class="font-semibold text-base-content"
+					>David Vivar Bogónez</strong
+				>, a Spanish open source developer most known as
+				<strong class="font-semibold text-base-content">Aster</strong>, and a
+				computer engineering undergraduate at
+				<a
+					href={site.uni}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link link-hover link-primary"
+				>
+					ESI-UCLM
+				</a
+				>. I am passionate about software and computers in general, and I mostly
+				work with Python and Rust, along with TypeScript, SQL, Java, and
+				containers via Docker and Podman.
+			</p>
 		</section>
-	</section>
 
-	<script is:inline define:vars={{ initialPosts }}>
-	const initBlogLanguageToggle = () => {
-		const buttons = Array.from(document.querySelectorAll("[data-post-filter]"))
-		const panels = Array.from(document.querySelectorAll("[data-post-panel]"))
+		<section class="flex flex-col gap-5">
+			<div class="flex flex-wrap items-end justify-between gap-3">
+				<h2 class="text-2xl font-bold tracking-tight">Selected work</h2>
+				<a
+					href={site.projects}
+					class="link link-hover link-primary font-mono text-xs"
+				>
+					All projects →
+				</a>
+			</div>
+			<p class="max-w-[70ch] text-base-content/70">
+				I maintain a handful of open source projects. The most significant ones
+				are pinned on my
+				<a
+					href={site.githubSponsors}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link link-hover link-primary"
+				>
+					GitHub Sponsors profile</a
+				>, and the rest live on my
+				<a
+					href={site.github}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link link-hover link-primary"
+				>
+					GitHub</a
+				>.
+			</p>
+			<ul class="flex flex-wrap gap-2">
+				{featured.map((name) => (
+					<li>
+						<a
+							href={`/projects/${name}`}
+							class="badge badge-lg badge-ghost font-mono transition-colors hover:border-primary/40 hover:text-primary"
+						>
+							{name}
+						</a>
+					</li>
+				))}
+			</ul>
+		</section>
 
-		if (buttons.length === 0 || panels.length === 0) return
+		<section class="flex flex-col gap-6">
+			<div class="flex flex-wrap items-end justify-between gap-3">
+				<h2 class="text-2xl font-bold tracking-tight">Recent writing</h2>
+				<a
+					href={site.blog}
+					class="link link-hover link-primary font-mono text-xs"
+				>
+					All posts →
+				</a>
+			</div>
 
-		const showPanel = (lang) => {
-			panels.forEach((panel) => {
-				panel.classList.toggle(
-					"hidden",
-					panel.getAttribute("data-post-panel") !== lang
-				)
-			})
-			buttons.forEach((button) => {
-				const active = button.getAttribute("data-post-filter") === lang
-				button.classList.toggle("btn-primary", active)
-				button.classList.toggle("btn-ghost", !active)
-				button.setAttribute("aria-pressed", String(active))
-			})
-		}
+			<LanguageFilter
+				enCount={enPosts.length}
+				esCount={esPosts.length}
+				initial={initialPosts}
+			/>
 
-		buttons.forEach((button) => {
-			button.onclick = () => showPanel(button.getAttribute("data-post-filter"))
-		})
+			<section
+				data-post-panel="en"
+				class:list={["masonry", initialPosts !== "en" && "hidden"]}
+			>
+				{enPosts.length > 0 ? (
+					enPosts
+						.slice(0, recentLimit)
+						.map((post) => <PostMeta post={toCard(post)} />)
+				) : (
+					<p class="text-base-content/60">No English posts yet.</p>
+				)}
+			</section>
 
-		showPanel(initialPosts)
-	}
+			<section
+				data-post-panel="es"
+				class:list={["masonry", initialPosts !== "es" && "hidden"]}
+			>
+				{esPosts.length > 0 ? (
+					esPosts
+						.slice(0, recentLimit)
+						.map((post) => <PostMeta post={toCard(post)} />)
+				) : (
+					<p class="text-base-content/60">
+						Ningún post en Español por ahora...
+					</p>
+				)}
+			</section>
 
-	initBlogLanguageToggle()
-	document.addEventListener("astro:page-load", initBlogLanguageToggle)
-	</script>
-
-	<div class="my-8"></div>
+			<p class="max-w-[70ch] text-sm text-base-content/60">
+				You can find more posts (some not published here) on my
+				<a
+					href={site.substack}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="link link-hover link-primary"
+				>
+					Substack</a
+				>
+				publication.
+			</p>
+		</section>
+	</div>
 </BaseLayout>

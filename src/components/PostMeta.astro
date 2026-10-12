@@ -1,4 +1,6 @@
 ---
+import { formatDate, readingTime } from "../lib/format.ts"
+
 interface PostData {
 	slug?: string
 	title: string
@@ -6,50 +8,86 @@ interface PostData {
 	date: Date
 	lang?: "en" | "es"
 	tags?: string[]
+	body?: string
 }
 
 interface Props {
 	post: PostData
 	header?: boolean
+	headingLevel?: 2 | 3
 }
 
-const { post, header = false } = Astro.props
+const { post, header = false, headingLevel = 3 } = Astro.props
 const langLabel = post.lang === "es" ? "ES" : "EN"
 const href = post.slug ? `/${post.lang || "en"}/posts/${post.slug}` : "/"
+const reading = readingTime(post.body)
+const dateLabel = formatDate(post.date)
+const dateIso = post.date.toISOString()
+const tags = post.tags?.length ? post.tags : ["uncategorised"]
 ---
 
-<header
-	class={`flex flex-col ${header ? "gap-4" : "gap-2 border-l-2 border-primary pl-4"}`}
->
-	<div class="flex items-start justify-between gap-3 flex-wrap">
-		{header ? (
-			<h1 class="text-3xl md:text-4xl font-bold">{post.title}</h1>
-		) : (
-			<a {href} class="link link-hover link-primary">
-				<h3 class="text-lg">{post.title}</h3>
-			</a>
-		)}
+{header ? (
+	<header class="flex flex-col gap-4">
+		<div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-base-content/60">
+			<span class="text-base-content/80">David Vivar Bogónez</span>
+			<span aria-hidden="true">·</span>
+			<time datetime={dateIso}>{dateLabel}</time>
+			<span aria-hidden="true">·</span>
+			<span>{reading}</span>
+		</div>
 
-		<span class="badge badge-soft badge-secondary">{langLabel}</span>
-	</div>
+		<h1 class="text-3xl font-bold tracking-tight text-balance md:text-4xl lg:text-5xl">
+			{post.title}
+		</h1>
 
-	<p class="text-base-content/70 text-sm leading-relaxed">{post.description}</p>
+		<p class="max-w-[65ch] text-base text-base-content/70 leading-relaxed md:text-lg">
+			{post.description}
+		</p>
 
-	<time datetime={post.date.toISOString()}>
-		{new Date(post.date).toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "long",
-			day: "numeric"
-		})}
-	</time>
+		<div class="flex flex-wrap items-center gap-2">
+			<span class="badge badge-soft badge-primary font-mono text-[0.7rem]">
+				{langLabel}
+			</span>
+			{tags.map((tag) => (
+				<span class="badge badge-ghost font-mono text-[0.7rem]">{tag}</span>
+			))}
+		</div>
+	</header>
+) : (
+	<a
+		{href}
+		class="card-interactive group relative flex flex-col gap-2 rounded-xl border border-base-300 bg-base-100 p-5"
+	>
+		<div class="flex items-start justify-between gap-3">
+			{headingLevel === 2 ? (
+				<h2 class="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary">
+					{post.title}
+				</h2>
+			) : (
+				<h3 class="text-lg font-semibold tracking-tight transition-colors group-hover:text-primary">
+					{post.title}
+				</h3>
+			)}
+			<span class="badge badge-soft badge-primary font-mono text-[0.65rem]">
+				{langLabel}
+			</span>
+		</div>
 
-	<div class="flex gap-2 flex-wrap m-0">
-		{post.tags?.length ? (
-			post.tags.map((tag) => (
-				<span class="badge badge-soft badge-info">{tag}</span>
-			))
-		) : (
-			<span class="badge badge-soft badge-info">UNCATEGORISED</span>
-		)}
-	</div>
-</header>
+		<p class="line-clamp-2 text-sm text-base-content/70 leading-relaxed">
+			{post.description}
+		</p>
+
+		<div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-base-content/50">
+			<time datetime={dateIso}>{dateLabel}</time>
+			<span aria-hidden="true">·</span>
+			<span>{reading}</span>
+			<span class="ml-auto flex flex-wrap gap-1.5">
+				{tags.slice(0, 3).map((tag) => (
+					<span class="rounded bg-base-200 px-1.5 py-0.5 text-[0.65rem] text-base-content/60">
+						{tag}
+					</span>
+				))}
+			</span>
+		</div>
+	</a>
+)}

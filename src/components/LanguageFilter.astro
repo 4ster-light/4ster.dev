@@ -1,0 +1,83 @@
+---
+interface Props {
+	enCount: number
+	esCount: number
+	initial: "en" | "es"
+}
+
+const { enCount, esCount, initial } = Astro.props
+---
+
+<div
+	class="flex flex-wrap gap-2"
+	role="tablist"
+	aria-label="Filter posts by language"
+	data-initial-lang={initial}
+>
+	<button
+		type="button"
+		class:list={[
+			"btn btn-sm gap-2 font-mono",
+			initial === "en" ? "btn-primary" : "btn-ghost"
+		]}
+		data-post-filter="en"
+		aria-pressed={initial === "en" ? "true" : "false"}
+	>
+		English
+		<span class="badge badge-sm badge-soft badge-primary">{enCount}</span>
+	</button>
+	<button
+		type="button"
+		class:list={[
+			"btn btn-sm gap-2 font-mono",
+			initial === "es" ? "btn-primary" : "btn-ghost"
+		]}
+		data-post-filter="es"
+		aria-pressed={initial === "es" ? "true" : "false"}
+	>
+		Español
+		<span class="badge badge-sm badge-soft badge-secondary">{esCount}</span>
+	</button>
+</div>
+
+<script>
+const initLanguageFilter = () => {
+	const root = document.querySelector("[data-initial-lang]")
+	if (!root) return
+
+	const buttons = Array.from(
+		document.querySelectorAll<HTMLButtonElement>("[data-post-filter]")
+	)
+	const panels = Array.from(
+		document.querySelectorAll<HTMLElement>("[data-post-panel]")
+	)
+	if (buttons.length === 0 || panels.length === 0) return
+
+	const showPanel = (lang: string) => {
+		for (const panel of panels) {
+			panel.classList.toggle(
+				"hidden",
+				panel.getAttribute("data-post-panel") !== lang
+			)
+		}
+		for (const button of buttons) {
+			const active = button.getAttribute("data-post-filter") === lang
+			button.classList.toggle("btn-primary", active)
+			button.classList.toggle("btn-ghost", !active)
+			button.setAttribute("aria-pressed", String(active))
+		}
+	}
+
+	for (const button of buttons) {
+		button.onclick = () => {
+			const lang = button.getAttribute("data-post-filter")
+			if (lang) showPanel(lang)
+		}
+	}
+
+	showPanel(root.getAttribute("data-initial-lang") || "en")
+}
+
+document.addEventListener("astro:page-load", initLanguageFilter)
+initLanguageFilter()
+</script>
