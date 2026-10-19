@@ -28,3 +28,37 @@ In Deno's own blog post, which is a rather short 2min read time statement, we ca
 > Joining also means choosing where to focus our effort. We’ve decided to put our future development work into this shared platform rather than continuing to develop a separate runtime and hosting service. We know this is a consequential change for people who have built on Deno.
 
 Everyone is entitled to their own opinion regarding software ecosystems and plurality, this entire post is subjective from my part, but that precise quote is the part I find most concerning for a number of reasons.
+
+## The pattern
+
+Zoom out and this stops being about Deno. In December 2025 Bun went to Anthropic, and whatever you think of either one of them (I have been vocal of my dislike for most decisions of both in fact), at least they publicly committed to continuing Bun's development as an open source runtime. In January 2026 the Astro team joined Cloudflare. In June 2026 it was VoidZero (Vite, Vitest, Rolldown, Oxc) also joining Cloudflare. And now Deno. The number of independently run, independently governed pieces of the mainstream JavaScript stack is shrinking in real time, and each of those pieces is now one blog post away from a roadmap change nobody voted on.
+
+Deno was the one runtime out there that existed precisely because its author had a list of regrets about the incumbent and decided to do something about it. Node's creator looked at his own creation, said "I regret a few things", and built the correction. And now the correction is gone, absorbed into the platform company whose programming model its own team had, two months earlier, lovingly cloned. [Simon Willison](https://simonwillison.net/2026/Oct/9/deno-is-joining-cloudflare/) put the practical takeaway better than I can:
+
+> This reduces the number of independently operated major JS runtimes by one.
+
+## The irony
+
+Here's the part that genuinely stings. Deno won the argument and lost the company. Node has spent the last couple of years slowly becoming Deno: type stripping for TypeScript, built-in SQLite, a permission model, batteries included. The ideas were so obviously right that the ecosystem absorbed them with a shrug. The apology worked so well that Node ate it.
+
+And the ideas *will* survive. The permissions system, which happens to be [Willison's favorite feature too](https://simonwillison.net/2026/Oct/9/deno-is-joining-cloudflare/), and mine, easily the most underrated security idea server-side JS ever produced, will live on somewhere, probably in whatever `celld` and `workerd` merge into. TypeScript-first development with zero config is now table stakes. Nobody is losing those things.
+
+But "the ideas survive" is cold comfort to those of us who liked the *thing*. We don't run ideas in production. We don't update the ideas every six weeks and read the changelogs of ideas with our morning coffee. **I liked Deno the way you like a car, not the way you like a physics equation about cars.**
+
+## The One sentence
+
+> We know this is a consequential change for people who have built on Deno.
+
+I believe them. Genuinely. The thing they're building next might be excellent, and `celld`'s existence suggests they understand portability in a way most platform companies don't.
+
+But.
+
+None of that changes what happened to the people who took the bet. Deno raised **$26 million**, had Sequoia behind it, had Ryan Dahl behind it, and still couldn't make it work as a standalone thing. That's the real lesson hiding under the euphemisms, and it's the one I'd underline for anyone building on venture-funded open source: the roadmap you bet on is a runway, not a promise. When the runway ends, your "consequential change" is a sentence between a quote about focus and a contact email.
+
+## Farewell
+
+I'm aware of how emotional all of this reads, hell, some parts read to me as if they were written by an overly dramatic LLM from a year ago. Sadly, I hadn't become experienced or skilled enough to be a contributor on any meaningful sense before the sunset, but I do like to think I did some service to its community. It's a runtime, not a friend. In ten years the JS landscape will be fine, possibly better, and this post may well look overwrought. Maybe plurality was always a luxury the ecosystem couldn't afford, maybe consolidation was the price of the ideas surviving at all.
+
+Still. *Deno 2 was great.* **Past tense, as I said.**
+
+So long, Deno. Thanks for all the flags.
