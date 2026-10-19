@@ -3,11 +3,10 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"packageManager": "pnpm@12.11.2",
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": "12.11.2"
+			"version": ">=12"
 		},
 		"runtime": {
 			"name": "node",
