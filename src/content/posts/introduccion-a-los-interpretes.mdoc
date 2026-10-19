@@ -1,0 +1,418 @@
+---
+title: "Una introducción a los intérpretes: un evaluador lógico"
+description: "Tutorial sobre cómo escribir un intérprete sencillo que evalúa expresiones lógicas"
+date: 2025-08-16
+lang: "es"
+translationKey: introduction-to-interpreters
+tags: ["tutorial", "intérprete", "parser", "lexer", "evaluador", "python"]
+is-preview: false
+---
+
+Desde que empecé mi camino en la programación, me ha fascinado cómo hemos logrado la «comunicación» entre humanos y ordenadores. La capacidad de escribir programas en lugar de fabricar distintos dispositivos codificados para un único propósito fue uno de los mayores avances a los que la tecnología se ha enfrentado jamás. Si eres una persona curiosa, esto por supuesto te hace preguntarte «¿pero cómo?». Bueno, ese es un tema increíblemente amplio, interesante y complicado. Pero lo que puedo y voy a enseñarte si sigues leyendo son los fundamentos de un tipo concreto de lenguajes de programación: los **lenguajes interpretados**.
+
+> Para este ejemplo/tutorial se asume que tienes conocimientos moderados de al menos `Python`, que es el lenguaje que usaremos para ayudar a la mayoría de la gente a entender los conceptos en lugar de centrarnos demasiado en el código, aunque por supuesto estará presente a lo largo de todas las explicaciones.
+
+## ¿Qué es un evaluador lógico?
+
+Es un intérprete bastante sencillo, ya que simplemente toma una expresión matemática que se evalúa como `true` o `false` según la condición que representa; por ejemplo, `!A | B` solo devolverá _true_ si la variable **B** o lo contrario de **A** es _true_. Incluso este ejemplo aparentemente simple implica:
+
+- Dos variables: **A** y **B**.
+- Dos operadores: **OR** lógico `|` y **NOT** lógico `!`.
+
+También añadiremos una impresión bonita en forma de tabla de verdad para visualizar mejor nuestro trabajo. Se vería algo así:
+
+| A | B | !A \| B |
+| - | - | :-----: |
+| T | T |    T    |
+| T | F |    F    |
+| F | T |    T    |
+| F | F |    T    |
+
+Las dos primeras columnas representan respectivamente los valores de **A** y **B**, mientras que la tercera columna muestra el valor resultante tras evaluar la expresión para esa combinación específica de valores.
+
+## El intérprete
+
+La mayoría de los intérpretes siguen los mismos _tres_ pasos o partes: el `lexer/tokenizador`, el `parser` y el `evaluator`. Para esto tendremos la siguiente estructura de archivos:
+
+```txt
+.
+├── evaluator.py
+├── lexer.py
+├── main.py
+└── parser.py
+```
+
+### El lexer
+
+> Puedes ver el código completo de
+> [lexer.py](https://github.com/4ster-light/py-logic/blob/main/lexer.py)
+
+#### 1. Concepto
+
+La forma más simple de describir este paso es que toma el texto sin procesar de la entrada y lo descompone en las partes reales de tu lenguaje. En este caso, serían variables y operadores, pero en un lenguaje de propósito general también tendría que extraer palabras clave (varios caracteres de texto) y entenderlas como un único **token**, y otras sutilezas como tratar números o símbolos especiales de forma diferente, etc., etc.
+
+#### 2. Tipos de tokens
+
+Como acabamos de mencionar, necesitamos definir los tokens que existen en nuestro lenguaje; simplemente definiremos un Enum con cada uno de ellos (esto se considera una buena práctica en lugar de repetir cadenas por todas partes):
+
+```python
+class TokenType(Enum):
+    LParen = "LParen" # (
+    RParen = "RParen" # )
+    NotOp = "NotOp" # !
+    AndOp = "AndOp" # &
+    OrOp = "OrOp" # |
+    ImpliesOp = "ImpliesOp" # ->
+    BiconditionalOp = "BiconditionalOp" # <->
+    Variable = "Variable" # A-Z Upper case
+    Eof = "Eof" # The endline character (depends on stdin)
+```
+
+Y también deberíamos definir una clase para la forma de cada token que nos ayude más adelante. Contendrá tanto su tipo como su _«lexema»_ (su forma de cadena):
+
+```python
+@dataclass(frozen=True)
+class Token:
+    type: TokenType
+    lexeme: Optional[str] = None
+```
+
+#### 3. Análisis léxico
+
+Ahora sí, la tokenización propiamente dicha. La clase del lexer contendrá tanto la cadena de entrada (la fórmula lógica) como la posición actual a medida que avanzamos por la fórmula tras cada token (ya que, como habrás notado, hay dos operadores que abarcan dos y tres caracteres respectivamente: **Implies** y **Biconditional**).
+
+```python
+class Lexer:
+    def __init__(self, input: str) -> None:
+        self._input = input
+        self._position = 0
+
+    def _peek(self, offset: int = 0) -> Optional[str]: ...
+
+    def _advance(self, count: int = 1) -> None: ...
+
+    def lex(self) -> list[Token]: ...
+```
+
+Como ya puedes notar, solo necesitamos usar tres métodos. Los dos privados, `_peek()` y `_advance()`, son ayudantes para operaciones que se repiten varias veces a lo largo del análisis léxico real que se realiza en `lex()`.
+
+1. **Peek**: comprueba si existe el carácter en cierto desplazamiento desde la posición actual y, si es así, lo devuelve. Si no, simplemente devuelve None. Se usa en tokens de más de un carácter, de modo que si encontramos el primer carácter, podemos comprobar si los siguientes coinciden con lo esperado para el token esperado y, si no lo hacen, es un carácter inválido, así que simplemente lanzamos un error.
+
+   ```python
+   def _peek(self, offset: int = 0) -> Optional[str]:
+       if self._position + offset < len(self._input):
+           return self._input[self._position + offset]
+       return None
+   ```
+
+2. **Advance**: simplemente mueve la posición actual hacia delante una cierta cantidad.
+
+   ```python
+   def _advance(self, count: int = 1) -> None:
+       self._position += count
+   ```
+
+3. **Lex**: el método principal que realiza el análisis léxico propiamente dicho. Devolverá la lista de tokens que puede usar el parser.
+
+   ```python
+   def lex(self) -> list[Token]:
+       tokens: list[Token] = []
+       while self._position < len(self._input):
+           current_char = self._input[self._position]
+           match current_char:
+               ...
+   ```
+
+   Lo primero que hacemos es crear una lista vacía de tokens y luego recorremos la cadena de entrada, extrayendo cada token individual a esa lista hasta llegar al final, momento en el que devolvemos la lista. Vamos a desglosarlo un poco:
+   - Si el carácter es un **espacio**, simplemente avanzamos la posición y pasamos al siguiente carácter:
+
+     ```python
+     case char if char.isspace():
+         self._advance()
+     ```
+
+   - Si el carácter es cualquiera de los siguientes: `(`, `)`, `!`, `&`, `|`, se realiza el mismo proceso de crear un token de ese tipo y avanzar la posición. Como son tokens de un solo carácter, no hace falta comprobar nada más:
+
+     ```python
+     case "(":
+         tokens.append(Token(TokenType.LParen, "("))
+         self._advance()
+     # ...
+     # Same for the other characters
+     # ...
+     case "|":
+         tokens.append(Token(TokenType.OrOp, "|"))
+         self._advance()
+     ```
+
+   - Ahora los cuatro casos interesantes que quedan: `->` y `<->`, así como el **caso por defecto** y las **variables**:
+     - Si el carácter es `-`, indica que estamos a punto de encontrarnos con el operador **Implies**, ¿verdad? Así que, en lugar de crear ese token de inmediato, usamos el método `_peek()` que te dije que sería útil para ver si efectivamente el siguiente carácter es `>`. Si lo es, creamos el token y avanzamos la posición. Si no, lanzamos un error útil, ya que tenemos información disponible como nuestra posición y carácter actuales:
+
+       ```python
+       case "-":
+           if self._peek(1) == ">":
+              tokens.append(Token(TokenType.ImpliesOp, "->"))
+              self._advance(2)
+           else:
+               raise Exception(
+                   f"Lexer error: Unexpected character '{current_char}' at position {self._position}. Expected '->'."
+               )
+       ```
+
+     - Si el carácter es `<`, indica que estamos a punto de encontrarnos con el **Biconditional**, pero de nuevo tenemos que hacer las comprobaciones oportunas de forma similar a **Implies**:
+
+       ```python
+       case "<":
+           if self._peek(1) == "-" and self._peek(2) == ">":
+               tokens.append(Token(TokenType.BiconditionalOp, "<->"))
+               self._advance(3)
+           else:
+               raise Exception(
+                   f"Lexer error: Unexpected character '{current_char}' at position {self._position}. Expected '<->'."
+               )
+       ```
+
+     - Si el carácter es cualquiera de `A-Z`, creamos un token de tipo **Variable** y avanzamos la posición:
+
+       ```python
+       case char if "A" <= char <= "Z":
+           tokens.append(Token(TokenType.Variable, char))
+           self._advance()
+       ```
+
+     - Ahora, si algún carácter no ha caído en ninguno de los casos anteriores, significa que es un carácter inválido, así que volvemos a lanzar un error:
+
+       ```python
+       case _:
+           raise Exception(
+               f"Lexer error: Unexpected character '{current_char}' at position {self._position}."
+           )
+       ```
+
+   - Lo único que queda es añadir el token **EOF** correspondiente al final de la lista y devolverla:
+
+     ```python
+     tokens.append(Token(TokenType.Eof))
+     return tokens
+     ```
+
+Eso es todo. Ahora hemos creado la lista de tokens que puede usar el parser. Es importante notar que esta forma de comprobar caracteres puede parecer sencilla cuando se presenta así, pero la importancia del método `_peek()` es bastante significativa. Puedes imaginar cómo en un lexer más complejo, quizá para un lenguaje de propósito general, por ejemplo, tendrías que comprobar líneas enteras o incluso la línea siguiente.
+
+Fíjate también en cómo almacenar correctamente la posición, además de ayudar en el peek, nos permite dar mensajes de error mucho más precisos, que de nuevo serían mucho más complejos para un lenguaje de propósito general. Y observa cómo, por ejemplo, al lanzar un error en los casos de los operadores **Implies** y **Biconditional**, sabíamos que el carácter aparentemente fuera de lugar formaba parte de estos tokens, por lo que sugerimos que podría tratarse del error tipográfico cometido.
+
+### El parser
+
+> Puedes ver el código completo de
+> [parser.py](https://github.com/4ster-light/py-logic/blob/main/parser.py)
+
+#### 1. Concepto
+
+Este segundo paso tomará la lista de tokens que acabamos de generar y la convertirá en los nodos correspondientes del árbol de sintaxis abstracta (AST), lo que simplemente significa representar los tokens que forman la expresión analizada anidados unos dentro de otros según corresponda en una lista; esto quedará más claro a medida que avancemos. Es la parte más complicada. Tomando el ejemplo que estamos construyendo, hay diferentes tipos de operadores que determinan cosas como el orden en que deben evaluarse.
+
+#### 2. Tipos de nodos del AST
+
+Distintos operadores tienen distintos niveles de _precedencia_, lo que significa que deben evaluarse primero y, como acabamos de tokenizar la expresión sin procesar, ahora debemos convertirla en la lista ordenada de nodos que puede usarse para evaluar la expresión correctamente. En nuestro ejemplo concreto, la precedencia sería la siguiente:
+
+1. Not: `!`
+2. And: `&`
+3. Or: `|`
+4. Implies: `->`
+5. Biconditional: `<->`
+
+Así que, en una expresión como `!A & B | C -> D <-> E`, el parser debe analizar `!A` primero, luego `&`, luego `|`, y así sucesivamente para construir el AST correctamente. Esto nos lleva al concepto de _asociatividad_, que determina cómo se agrupan los operadores de la misma precedencia (lo que en este caso solo puede ocurrir si es el mismo operador):
+
+- Asociativo por la izquierda: el operador se evalúa antes que los operandos, agrupados de izquierda a derecha. En la implementación, esto se representa con un bucle while.
+  - Ejemplo: `A & B & C` ->
+    `And(left=And(left=Var(name='A'), right=Var(name='B')), right=Var(name='C'))`
+- Asociativo por la derecha: el operador se evalúa después de los operandos, agrupados de derecha a izquierda. En la implementación, esto se representa con un condicional en su lugar.
+  - Ejemplo: `A -> B -> C` ->
+    `Implies(left=Var(name='A'), right=Implies(left=Var(name='B'), right=Var(name='C')))`
+
+Los operadores asociativos por la derecha son **Not** e **Implies**, mientras que los asociativos por la izquierda son **And**, **Or** y **Biconditional**.
+
+Además, como habrás notado, todos los operadores excepto **Not** tienen una rama izquierda y otra derecha en el árbol de nodos, así que también deberíamos definir una clase para la forma de cada nodo (todas heredando de `Expression` para que puedan tratarse como tal) que nos ayude más adelante. Contendrán ambas ramas o, en el caso de **Variables** y **Not**, simplemente el nombre y la expresión interna respectivamente:
+
+```python
+class Expression:
+    pass
+
+@dataclass(frozen=True)
+class Var(Expression):
+    name: str
+
+@dataclass(frozen=True)
+class Not(Expression):
+    expression: Expression
+
+@dataclass(frozen=True)
+class And(Expression):
+    left: Expression
+    right: Expression
+
+@dataclass(frozen=True)
+class Or(Expression):
+    left: Expression
+    right: Expression
+
+@dataclass(frozen=True)
+class Implies(Expression):
+    left: Expression
+    right: Expression
+
+@dataclass(frozen=True)
+class Biconditional(Expression):
+    left: Expression
+    right: Expression
+```
+
+#### 3. Análisis sintáctico
+
+Igual que hicimos con el lexer, vamos a echar un vistazo a cada uno de los métodos auxiliares de la clase `Parser`, aunque es bastante más complejo debido a la recursividad mutua entre los distintos métodos `_parse_*()`. Veamos primero los auxiliares:
+
+1. **Consume**: como ahora tenemos tokens individuales, nos moveremos linealmente por la lista. Este método consumirá el siguiente token y lo devolverá, lanzando un error si no es del tipo esperado:
+
+   ```python
+   def _consume(self, expected_type: TokenType) -> None:
+       if self._peek().type == expected_type:
+           self._position += 1
+       else:
+           raise Exception(
+               f"Parser error: Expected {expected_type} but found {self._peek().type}"
+           )
+   ```
+
+2. **Peek**: similar al método `_peek()` del lexer, aunque este método solo comprobará la posición actual y no la siguiente. Devolverá el token en la posición actual si existe, y `EOF` en caso contrario:
+
+   ```python
+   def _peek(self) -> Optional[Token]:
+       if self._position < len(self._tokens):
+           return self._tokens[self._position]
+       return Token(TokenType.Eof)
+   ```
+
+3. **Parse**: este es el método principal que realiza el análisis sintáctico propiamente dicho. Devolverá la expresión del AST que puede usar el evaluador. Funciona usando un montón de ayudantes privados de análisis para cada tipo de token que son mutuamente recursivos uno tras otro. Lo que esto significa es que, siguiendo el orden de precedencia, cada operación de análisis llamará a la siguiente hasta el final de la expresión:
+
+   ```txt
+   parse()
+   └── _parse_biconditional()
+       └── _parse_implies()
+           └── _parse_or()
+               └── _parse_and()
+                   └── _parse_not()
+                       └── _parse_primary()
+   ```
+
+   Esto es un poco contraintuitivo, ya que puede parecer «al revés», pero es el orden correcto. El proceso de análisis comienza con el operador de menor precedencia (`_parse_biconditional`), que llama a la función del operador de precedencia inmediatamente superior (`_parse_implies`), y así sucesivamente hasta llegar a los operadores de mayor precedencia (`_parse_primary` y `_parse_not`). Este enfoque de descenso recursivo maneja naturalmente el orden de las operaciones delegando en funciones para expresiones de mayor precedencia.
+
+   ```python
+   def _parse_primary(self) -> Expression:
+        token = self._peek()
+        if token.type == TokenType.Variable:
+            self._consume(TokenType.Variable)
+            if token.lexeme is None:
+                raise Exception("Parser error: Variable name is missing.")
+            return Var(token.lexeme)
+        elif token.type == TokenType.LParen:
+            self._consume(TokenType.LParen)
+            expr = self._parse_biconditional()
+            self._consume(TokenType.RParen)
+            return expr
+        else:
+            raise Exception(
+                f"Parser error: Expected variable or '(' but found {token.type}"
+            )
+
+    def _parse_not(self) -> Expression:
+        if self._peek().type == TokenType.NotOp:
+            self._consume(TokenType.NotOp)
+            return Not(self._parse_not())
+        return self._parse_primary()
+
+    def _parse_and(self) -> Expression:
+        left = self._parse_not()
+        while self._peek().type == TokenType.AndOp:
+            self._consume(TokenType.AndOp)
+            right = self._parse_not()
+            left = And(left, right)
+        return left
+
+    def _parse_or(self) -> Expression:
+        left = self._parse_and()
+        while self._peek().type == TokenType.OrOp:
+            self._consume(TokenType.OrOp)
+            right = self._parse_and()
+            left = Or(left, right)
+        return left
+
+    def _parse_implies(self) -> Expression:
+        left = self._parse_or()
+        if self._peek().type == TokenType.ImpliesOp:
+            self._consume(TokenType.ImpliesOp)
+            right = self._parse_implies()
+            left = Implies(left, right)
+        return left
+
+    def _parse_biconditional(self) -> Expression:
+        left = self._parse_implies()
+        while self._peek().type == TokenType.BiconditionalOp:
+            self._consume(TokenType.BiconditionalOp)
+            right = self._parse_implies()
+            left = Biconditional(left, right)
+        return left
+
+    def parse(self) -> Expression:
+        expr = self._parse_biconditional()
+        if self._peek().type != TokenType.Eof:
+            raise Exception("Parser error: Unexpected tokens remaining.")
+        return expr
+   ```
+
+### El evaluador
+
+> Puedes ver el código completo de
+> [parser.py](https://github.com/4ster-light/py-logic/blob/main/evaluator.py)
+
+#### 1. Concepto
+
+¡Enhorabuena! Ya hemos repasado básicamente toda la implementación. Ahora solo tenemos que evaluar la expresión ya analizada e imprimir el resultado. No entraremos en los detalles de la impresión, pero evaluar es bastante fácil, ya que tenemos el AST. Dado que ya habremos creado las distintas **asignaciones**, es decir, las diferentes combinaciones posibles de las variables dadas, al generar la tabla (si tienes curiosidad, mira el código fuente), podemos simplemente crear un método `evaluate()` general que tome la expresión y las variables y devuelva el resultado de cada cálculo lógico.
+
+#### 2. Evaluar el AST
+
+Para lograrlo, es tan simple como hacer coincidencia de patrones con las distintas ramas del árbol y aplicar cada operación de forma recursiva.
+
+```python
+class Evaluator:
+    def __init__(self, assignments: dict[str, bool]) -> None:
+        self._assignments = assignments
+
+    def evaluate(self, expr: Expression) -> bool:
+        match expr:
+            case Var(name):
+                return self._assignments[name]
+            case Not(expression):
+                return not self.evaluate(expression)
+            case And(left, right):
+                return self.evaluate(left) and self.evaluate(right)
+            case Or(left, right):
+                return self.evaluate(left) or self.evaluate(right)
+            case Implies(left, right):
+                return not self.evaluate(left) or self.evaluate(right)
+            case Biconditional(left, right):
+                return self.evaluate(left) == self.evaluate(right)
+            case _:
+                raise Exception("Evaluation error: Unknown expression type.")
+```
+
+En el improbable caso de que un error haya llegado hasta este punto del proceso, simplemente lo lanzaremos con un mensaje adecuado, como siempre. Habrás notado que este es un patrón que se repite constantemente en todo el código: comprobaciones por todas partes y mensajes de error lo más informativos posible, aunque ningún error debería poder llegar hasta aquí.
+
+Puedes ver el archivo principal para la interacción real con el usuario y el acoplamiento de las tres partes juntas [main.py](https://github.com/4ster-light/py-logic/blob/main/main.py) solo por curiosidad, pero ya hemos cubierto toda la implementación del intérprete.
+
+## Conclusión
+
+¡Hemos llegado al final del tutorial! Y aunque no es el ejemplo más complejo, sigue mostrando el poder del intérprete y cómo puede usarse para evaluar cualquier tipo de cálculo.
+
+Como siempre, gracias por leer y, si tienes alguna pregunta o comentario, no dudes en contactarme en cualquiera de mis redes sociales; están en mi [Link Tree](https://bio.4ster.dev). Siempre estoy abierto a las críticas, tal como espero que hayas hecho al leer esto; siempre intento aprender y mejorar.
+
+## Patrocinar
+
+Si te ha gustado esta entrada y te ha resultado útil, considera apoyarme a través de cualquiera de los canales que aparecen en mi página de patrocinadores (enlazada con el botón justo debajo).

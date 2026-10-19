@@ -1,0 +1,110 @@
+---
+title: "Python y los desarrolladores junior"
+description: "Por qué la simplicidad y la popularidad de Python pueden convertirse en un problema a veces"
+date: 2024-12-02
+lang: "es"
+translationKey: learning-python
+tags: ["python", "mercado laboral", "programación"]
+is-preview: false
+---
+
+Llevo queriendo hablar de esto desde que empecé a sentirme lo bastante seguro como para decir «SÉ Python» (un poco arrogante por mi parte, ya que por supuesto me queda muchísimo por aprender, pero entiendes la idea). Como probablemente sabe cualquiera que esté leyendo esto, Python tiene una sintaxis extremadamente simple; el típico ejemplo de código que le mostrarías a alguien que nunca ha programado se lee casi como inglés corriente en la mayor parte.
+
+## El problema: exceso de confianza frente a competencia
+
+Lo que he encontrado es que esto proporciona a algunos de los llamados «ingenieros de software» (autoproclamados en sus portafolios y currículums) la ilusión de poseer grandes habilidades de programación y de merecer un trabajo de inmediato. No me malinterpretes: es motivo de celebración que exista un lenguaje que empodere tanto a los recién llegados, pero, aun así, como dice el título, hay una gran diferencia entre ser competente hasta cierto punto y simplemente tener un exceso de confianza.
+
+Lo que intento decir es que este es un problema que, creo, no se aborda con la suficiente frecuencia ni de la forma adecuada, y es similar a lo que me gusta llamar «la miríada de React» en el desarrollo web, donde encuentras por todas partes a un montón de «desarrolladores autodidactas» que pretenden ser desarrolladores web, blandiendo sus aplicaciones de tareas pendientes como poderosas espadas de la ingeniería, sin tener conocimientos básicos de HTML.
+
+Y luego les pides a esos «desarrolladores de Python» que implementen algún ejemplo de código que, seamos sinceros, no es tan complicado, como un iterador:
+
+```python
+class PrimeGenerator:
+    def __init__(self):
+        self._sieve = {}  # Dictionary for sieve storage
+        self.current = 2  # Start checking from 2
+
+    def __iter__(self):
+        return self
+
+    def __next__(self) -> int:
+        while self.current in self._sieve:
+            # Move multiples to their next multiple
+            for prime in self._sieve[self.current]:
+                self._sieve
+                    .setdefault(prime + self.current, [])
+                    .append(prime)
+
+            del self._sieve[self.current]
+            self.current += 1
+
+        # Found a prime
+        self._sieve[self.current * 2] = [self.current]
+        prime = self.current
+        self.current += 1
+
+        return prime
+
+    def take(self, n: int) -> list[int]:
+        return [next(self) for _ in range(n)]
+```
+
+Puede que ni siquiera sepan qué hacer; algunos no tienen ni idea ni conocimiento previo de que la palabra clave `yield` existe en Python, ni de qué son `__iter__` o `__next__`, ni de por qué deberían usarse en lugar de crear un método propio.
+
+Como puedes ver, es un ejemplo bastante sencillo que, bien explicado, no debería presentar ningún problema a nadie que lleve un tiempo aprendiendo a programar. Son los pequeños detalles que demuestran si de verdad conoces el lenguaje, la herramienta, que dices conocer. Solo 27 líneas de código Python demuestran conceptos clave como los iteradores personalizados, la lógica de generadores y la eficiencia algorítmica, que para muchos probablemente sean pan comido, pero que, por supuesto, los nuevos deben aprender en algún momento, y no caer en el síndrome de **Dunning-Kruger**. Como resultado, pueden incluso descartar funciones más complejas por considerarlas innecesarias y no merecedoras del tiempo de aprendizaje, profundizando aún más la brecha entre la semántica superficial y la riqueza real del lenguaje.
+
+Sinceramente, esto me entristece, ya que amo este lenguaje por lo versátil y adaptable que es para muchos casos de uso, pero aun así estas personas le dan mala fama, haciendo que parezca un lenguaje de juguete o que tenga una mala DX (lo cual entiendo que, hasta cierto punto, es una cualidad subjetiva), aunque no sea así para mucha gente que lo usa a diario.
+
+## El síndrome del tutorial de YouTube
+
+Un gran contribuyente a este problema es lo que me gusta llamar «el síndrome del tutorial de YouTube». Los tutoriales en línea son puntos de partida fantásticos, pero tienden a centrarse en la **replicación** en lugar de la **comprensión**. Un desarrollador puede seguir un vídeo para crear una aplicación sencilla, pero le cuesta ampliarla o modificarla porque no domina los principios que hay detrás del código.
+
+Esta dependencia excesiva de los tutoriales puede crear una falsa sensación de logro. Cuando se enfrentan a desafíos únicos, estos desarrolladores a menudo se bloquean, incapaces de apartarse de los patrones mostrados en los tutoriales.
+
+## Cerrar la brecha: de la sintaxis a la ingeniería
+
+Sé que en esta lista todo se ha mencionado varias veces en la comunidad del software, pero al parecer no se repite ni se tiene en cuenta lo suficiente:
+
+- **Enfatiza los fundamentos de las ciencias de la computación:** Anima a quienes aprenden a estudiar estructuras de datos, algoritmos y patrones de diseño. Estos conceptos son independientes del lenguaje y forman la columna vertebral de la ingeniería de software. La mayoría de la gente no necesita ser experta, por supuesto, pero los conocimientos básicos siempre vienen bien. E incluso si acabas en desacuerdo con parte de esto, porque incluso los ingenieros con experiencia pueden llegar a malas abstracciones, habrás aprendido **«el porqué»** del problema, tendrás una opinión fundamentada, perfectamente válida aunque sea subjetiva.
+- **Promueve el aprendizaje basado en proyectos:** Anima a los desarrolladores a construir proyectos complejos del mundo real que vayan más allá de scripts sencillos o aplicaciones de tareas pendientes. Este consejo es muy cliché, pero es la única forma de entender de verdad la arquitectura del software y el diseño de sistemas, algo a lo que la mayoría tiende a no prestar suficiente atención; y cuando se encuentran en una situación en la que tienen que tomar una decisión, tienden a ir por la solución más simple, que no siempre es la mejor.
+- **Fomenta una cultura de aprendizaje continuo:** La industria tecnológica evoluciona rápidamente. Inculca la importancia de mantenerse actualizado con las nuevas tecnologías, las buenas prácticas y las tendencias del sector.
+- **Fomenta las revisiones de código y la colaboración:** Participa en proyectos de código abierto o en revisiones de código entre compañeros. Esta exposición a diferentes estilos de programación y enfoques de resolución de problemas es crucial para crecer. Nos beneficiamos de la experiencia y los conocimientos de otros desarrolladores y, como hemos dicho antes, aunque no estemos de acuerdo, a veces una mala lección es una mejor lección.
+
+Aplicando estas estrategias, podemos ayudar a cerrar la brecha entre saber sintaxis de Python y convertirse en un ingeniero de software competente, asegurando que la simplicidad de Python sea un trampolín y no un tropiezo en el camino de un desarrollador.
+
+### Extra: la oscuridad de los decoradores
+
+Este es un tema muy interesante y no voy a entrar en demasiado detalle aquí, pero creo que merece la pena mencionarlo. Incluso entre desarrolladores realmente talentosos y experimentados, es algo que tiende a generar rechazo y críticas, porque los decoradores modifican el comportamiento de una función, lo que, según algunos, puede hacer que el código sea más difícil de rastrear y depurar.
+
+Hay formas muy idiomáticas y sencillas de usarlos y, como yo mismo soy desarrollador de Rust y estos se parecen mucho a las macros procedurales a alto nivel, creo que es seguro decir que no son tan oscuros y que son una herramienta bastante potente. Muchos frameworks incluso dependen en gran medida de ellos para mejorar la DX de su código.
+
+E incluso pueden usarse a nivel personal para hacerte la vida más fácil sin mucho esfuerzo, así:
+
+```python
+import time
+
+def benchmark(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        dt = end_time - start_time
+        print(f"Benchmark executed in {dt:.6f} seconds.")
+        return result
+    return wrapper
+
+@benchmark
+def slow_function():
+    for _ in range(10**6):
+        pass
+
+slow_function()
+```
+
+Este es un ejemplo muy sencillo, pero muestra cómo puedes usar decoradores para añadir funcionalidad a una función sin modificar su código, algo muy común en Python y que puede hacerse en Rust y en muchos lenguajes populares donde se usan **intensivamente**.
+
+## Conclusión
+
+Espero que esta entrada haya sido útil y te haya dado alguna perspectiva sobre la complejidad de Python y los retos a los que se enfrentan los desarrolladores al aprenderlo. Estoy seguro de que has aprendido mucho sobre el lenguaje y sobre cómo puede usarse para resolver problemas, pero también espero que hayas ganado algo de perspectiva sobre los retos que afrontan los desarrolladores al aprender un lenguaje nuevo.
+
+Si encuentras algún problema con el contenido de esta entrada o con mi forma de expresarme, házmelo saber ;), siempre estoy abierto a comentarios y sugerencias, ya que en el momento de escribir esto soy un escritor muy inexperto.

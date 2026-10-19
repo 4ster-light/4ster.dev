@@ -1,0 +1,107 @@
+---
+title: Las etiquetas inmutables de GitHub son una locura
+description: Cómo el inaceptable diseño de una función de GitHub puede arruinar tu versionado
+date: 2026-05-06
+lang: es
+translationKey: github-immutable-tags
+tags:
+  - queja
+  - github
+  - problema
+  - experiencia-de-desarrollador
+is-preview: false
+---
+Hay una función en GitHub diseñada para protegerte. En cambio, te castiga, **de forma permanente** y sin posibilidad de apelación. Se llama **Immutable Releases** (versiones inmutables), y si estás leyendo esto porque ahora mismo estás bloqueado fuera de una etiqueta de tu propio repositorio, bienvenido al club. Toma asiento. No vas a recuperar esa etiqueta.
+
+## Qué pasó
+
+Mi repositorio público de proyecto [`4ster-light/sentinel`](https://github.com/4ster-light/sentinel) se topó con este muro justo hoy. Se creó una release para la etiqueta `v0.2.1`. Fue un error. La release se eliminó. La etiqueta se eliminó en local y en el remoto. Borrón y cuenta nueva, ¿verdad? Si esa fue tu respuesta, estás **EQUIVOCADO**.
+
+Al intentar recrear la etiqueta:
+
+```bash
+git tag v0.2.1 && git push origin v0.2.1 --force
+```
+
+GitHub respondió con esto:
+
+```text
+remote: error: GH013: Repository rule violations found for refs/tags/v0.2.1.
+remote: Review all repository rules at https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1
+remote:
+remote: - Cannot create ref due to creations being restricted.
+remote:
+To github.com:4ster-light/sentinel.git
+ ! [remote rejected] v0.2.1 -> v0.2.1 (push declined due to repository rule violations)
+```
+
+La etiqueta no existe ni en el remoto ni en local. La release no existe. Pero GitHub simplemente dice que no.
+
+## La pesadilla de depuración
+
+[https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1](https://github.com/4ster-light/sentinel/rules?ref=refs%2Ftags%2Fv0.2.1)
+
+El mensaje de error apunta a una página de «reglas». Naturalmente, el primer instinto es ir a revisar esas reglas. La página de reglas no muestra literalmente **nada**. Ningún conjunto de reglas. Ninguna regla de protección de ramas. Ninguna regla de protección de etiquetas. Solo una página vacía burlándose de ti con un botón de «Nuevo conjunto de reglas».
+
+Vale. Quizá esté en otro sitio. Reviso **Ajustes → Ramas**. Nada relevante. Reviso **Ajustes → Etiquetas**. Nada. Reviso **Ajustes → Reglas → Conjuntos de reglas**. Nada. Llegados a este punto, desesperado, voy por la opción nuclear: hacer clic en **«Desactivar las reglas de protección de ramas»**, que advierte explícitamente de que se desactivará toda la aplicación de las reglas. Hecho. Empujo de nuevo.
+
+El mismo error. El mismo muro. Da la sensación de que se está riendo de ti.
+
+El mensaje de error *miente descaradamente* al señalar reglas que no existen y una página de reglas que no muestra **nada**. Es un callejón sin salida disfrazado de herramienta de diagnóstico.
+
+## La causa real: una función que GitHub enterró en la letra pequeña
+
+GitHub lanzó **Immutable Releases** como función disponible de forma general en octubre de 2025. La propuesta es razonable: una vez que una release se publica y se marca como inmutable, su etiqueta y sus recursos no pueden sustituirse a escondidas. Es una preocupación real de seguridad de la cadena de suministro y es genial que se hayan tomado la molestia de aportar una contramedida.
+
+Pero enterrada en la [documentación](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases) hay esta frase:
+
+> *Si eliminas la release inmutable, puedes eliminar la etiqueta, pero no puedes reutilizar el mismo nombre de etiqueta.*
+
+Y [esta otra](https://github.blog/changelog/2025-10-28-immutable-releases-are-now-generally-available/):
+
+> *Desactivar la inmutabilidad no afecta a las releases creadas mientras estaba activada: siguen siendo inmutables.*
+
+Así que si `v0.2.1` estuvo asociada alguna vez a una release inmutable, aunque fuera durante cinco minutos, aunque fuera por accidente, aunque la release ya no exista en absoluto, el nombre de etiqueta `v0.2.1` está **permanentemente** en la lista negra. Sin API. Sin anulación por parte del administrador. Sin ticket de soporte. Sin excepción. Para siempre.
+
+## Por qué este diseño es inexcusable
+
+Podrías argumentar que todo esto debería ser el comportamiento esperado de una función de seguridad sólida y verdaderamente inmutable, pero hay varias razones por las que sigo pensando que, en el mejor de los casos, es una implementación desastrosa:
+
+### No hay advertencia
+
+Cuando una release se marca como inmutable, GitHub no dice: *«Advertencia: eliminar esta release pondrá permanentemente en la lista negra este nombre de etiqueta en todo tu repositorio, para siempre, sin ninguna vía de recuperación.»* Simplemente... lo hace. En silencio. La consecuencia es permanente e irreversible, y al usuario no se le da ni la menor indicación de ello en el momento en que importa.
+
+### El mensaje de error es inútil
+
+`GH013: Repository rule violations found for refs/tags/v0.2.1` es probablemente uno de los mensajes de error más engañosos que se me ocurren en el software moderno. Señala reglas. No hay reglas. La causa real, un registro de release inmutable, no se menciona nunca. Un desarrollador que depure esto a ciegas pasaría horas revisando reglas de protección, conjuntos de reglas, políticas de organización y permisos de API antes de tropezar con la respuesta real, si es que llega a hacerlo, que es básicamente lo que me pasó a mí tras varias horas rebuscando en internet en busca de una respuesta clara.
+
+### No hay anulación por parte del administrador
+
+Este es un repositorio personal. `4ster-light`, **YO**, es el único propietario, administrador y (al menos por ahora) colaborador. Aquí no se aplica ninguna política de organización, no hay ningún requisito de cumplimiento, no hay ninguna autoridad externa. El propietario del repositorio debería tener el derecho absoluto de modificarlo como le plazca, con la autenticación adecuada, por supuesto. En cambio, GitHub ha decidido que el fantasma de una release eliminada tiene prioridad sobre el propietario humano, vivo y respirante, del repositorio. Eso es una inversión obscena del control del usuario.
+
+### «Función de seguridad» no significa «castigar errores»
+
+El caso de uso legítimo de las releases inmutables es evitar la manipulación de artefactos *publicados intencionadamente*. No está pensado para atrapar a desarrolladores que hicieron clic en el botón equivocado por accidente. Una implementación sensata incluiría:
+
+- Un periodo de gracia (por ejemplo, 24 horas) antes de que la inmutabilidad se bloquee
+- Una advertencia de confirmación explícita: *«Esta acción es permanente y no se puede deshacer»*
+- Una vía de escape para administradores/propietarios en repositorios personales
+- Un mensaje de error honesto que nombre la causa real
+
+Ninguna de estas existe. ***GitHub envió el candado y olvidó enviar la llave***.
+
+## La comunidad se ha dado cuenta
+
+El proyecto `semantic-release` se topó con este mismo muro en 2026: su herramienta de publicación automatizada seguía intentando empujar una etiqueta que había sido usada por una release inmutable, creando un bucle irrecuperable. No es un caso aislado. Cualquier pipeline de CI/CD que cree releases y luego las limpie acabará cayendo en esta trampa.
+
+> [https://github.com/semantic-release/semantic-release/issues/4147](https://github.com/semantic-release/semantic-release/issues/4147)
+
+El debate de la comunidad en los propios foros de GitHub confirma que incluso a quienes *les gustan* las releases inmutables les parece desconcertante la falta de una vía de recuperación.
+
+> [https://news.ycombinator.com/item?id=45772064](https://news.ycombinator.com/item?id=45772064)
+
+---
+
+## Conclusión
+
+En fin, sé que esta opinión no es tan unilateral como la he presentado en este blog. Esto es sobre todo un desahogo puro por la frustración debida a los problemas que he sufrido en mi propio proyecto y, por las razones que ya he expuesto, por lo exasperante que me parece todo el contexto de la situación. No soy el único que piensa así, pero supongo que se podría argumentar que activar esta función, que es opcional (opt-in), es responsabilidad mía; en cualquier caso, las futuras releases de sentinel no serán inmutables y aquí queda testimonio de lo molestas que pueden llegar a ser y de sus carencias en términos de DX.
