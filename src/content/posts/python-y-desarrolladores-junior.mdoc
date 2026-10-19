@@ -31,9 +31,7 @@ class PrimeGenerator:
         while self.current in self._sieve:
             # Move multiples to their next multiple
             for prime in self._sieve[self.current]:
-                self._sieve
-                    .setdefault(prime + self.current, [])
-                    .append(prime)
+                self._sieve.setdefault(prime + self.current, []).append(prime)
 
             del self._sieve[self.current]
             self.current += 1
