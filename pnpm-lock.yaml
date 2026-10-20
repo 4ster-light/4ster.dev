@@ -7,7 +7,7 @@ importers:
     configDependencies: {}
     packageManagerDependencies:
       pnpm:
-        specifier: 12.11.2
+        specifier: '>=12'
         version: 12.11.2
 
 packages:
