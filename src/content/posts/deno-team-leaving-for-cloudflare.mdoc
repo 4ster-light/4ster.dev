@@ -12,14 +12,14 @@ tags:
   - cloudflare
   - web
   - open-source
-is-preview: true
+is-preview: false
 ---
 On October 9th 2026 we got hit with the following announcement:
 
 - On Deno's blog: [https://deno.com/blog/cloudflare](https://deno.com/blog/cloudflare)
 - On Cloudflare's blog: [https://blog.cloudflare.com/deno-joins-cloudflare/](https://blog.cloudflare.com/deno-joins-cloudflare/)
 
-First thing I would like to get out of the way is that I am perfectly aware that few people were as emotionally invested in Deno as a project as I was, mainly because **Deno 1** never really took off and that diminished the general public's exposure to how great **Deno 2** was (notice the past tense), fine, it doesn't matter that it never reached widespread adoption, many do agree it was great quality software and a good direction for the JS/TS ecosystem.
+First thing I would like to get out of the way is that I am perfectly aware that few people were as emotionally invested in Deno as a project as I was, mainly because **Deno 1** never really took off and that diminished the general public's exposure to how great **Deno 2** was (notice the past tense). Fine, it doesn't matter that it never reached widespread adoption, many do agree it was great quality software and a good direction for the JS/TS ecosystem.
 
 ## The Announcement
 
@@ -33,7 +33,7 @@ Everyone is entitled to their own opinion regarding software ecosystems and plur
 
 Zoom out and this stops being about Deno. In December 2025 Bun went to Anthropic, and whatever you think of either one of them (I have been vocal of my dislike for most decisions of both in fact), at least they publicly committed to continuing Bun's development as an open source runtime. In January 2026 the Astro team joined Cloudflare. In June 2026 it was VoidZero (Vite, Vitest, Rolldown, Oxc) also joining Cloudflare. And now Deno. The number of independently run, independently governed pieces of the mainstream JavaScript stack is shrinking in real time, and each of those pieces is now one blog post away from a roadmap change nobody voted on.
 
-Deno was the one runtime out there that existed precisely because its author had a list of regrets about the incumbent and decided to do something about it. Node's creator looked at his own creation, said "I regret a few things", and built the correction. And now the correction is gone, absorbed into the platform company whose programming model its own team had, two months earlier, lovingly cloned. [Simon Willison](https://simonwillison.net/2026/Oct/9/deno-is-joining-cloudflare/) put the practical takeaway better than I can:
+Deno was the one runtime out there that existed precisely because its author had a list of regrets about the incumbent and decided to do something about it (even if you could argue the Node compatibility rampage of the late Deno defeated its original purpose, which is a different debate entirely). Node's creator looked at his own creation, said "I regret a few things", and built the correction. And now the correction is gone, absorbed into the platform company whose programming model its own team had, two months earlier, lovingly cloned. [Simon Willison](https://simonwillison.net/2026/Oct/9/deno-is-joining-cloudflare/) put the practical takeaway better than I can:
 
 > This reduces the number of independently operated major JS runtimes by one.
 
@@ -57,8 +57,12 @@ None of that changes what happened to the people who took the bet. Deno raised *
 
 ## Farewell
 
-I'm aware of how emotional all of this reads, hell, some parts read to me as if they were written by an overly dramatic LLM from a year ago. Sadly, I hadn't become experienced or skilled enough to be a contributor on any meaningful sense before the sunset, but I do like to think I did some service to its community. It's a runtime, not a friend. In ten years the JS landscape will be fine, possibly better, and this post may well look overwrought. Maybe plurality was always a luxury the ecosystem couldn't afford, maybe consolidation was the price of the ideas surviving at all.
+I'm aware of how emotional all of this reads, hell, some parts read to me as if they were written by an overly dramatic LLM from a year ago. Sadly, I hadn't become experienced or skilled enough to be a contributor on any meaningful sense before the sunset of the project, but I do like to think I did some service to its community. It's a runtime, not a friend. In ten years the JS landscape will be fine, possibly better, and this post may well look overwrought. Maybe plurality was always a luxury the ecosystem couldn't afford, maybe consolidation was the price of the ideas surviving at all.
 
-Still. *Deno 2 was great.* **Past tense, as I said.**
+Still. **Deno 2** *was great.* ***Past tense, as I said.***
 
 So long, Deno. Thanks for all the flags.
+
+---
+
+**Small note:** Go watch [*ThePrimeagen's* video on the topic](https://youtu.be/5WyoCv68Sok), it sheds some light over the technical aspects of `celld` and why it is great for the community, which is something I didn't want to focus on here, I am in fact a user of Cloudflare Workers (specially now that Deno Deploy is gone), Deno sunsetting being bad news and Cloudflare Workers being good technology are two statements that can coexist, and even if I dislike the company on a personal basis I am happy when anyone improves software in general.
