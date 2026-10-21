@@ -135,6 +135,13 @@ const navLinks = [
 			type="font/ttf"
 			crossorigin
 		>
+		<link
+			rel="preload"
+			href="/fonts/FiraCode-Latin.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		>
 		{jsonLd.map((schema) => (
 			<script type="application/ld+json" set:html={JSON.stringify(schema)} />
 		))}
