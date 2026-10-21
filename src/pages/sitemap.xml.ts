@@ -43,7 +43,7 @@ for (const post of posts) {
 
 	const lang = post.data.lang || "en"
 	urls.push({
-		url: `${site.baseUrl}/${lang}/posts/${post.slug}`,
+		url: `${site.baseUrl}/${lang}/posts/${post.id}`,
 		lastmod: post.data.date.toISOString().slice(0, 10)
 	})
 }

@@ -9,14 +9,15 @@
 
 - Use `pnpm run dev` for local Astro dev.
 - Use `pnpm run build` before deployment or when you need the Cloudflare bundle to be regenerated.
-- Use `pnpm run preview` to test the production build locally with `wrangler dev --local`.
+- Use `pnpm run preview` to test the production build locally with `astro preview` (the
+  Cloudflare adapter's Vite preview server).
 - Use `pnpm run lint` for formatting, linting, and import organization with Biome, but expect it to
   modify files because it runs `biome check --fix`.
 - Use `pnpm run fmt` when you only want Biome formatting.
 - Use `pnpm run check` to sync content and run `astro check` for type errors.
 - Use `pnpm run sync` to regenerate Astro content types before build/preview.
 - Use `pnpm run types` to regenerate `worker-configuration.d.ts` with `wrangler types`; run it after
-  a build so `dist/_worker.js` exists.
+  a build so the build output exists.
 
 ## Repo Shape
 
@@ -38,11 +39,14 @@
 
 ## Workflow Notes
 
-- `pnpm run build` runs `astro sync`, `astro build`, then `wrangler types`. Generating worker types
-  after the build means `dist/_worker.js/index.js` exists, so `worker-configuration.d.ts` is
-  reproducible on a clean checkout (it includes `Cloudflare.GlobalProps`).
-- The site targets Cloudflare Pages/Workers; `wrangler.jsonc` points production at
-  `dist/_worker.js/index.js` and disables `workers_dev` and `preview_urls`.
+- `pnpm run build` runs `astro sync`, `astro build`, then `wrangler types`. `@astrojs/cloudflare` v14
+  emits `dist/client/` and `dist/server/` (worker entry `dist/server/entry.mjs`) plus its own
+  generated `dist/server/wrangler.json`. The source `wrangler.jsonc` only carries bindings and
+  observability settings; do not add `main` or `assets` to it, since the adapter/vite plugin supply
+  those. Generating worker types after the build keeps `worker-configuration.d.ts` reproducible on a
+  clean checkout (it includes `Cloudflare.GlobalProps`).
+- The site targets Cloudflare Workers; `wrangler.jsonc` disables `workers_dev` and `preview_urls`.
+  Deploy with the generated config (`wrangler deploy --config dist/server/wrangler.json`).
 - The projects pages are prerendered. They read `GH_API` at build time through `import.meta.env`
   (Astro inlines it into the server bundle), while the runtime `/api/projects.json` route reads it
   from `process.env`. Cloudflare configures build and runtime secrets separately, so if the build

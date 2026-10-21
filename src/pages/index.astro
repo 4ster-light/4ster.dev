@@ -18,7 +18,7 @@ const initialPosts = enPosts.length > 0 ? "en" : "es"
 const recentLimit = 4
 
 const toCard = (post: (typeof posts)[number]) => ({
-	slug: post.slug,
+	slug: post.id,
 	...post.data,
 	body: post.body
 })

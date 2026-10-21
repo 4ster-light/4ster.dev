@@ -81,7 +81,7 @@ firefox --headless --window-size=1200,630 \
 ## Tech Stack
 
 - **Frontend**: Daisyui 5 + Tailwind CSS 4 + Astro
-- **Deployment**: Cloudflare Pages
+- **Deployment**: Cloudflare Workers
 
 CI/CD handles automatic deployments on push to main.
 

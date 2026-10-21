@@ -7,12 +7,12 @@
 	"devEngines": {
 		"packageManager": {
 			"name": "pnpm",
-			"version": ">=12.11.2 <13",
+			"version": ">=12",
 			"onFail": "download"
 		},
 		"runtime": {
 			"name": "node",
-			"version": ">=24 <25",
+			"version": ">=24",
 			"onFail": "error"
 		}
 	},
@@ -21,15 +21,15 @@
 		"sync": "astro sync",
 		"types": "wrangler types",
 		"build": "pnpm run sync && astro build && pnpm run types",
-		"preview": "pnpm run build && wrangler dev --local",
+		"preview": "pnpm run build && astro preview",
 		"fmt": "biome format --write .",
 		"lint": "biome check --fix .",
 		"check": "pnpm run sync && astro check"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^12.6.13",
-		"@astrojs/markdoc": "^0.14.2",
-		"@astrojs/react": "^4.4.2",
+		"@astrojs/cloudflare": "14.4.1",
+		"@astrojs/markdoc": "2.1.0",
+		"@astrojs/react": "7.1.0",
 		"@keystatic/astro": "^5.2.0",
 		"@keystatic/core": "^0.5.51",
 		"@tailwindcss/typography": "^0.5.20",
@@ -37,19 +37,19 @@
 		"@types/node": "^25.9.9",
 		"@types/react": "^19.3.0",
 		"@types/react-dom": "^19.3.0",
-		"astro": "^5.18.2",
-		"daisyui": "^5.7.47",
+		"astro": "7.4.1",
+		"daisyui": "^5.7.50",
 		"marked": "^15.0.12",
 		"marked-gfm-heading-id": "^4.1.4",
-		"react": "^19.3.0",
-		"react-dom": "^19.3.0",
+		"react": "^19.3.1",
+		"react-dom": "^19.3.1",
 		"shiki": "^1.29.2",
 		"tailwindcss": "^4.3.3"
 	},
 	"devDependencies": {
-		"@astrojs/check": "^0.9.10",
+		"@astrojs/check": "0.9.11",
 		"@biomejs/biome": "^2.5.15",
 		"typescript": "^6.0.3",
-		"wrangler": "^4.149.0"
+		"wrangler": "^4.151.2"
 	}
 }

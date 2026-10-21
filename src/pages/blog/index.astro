@@ -18,7 +18,7 @@ const esPosts = posts.filter((post) => post.data.lang === "es")
 const initialPosts = enPosts.length > 0 ? "en" : "es"
 
 const toCard = (post: (typeof posts)[number]) => ({
-	slug: post.slug,
+	slug: post.id,
 	...post.data,
 	body: post.body
 })

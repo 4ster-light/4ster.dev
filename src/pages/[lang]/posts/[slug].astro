@@ -15,7 +15,7 @@ export const prerender = true
 export const getStaticPaths = async () => {
 	const posts = await getCollection("posts")
 	return posts.map((post) => ({
-		params: { lang: post.data.lang || "en", slug: post.slug }
+		params: { lang: post.data.lang || "en", slug: post.id }
 	}))
 }
 
@@ -25,7 +25,7 @@ const allPosts = (await getCollection("posts")).sort(
 	(a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
 )
 const post = allPosts.find(
-	(entry) => entry.slug === slug && (entry.data.lang || "en") === lang
+	(entry) => entry.id === slug && (entry.data.lang || "en") === lang
 )
 
 if (!post) {
@@ -35,7 +35,7 @@ if (!post) {
 const translatedPost = post.data.translationKey
 	? allPosts.find(
 			(entry) =>
-				entry.slug !== post.slug &&
+				entry.id !== post.id &&
 				entry.data.translationKey === post.data.translationKey &&
 				(entry.data.lang || "en") !== lang
 		)
@@ -46,13 +46,13 @@ const parsed = extractHeadings(marked.parse(post.body || "") as string)
 const recentPosts = allPosts
 	.filter(
 		(entry) =>
-			entry.slug !== post.slug &&
+			entry.id !== post.id &&
 			(entry.data.lang || "en") === lang &&
 			!entry.data["is-preview"]
 	)
 	.slice(0, 5)
 	.map((entry) => ({
-		slug: entry.slug,
+		slug: entry.id,
 		title: entry.data.title,
 		date: entry.data.date,
 		lang: entry.data.lang || "en"
@@ -60,16 +60,16 @@ const recentPosts = allPosts
 
 const switchLabel = lang === "es" ? "Read in English 🇬🇧" : "Leer en español 🇪🇸"
 const switchHref = translatedPost
-	? `/${translatedPost.data.lang || "en"}/posts/${translatedPost.slug}`
+	? `/${translatedPost.data.lang || "en"}/posts/${translatedPost.id}`
 	: undefined
-const canonicalUrl = `${site.baseUrl}/${lang}/posts/${post.slug}`
+const canonicalUrl = `${site.baseUrl}/${lang}/posts/${post.id}`
 const alternateUrls = [
 	{ lang, href: canonicalUrl },
 	...(translatedPost
 		? [
 				{
 					lang: translatedPost.data.lang || "en",
-					href: `${site.baseUrl}/${translatedPost.data.lang || "en"}/posts/${translatedPost.slug}`
+					href: `${site.baseUrl}/${translatedPost.data.lang || "en"}/posts/${translatedPost.id}`
 				}
 			]
 		: [])
@@ -78,7 +78,7 @@ const alternateUrls = [
 const langPosts = allPosts.filter(
 	(entry) => (entry.data.lang || "en") === lang && !entry.data["is-preview"]
 )
-const currentIndex = langPosts.findIndex((entry) => entry.slug === post.slug)
+const currentIndex = langPosts.findIndex((entry) => entry.id === post.id)
 const newerPost = currentIndex > 0 ? langPosts[currentIndex - 1] : undefined
 const olderPost =
 	currentIndex >= 0 && currentIndex < langPosts.length - 1
@@ -118,7 +118,7 @@ const olderPost =
 		}
 	]}
 >
-	<PostMeta post={{ slug: post.slug, ...post.data, body: post.body }} header />
+	<PostMeta post={{ slug: post.id, ...post.data, body: post.body }} header />
 
 	{switchHref && (
 		<div class="mt-6">
@@ -155,7 +155,7 @@ const olderPost =
 		>
 			{olderPost ? (
 				<a
-					href={`/${lang}/posts/${olderPost.slug}`}
+					href={`/${lang}/posts/${olderPost.id}`}
 					class="group flex flex-col gap-1 rounded-xl border border-base-300 p-4 transition-colors hover:border-primary/40 hover:bg-base-200/40"
 				>
 					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">
@@ -170,7 +170,7 @@ const olderPost =
 			)}
 			{newerPost ? (
 				<a
-					href={`/${lang}/posts/${newerPost.slug}`}
+					href={`/${lang}/posts/${newerPost.id}`}
 					class="group flex flex-col items-end gap-1 rounded-xl border border-base-300 p-4 text-right transition-colors hover:border-primary/40 hover:bg-base-200/40 sm:col-start-2"
 				>
 					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">

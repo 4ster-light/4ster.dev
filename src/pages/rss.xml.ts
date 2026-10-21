@@ -22,7 +22,7 @@ export async function GET() {
 
 	const items = posts.map((post) => {
 		const lang = post.data.lang || "en"
-		const url = `${site.baseUrl}/${lang}/posts/${post.slug}`
+		const url = `${site.baseUrl}/${lang}/posts/${post.id}`
 		const categories = (post.data.tags ?? [])
 			.map((tag) => `      <category>${escapeXml(tag)}</category>`)
 			.join("\n")
