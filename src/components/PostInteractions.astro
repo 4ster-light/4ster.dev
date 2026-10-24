@@ -1,0 +1,288 @@
+---
+interface Props {
+	slug: string
+	lang?: "en" | "es"
+}
+
+const { slug, lang = "en" } = Astro.props
+const copy =
+	lang === "es"
+		? {
+				like: "Me gusta",
+				liked: "Ya no me gusta",
+				comments: "Comentarios",
+				name: "Nombre",
+				comment: "Comentario",
+				submit: "Publicar comentario",
+				empty: "Todavía no hay comentarios. ¡Sé la primera persona!",
+				loading: "Cargando…",
+				error: "No se pudieron cargar las interacciones."
+			}
+		: {
+				like: "Like this post",
+				liked: "Unlike this post",
+				comments: "Comments",
+				name: "Name",
+				comment: "Comment",
+				submit: "Post comment",
+				empty: "No comments yet. Be the first!",
+				loading: "Loading…",
+				error: "Interactions could not be loaded."
+			}
+---
+
+<section
+	class="mt-12 border-t border-base-300 pt-8"
+	data-post-interactions
+	data-slug={slug}
+	data-error={copy.error}
+	data-empty={copy.empty}
+	data-like-label={copy.like}
+	data-unlike-label={copy.liked}
+>
+	<div class="flex items-center justify-between gap-4">
+		<h2 class="text-2xl font-bold tracking-tight">{copy.comments}</h2>
+		<button
+			type="button"
+			class="btn btn-sm btn-outline gap-2"
+			data-like-button
+			aria-label={copy.like}
+			aria-pressed="false"
+			disabled
+		>
+			<svg
+				class="size-4"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path
+					d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"
+				></path>
+			</svg>
+			<span data-like-count>0</span>
+		</button>
+	</div>
+
+	<p
+		class="mt-2 text-sm text-base-content/60"
+		data-interaction-status
+		aria-live="polite"
+	>
+		{copy.loading}
+	</p>
+
+	<form class="mt-6 flex flex-col gap-4" data-comment-form>
+		<div class="grid gap-4 sm:grid-cols-[minmax(0,12rem)_1fr] sm:items-start">
+			<label class="form-control">
+				<span class="label-text mb-1">{copy.name}</span>
+				<input
+					name="author"
+					type="text"
+					class="input input-bordered w-full"
+					maxlength="40"
+					autocomplete="nickname"
+					required
+				>
+			</label>
+			<label class="form-control">
+				<span class="label-text mb-1">{copy.comment}</span>
+				<textarea
+					name="body"
+					class="textarea textarea-bordered min-h-24 w-full"
+					maxlength="1000"
+					required
+				></textarea>
+			</label>
+		</div>
+		<label class="hidden" aria-hidden="true">
+			Website
+			<input name="website" type="text" tabindex="-1" autocomplete="off">
+		</label>
+		<div>
+			<button type="submit" class="btn btn-primary btn-sm" data-comment-submit>
+				{copy.submit}
+			</button>
+		</div>
+	</form>
+
+	<div class="mt-8 flex flex-col gap-4" data-comment-list></div>
+</section>
+
+<script>
+interface Comment {
+	id: number
+	author: string
+	body: string
+	createdAt: string
+}
+
+const initializeInteractions = () => {
+	const sections = document.querySelectorAll<HTMLElement>(
+		"[data-post-interactions]:not([data-initialized])"
+	)
+
+	for (const section of sections) {
+		section.dataset.initialized = "true"
+		const slug = section.dataset.slug ?? ""
+		const endpoint = `/api/posts/${encodeURIComponent(slug)}`
+		const likeButton =
+			section.querySelector<HTMLButtonElement>("[data-like-button]")
+		const likeCount = section.querySelector<HTMLElement>("[data-like-count]")
+		const status = section.querySelector<HTMLElement>(
+			"[data-interaction-status]"
+		)
+		const form = section.querySelector<HTMLFormElement>("[data-comment-form]")
+		const submit = section.querySelector<HTMLButtonElement>(
+			"[data-comment-submit]"
+		)
+		const list = section.querySelector<HTMLElement>("[data-comment-list]")
+		if (!likeButton || !likeCount || !status || !form || !submit || !list) {
+			continue
+		}
+
+		const updateLikeButton = (likes: number, liked: boolean) => {
+			likeCount.textContent = String(likes)
+			likeButton.setAttribute("aria-pressed", String(liked))
+			likeButton.setAttribute(
+				"aria-label",
+				liked
+					? (section.dataset.unlikeLabel ?? "Unlike this post")
+					: (section.dataset.likeLabel ?? "Like this post")
+			)
+			likeButton.classList.toggle("btn-primary", liked)
+			likeButton.classList.toggle("btn-outline", !liked)
+		}
+
+		const showError = (message: string) => {
+			status.textContent = message
+			status.classList.add("text-error")
+		}
+		const clearStatus = () => {
+			status.textContent = ""
+			status.classList.remove("text-error")
+		}
+		const renderComments = (comments: Comment[]) => {
+			list.replaceChildren()
+			if (comments.length === 0) {
+				const empty = document.createElement("p")
+				empty.className = "text-sm text-base-content/60"
+				empty.textContent = section.dataset.empty ?? "No comments yet."
+				list.appendChild(empty)
+				return
+			}
+
+			for (const comment of comments) {
+				const article = document.createElement("article")
+				article.className =
+					"rounded-xl border border-base-300 bg-base-200/30 p-4"
+				const header = document.createElement("header")
+				header.className = "flex flex-wrap items-baseline justify-between gap-2"
+				const author = document.createElement("strong")
+				author.textContent = comment.author
+				const date = document.createElement("time")
+				date.className = "font-mono text-xs text-base-content/50"
+				date.dateTime = comment.createdAt
+				date.textContent = new Intl.DateTimeFormat(undefined, {
+					dateStyle: "medium"
+				}).format(new Date(comment.createdAt))
+				const body = document.createElement("p")
+				body.className = "mt-2 whitespace-pre-wrap break-words text-sm"
+				body.textContent = comment.body
+				header.appendChild(author)
+				header.appendChild(date)
+				article.appendChild(header)
+				article.appendChild(body)
+				list.appendChild(article)
+			}
+		}
+
+		const load = async () => {
+			try {
+				const [likeResponse, commentsResponse] = await Promise.all([
+					fetch(`${endpoint}/like`),
+					fetch(`${endpoint}/comments`)
+				])
+				if (!likeResponse.ok || !commentsResponse.ok) {
+					throw new Error("Request failed")
+				}
+				const likes = (await likeResponse.json()) as {
+					likes: number
+					liked: boolean
+				}
+				const comments = (await commentsResponse.json()) as {
+					comments: Comment[]
+				}
+				updateLikeButton(likes.likes, likes.liked)
+				likeButton.disabled = false
+				renderComments(comments.comments)
+				clearStatus()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			}
+		}
+
+		likeButton.addEventListener("click", async () => {
+			likeButton.disabled = true
+			try {
+				const response = await fetch(`${endpoint}/like`, { method: "POST" })
+				if (!response.ok) throw new Error("Request failed")
+				const result = (await response.json()) as {
+					likes: number
+					liked: boolean
+				}
+				updateLikeButton(result.likes, result.liked)
+				clearStatus()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			} finally {
+				likeButton.disabled = false
+			}
+		})
+
+		form.addEventListener("submit", async (event) => {
+			event.preventDefault()
+			submit.disabled = true
+			const data = new FormData(form)
+			try {
+				const response = await fetch(`${endpoint}/comments`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						author: data.get("author"),
+						body: data.get("body"),
+						website: data.get("website")
+					})
+				})
+				const result = (await response.json()) as {
+					comments?: Comment[]
+					error?: string
+				}
+				if (!response.ok || !result.comments) {
+					throw new Error(result.error ?? "Request failed")
+				}
+				renderComments(result.comments)
+				form.reset()
+				clearStatus()
+			} catch (error) {
+				showError(
+					error instanceof Error
+						? error.message
+						: (section.dataset.error ?? "Comment could not be submitted.")
+				)
+			} finally {
+				submit.disabled = false
+			}
+		})
+
+		void load()
+	}
+}
+
+document.addEventListener("astro:page-load", initializeInteractions)
+initializeInteractions()
+</script>

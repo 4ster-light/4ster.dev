@@ -65,6 +65,28 @@ tags: ["personal"]
 Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
 pnpm.
 
+## Post interactions prototype
+
+The `prototype/post-interactions` branch stores likes and comments in Cloudflare D1. Likes use an
+anonymous, HTTP-only visitor cookie; comments are public and have basic validation, a honeypot,
+and per-visitor rate limiting. This is intentionally a prototype: add moderation and stronger
+anti-spam controls before treating comments as production-ready.
+
+For local development, apply the D1 migration and start Astro:
+
+```sh
+pnpm exec wrangler d1 migrations apply DB --local
+pnpm run dev
+```
+
+Before deploying this branch, create the database, copy its real ID into `wrangler.jsonc`, and apply
+the migration remotely:
+
+```sh
+pnpm exec wrangler d1 create aster-interactions
+pnpm exec wrangler d1 migrations apply DB --remote
+```
+
 ## Social preview image
 
 `public/og.png` is generated from `src/assets/og.svg`. Social platforms don't render SVG
