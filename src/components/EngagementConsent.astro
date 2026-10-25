@@ -7,16 +7,16 @@ const { lang = "en" } = Astro.props
 const copy =
 	lang === "es"
 		? {
-				title: "Cookie opcional para interacciones",
-				body: "¿Permites la cookie aster_visitor durante 1 año? Asigna un identificador aleatorio a este navegador para recordar tus «me gusta» y asociar tus comentarios al límite anti-spam. El servidor solo guarda un hash del identificador. No se usa para publicidad, analítica ni seguimiento en otros sitios. Si la rechazas, puedes leer artículos y comentarios, pero no dar «me gusta» ni comentar.",
-				accept: "Aceptar cookie de interacción",
+				title: "¿Quieres activar los «me gusta» y los comentarios?",
+				body: "Este blog usa una cookie para recordar las publicaciones que te gustan y ayudar a evitar comentarios spam repetidos. Se queda en este navegador durante un máximo de 1 año y contiene un código aleatorio, no tu nombre. No la usamos para publicidad ni para seguirte en otras webs. Puedes leerlo todo sin ella. Acepta para dar «me gusta» y comentar, o rechaza para continuar solo con la lectura.",
+				accept: "Aceptar",
 				deny: "Rechazar",
 				error: "No se pudo eliminar la cookie. Inténtalo de nuevo."
 			}
 		: {
-				title: "Optional interaction cookie",
-				body: "Allow the aster_visitor cookie for 1 year? It gives this browser a random ID to remember your likes and associate your comments with the anti-spam rate limit. The server stores only a hash of that ID. It is not used for advertising, analytics, or tracking across other websites. If you deny it, you can read posts and comments, but liking and commenting are disabled.",
-				accept: "Accept interaction cookie",
+				title: "Want to enable likes and comments?",
+				body: "This blog uses a cookie to remember which posts you liked and help prevent repeated spam comments. It stays in this browser for up to 1 year and contains a random code, not your name. We do not use it for advertising or to follow you around the web. You can read everything without it. Accept to like and comment, or deny to continue in read-only mode.",
+				accept: "Accept",
 				deny: "Deny",
 				error: "The cookie could not be cleared. Please try again."
 			}
