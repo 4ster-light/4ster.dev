@@ -51,19 +51,38 @@ tags: ["personal"]
 
 ## Available Commands
 
-| Command            | Purpose                                          |
-| ------------------ | ------------------------------------------------ |
-| `pnpm run dev`     | Start development server                         |
-| `pnpm run build`   | Sync content, build, and regenerate worker types |
-| `pnpm run preview` | Build and preview the production build locally   |
-| `pnpm run fmt`     | Format files with Biome                          |
-| `pnpm run lint`    | Lint and apply safe fixes with Biome             |
-| `pnpm run check`   | Sync content and run `astro check`               |
-| `pnpm run sync`    | Regenerate Astro content types                   |
-| `pnpm run types`   | Regenerate worker types (run after a build)      |
+| Command              | Purpose                                          |
+| -------------------- | ------------------------------------------------ |
+| `pnpm run dev`       | Start development server                         |
+| `pnpm run build`     | Sync content, build, and regenerate worker types |
+| `pnpm run preview`   | Build and preview the production build locally   |
+| `pnpm run fmt`       | Format files with Biome                          |
+| `pnpm run lint`      | Lint and apply safe fixes with Biome             |
+| `pnpm run check`     | Sync content and run `astro check`               |
+| `pnpm run sync`      | Regenerate Astro content types                   |
+| `pnpm run types`     | Regenerate worker types (run after a build)      |
+| `pnpm run test`      | Run the Vitest and Playwright suites             |
+| `pnpm run test:unit` | Run Workers/D1 tests with Vitest                 |
+| `pnpm run test:e2e`  | Run focused browser tests with Playwright        |
 
 Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
 pnpm.
+
+## Testing
+
+The Vitest suite uses `@cloudflare/vitest-plugin` to run inside the Workers runtime with a real,
+isolated D1 database. It applies the tracked migrations automatically, so no local database setup
+is required. It covers interaction repository behavior and the consent guards on the API routes.
+
+The Playwright suite runs Chromium against the Astro dev server and mocks the interaction API
+responses. It focuses on the consent gate, read-only mode, persistence across reloads, and safe
+rendering of comment text. Install the browser once with:
+
+```sh
+pnpm exec playwright install chromium
+```
+
+`pnpm run test` runs both suites. CI runs them after the formatting and type checks.
 
 ## Post interactions and D1
 

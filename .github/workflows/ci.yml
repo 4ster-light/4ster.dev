@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   checks:
-    name: Format, lint, import order & type check
+    name: Format, lint, type check & tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,3 +34,12 @@ jobs:
 
       - name: Astro type check
         run: pnpm run check
+
+      - name: Unit and D1 tests
+        run: pnpm run test:unit
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Browser tests
+        run: pnpm run test:e2e

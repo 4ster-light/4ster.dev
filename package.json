@@ -24,7 +24,10 @@
 		"preview": "pnpm run build && astro preview",
 		"fmt": "biome format --write .",
 		"lint": "biome check --fix .",
-		"check": "pnpm run sync && astro check"
+		"check": "pnpm run sync && astro check",
+		"test": "pnpm run test:unit && pnpm run test:e2e",
+		"test:unit": "vitest run",
+		"test:e2e": "playwright test"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "14.4.1",
@@ -49,7 +52,10 @@
 	"devDependencies": {
 		"@astrojs/check": "0.9.11",
 		"@biomejs/biome": "^2.5.15",
+		"@cloudflare/vitest-plugin": "^1.4.7",
+		"@playwright/test": "^1.64.1",
 		"typescript": "^6.0.3",
+		"vitest": "^4.1.12",
 		"wrangler": "^4.151.2"
 	}
 }
