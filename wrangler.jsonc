@@ -7,7 +7,7 @@
 		{
 			"binding": "DB",
 			"database_name": "aster-interactions",
-			"database_id": "00000000-0000-0000-0000-000000000000",
+			"database_id": "3f4e41db-e71d-4ba7-b8c6-af7a5d221f06",
 			"migrations_dir": "migrations"
 		}
 	],
