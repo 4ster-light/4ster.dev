@@ -68,8 +68,10 @@ pnpm.
 ## Post interactions prototype
 
 The `prototype/post-interactions` branch stores likes and comments in Cloudflare D1. Likes use an
-anonymous, HTTP-only visitor cookie; comments are public and have basic validation, a honeypot,
-and per-visitor rate limiting. This is intentionally a prototype: add moderation and stronger
+anonymous, HTTP-only visitor cookie; a composite primary key allows one like per post and visitor,
+and clicking again removes it. This is not authentication: clearing cookies or changing browsers
+creates a new visitor. Comments are public and have basic validation, a honeypot, and per-visitor
+rate limiting. This is intentionally a prototype: add moderation and stronger
 anti-spam controls before treating comments as production-ready.
 
 For local development, apply the D1 migration and start Astro:

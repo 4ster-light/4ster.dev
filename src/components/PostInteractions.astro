@@ -50,7 +50,15 @@ const copy =
 	<div class="flex flex-wrap items-center justify-between gap-4">
 		<div>
 			<p class="eyebrow">{lang === "es" ? "Conversación" : "Conversation"}</p>
-			<h2 class="mt-2 text-2xl font-bold tracking-tight">{copy.comments}</h2>
+			<div class="mt-2 flex items-center gap-2.5">
+				<h2 class="text-2xl font-bold tracking-tight">{copy.comments}</h2>
+				<span
+					class="rounded-full bg-base-200 px-2 py-0.5 font-mono text-[0.65rem] text-base-content/55"
+					data-comment-count
+				>
+					0
+				</span>
+			</div>
 		</div>
 		<button
 			type="button"
@@ -143,7 +151,7 @@ const copy =
 		</div>
 	</form>
 
-	<div class="mt-6 divide-y divide-base-300/70" data-comment-list></div>
+	<ol class="mt-8 list-none divide-y divide-base-300/70" data-comment-list></ol>
 </section>
 
 <script>
@@ -174,7 +182,18 @@ const initializeInteractions = () => {
 			"[data-comment-submit]"
 		)
 		const list = section.querySelector<HTMLElement>("[data-comment-list]")
-		if (!likeButton || !likeCount || !status || !form || !submit || !list) {
+		const commentCount = section.querySelector<HTMLElement>(
+			"[data-comment-count]"
+		)
+		if (
+			!likeButton ||
+			!likeCount ||
+			!status ||
+			!form ||
+			!submit ||
+			!list ||
+			!commentCount
+		) {
 			continue
 		}
 
@@ -201,38 +220,59 @@ const initializeInteractions = () => {
 		}
 		const renderComments = (comments: Comment[]) => {
 			list.replaceChildren()
+			commentCount.textContent = String(comments.length)
 			if (comments.length === 0) {
-				const empty = document.createElement("p")
+				const empty = document.createElement("li")
 				empty.className =
-					"border-l-2 border-base-300 py-1 pl-4 text-sm text-base-content/55"
+					"rounded-2xl border border-dashed border-base-300 px-6 py-8 text-center text-sm text-base-content/55"
 				empty.textContent = section.dataset.empty ?? "No comments yet."
 				list.appendChild(empty)
 				return
 			}
 
 			for (const comment of comments) {
+				const item = document.createElement("li")
+				item.className =
+					"grid grid-cols-[2.25rem_minmax(0,1fr)] gap-3 py-7 first:pt-2 last:pb-0 sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:gap-4"
+				const avatar = document.createElement("div")
+				avatar.className =
+					"flex size-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-mono text-[0.65rem] font-semibold uppercase text-primary sm:size-10"
+				avatar.setAttribute("aria-hidden", "true")
+				avatar.textContent = comment.author
+					.trim()
+					.split(/\s+/)
+					.slice(0, 2)
+					.map((part) => Array.from(part)[0] ?? "")
+					.join("")
 				const article = document.createElement("article")
-				article.className = "py-6 first:pt-2 last:pb-0"
+				article.className = "min-w-0 pt-0.5"
 				const header = document.createElement("header")
 				header.className = "flex flex-wrap items-baseline gap-x-3 gap-y-1"
 				const author = document.createElement("strong")
-				author.className = "text-sm font-semibold"
+				author.className = "text-sm font-semibold tracking-tight"
 				author.textContent = comment.author
 				const date = document.createElement("time")
 				date.className = "font-mono text-[0.65rem] text-base-content/45"
 				date.dateTime = comment.createdAt
+				const fullDate = new Intl.DateTimeFormat(undefined, {
+					dateStyle: "full",
+					timeStyle: "short"
+				}).format(new Date(comment.createdAt))
+				date.title = fullDate
 				date.textContent = new Intl.DateTimeFormat(undefined, {
 					dateStyle: "medium"
 				}).format(new Date(comment.createdAt))
 				const body = document.createElement("p")
 				body.className =
-					"mt-2 max-w-[65ch] whitespace-pre-wrap break-words text-[0.95rem] leading-7 text-base-content/80"
+					"mt-2 max-w-[65ch] whitespace-pre-wrap break-words text-[0.95rem] leading-7 text-base-content/75"
 				body.textContent = comment.body
 				header.appendChild(author)
 				header.appendChild(date)
 				article.appendChild(header)
 				article.appendChild(body)
-				list.appendChild(article)
+				item.appendChild(avatar)
+				item.appendChild(article)
+				list.appendChild(item)
 			}
 		}
 
