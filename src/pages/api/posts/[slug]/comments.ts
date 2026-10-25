@@ -3,6 +3,7 @@ import type { APIRoute } from "astro"
 import {
 	errorResponse,
 	getVisitor,
+	hasInteractionConsent,
 	isValidSlug,
 	jsonResponse,
 	setVisitorCookie
@@ -40,6 +41,9 @@ export const GET: APIRoute = async ({ params }) => {
 export const POST: APIRoute = async ({ params, request }) => {
 	const slug = params.slug ?? ""
 	if (!isValidSlug(slug)) return errorResponse("Invalid post slug", 400)
+	if (!hasInteractionConsent(request)) {
+		return errorResponse("Interaction cookie consent is required", 403)
+	}
 
 	let input: { author?: unknown; body?: unknown; website?: unknown }
 	try {

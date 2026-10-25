@@ -36,6 +36,9 @@ export const getVisitor = async (request: Request) => {
 	return { token, hash }
 }
 
+export const hasInteractionConsent = (request: Request) =>
+	request.headers.get("X-Engagement-Consent") === "accepted"
+
 export const setVisitorCookie = (
 	headers: Headers,
 	request: Request,
@@ -45,6 +48,16 @@ export const setVisitorCookie = (
 	headers.append(
 		"Set-Cookie",
 		`${VISITOR_COOKIE}=${token}; Max-Age=31536000; Path=/; HttpOnly; SameSite=Lax${secure}`
+	)
+	return headers
+}
+
+export const clearVisitorCookie = (request: Request) => {
+	const secure = new URL(request.url).protocol === "https:" ? "; Secure" : ""
+	const headers = new Headers()
+	headers.append(
+		"Set-Cookie",
+		`${VISITOR_COOKIE}=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; HttpOnly; SameSite=Lax${secure}`
 	)
 	return headers
 }

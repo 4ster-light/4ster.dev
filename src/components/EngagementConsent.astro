@@ -1,0 +1,134 @@
+---
+interface Props {
+	lang?: "en" | "es"
+}
+
+const { lang = "en" } = Astro.props
+const copy =
+	lang === "es"
+		? {
+				title: "Cookie opcional para interacciones",
+				body: "¿Permites la cookie aster_visitor durante 1 año? Asigna un identificador aleatorio a este navegador para recordar tus «me gusta» y asociar tus comentarios al límite anti-spam. El servidor solo guarda un hash del identificador. No se usa para publicidad, analítica ni seguimiento en otros sitios. Si la rechazas, puedes leer artículos y comentarios, pero no dar «me gusta» ni comentar.",
+				accept: "Aceptar cookie de interacción",
+				deny: "Rechazar",
+				error: "No se pudo eliminar la cookie. Inténtalo de nuevo."
+			}
+		: {
+				title: "Optional interaction cookie",
+				body: "Allow the aster_visitor cookie for 1 year? It gives this browser a random ID to remember your likes and associate your comments with the anti-spam rate limit. The server stores only a hash of that ID. It is not used for advertising, analytics, or tracking across other websites. If you deny it, you can read posts and comments, but liking and commenting are disabled.",
+				accept: "Accept interaction cookie",
+				deny: "Deny",
+				error: "The cookie could not be cleared. Please try again."
+			}
+---
+
+<aside
+	class="fixed inset-x-3 bottom-3 z-50 mx-auto hidden max-w-2xl rounded-2xl border border-base-300 bg-base-100/95 p-5 shadow-2xl backdrop-blur sm:inset-x-6 sm:bottom-6 sm:p-6"
+	data-engagement-consent
+	data-error={copy.error}
+	role="dialog"
+	aria-labelledby="interaction-cookie-title"
+	aria-describedby="interaction-cookie-description"
+>
+	<h2 id="interaction-cookie-title" class="text-lg font-bold tracking-tight">
+		{copy.title}
+	</h2>
+	<p
+		id="interaction-cookie-description"
+		class="mt-2 text-sm leading-6 text-base-content/70"
+	>
+		{copy.body}
+	</p>
+	<p class="mt-3 hidden text-sm text-error" data-consent-error role="alert"></p>
+	<div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+		<button type="button" class="btn btn-ghost btn-sm" data-consent-deny>
+			{copy.deny}
+		</button>
+		<button type="button" class="btn btn-primary btn-sm" data-consent-accept>
+			{copy.accept}
+		</button>
+	</div>
+</aside>
+
+<script>
+const CONSENT_KEY = "aster-engagement-consent"
+
+const getConsentChoice = () => {
+	try {
+		return localStorage.getItem(CONSENT_KEY)
+	} catch {
+		return null
+	}
+}
+
+const saveConsentChoice = (choice: "accepted" | "denied") => {
+	try {
+		localStorage.setItem(CONSENT_KEY, choice)
+	} catch {
+		// The choice still applies to the current page when storage is blocked.
+	}
+}
+
+const notifyInteractions = (accepted: boolean) => {
+	for (const section of document.querySelectorAll("[data-post-interactions]")) {
+		section.dispatchEvent(
+			new CustomEvent("engagement:consent", { detail: { accepted } })
+		)
+	}
+}
+
+const initializeConsent = () => {
+	const banners = document.querySelectorAll<HTMLElement>(
+		"[data-engagement-consent]:not([data-initialized])"
+	)
+	for (const banner of banners) {
+		banner.dataset.initialized = "true"
+		const accept = banner.querySelector<HTMLButtonElement>(
+			"[data-consent-accept]"
+		)
+		const deny = banner.querySelector<HTMLButtonElement>("[data-consent-deny]")
+		const error = banner.querySelector<HTMLElement>("[data-consent-error]")
+		if (!accept || !deny || !error) continue
+
+		banner.classList.toggle("hidden", getConsentChoice() !== null)
+		accept.addEventListener("click", () => {
+			saveConsentChoice("accepted")
+			banner.classList.add("hidden")
+			error.classList.add("hidden")
+			notifyInteractions(true)
+		})
+		deny.addEventListener("click", async () => {
+			deny.disabled = true
+			accept.disabled = true
+			error.classList.add("hidden")
+			try {
+				const response = await fetch("/api/engagement/consent", {
+					method: "DELETE"
+				})
+				if (!response.ok) throw new Error("Request failed")
+				saveConsentChoice("denied")
+				banner.classList.add("hidden")
+				notifyInteractions(false)
+			} catch {
+				error.textContent =
+					banner.dataset.error ?? "The cookie could not be cleared."
+				error.classList.remove("hidden")
+			} finally {
+				deny.disabled = false
+				accept.disabled = false
+			}
+		})
+	}
+}
+
+document.addEventListener("click", (event) => {
+	const target = event.target as Element | null
+	if (!target?.closest("[data-consent-open]")) return
+	document
+		.querySelector<HTMLElement>("[data-engagement-consent]")
+		?.classList.remove("hidden")
+})
+
+document.addEventListener("astro:page-load", initializeConsent)
+initializeConsent()
+</script>

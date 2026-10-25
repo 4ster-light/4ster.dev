@@ -19,6 +19,9 @@ const copy =
 				guidelines: "Texto sin formato · Máximo 1.000 caracteres",
 				empty: "Todavía no hay comentarios. ¡Sé la primera persona!",
 				loading: "Cargando…",
+				consentRequired:
+					"Acepta la cookie opcional de interacción para dar «me gusta» o comentar. Leer comentarios no requiere cookies.",
+				cookieSettings: "Ver opciones de cookies",
 				error: "No se pudieron cargar las interacciones."
 			}
 		: {
@@ -33,6 +36,9 @@ const copy =
 				guidelines: "Plain text · 1,000 characters max",
 				empty: "No comments yet. Be the first!",
 				loading: "Loading…",
+				consentRequired:
+					"Accept the optional interaction cookie to like or comment. Reading comments does not require cookies.",
+				cookieSettings: "Review cookie choices",
 				error: "Interactions could not be loaded."
 			}
 ---
@@ -94,6 +100,16 @@ const copy =
 		{copy.loading}
 	</p>
 
+	<p
+		class="mt-4 rounded-xl border border-base-300/80 bg-base-200/20 px-4 py-3 text-sm text-base-content/65"
+		data-consent-note
+	>
+		{copy.consentRequired}{" "}
+		<button type="button" class="link link-primary" data-consent-open>
+			{copy.cookieSettings}
+		</button>
+	</p>
+
 	<form
 		class="mt-6 overflow-hidden rounded-2xl border border-base-300/80 bg-base-200/20 transition-colors focus-within:border-primary/50 focus-within:bg-base-200/35"
 		data-comment-form
@@ -113,6 +129,7 @@ const copy =
 					maxlength="40"
 					autocomplete="nickname"
 					required
+					disabled
 				>
 			</label>
 			<label class="block">
@@ -128,6 +145,7 @@ const copy =
 					placeholder={copy.commentPlaceholder}
 					maxlength="1000"
 					required
+					disabled
 				></textarea>
 			</label>
 		</div>
@@ -145,6 +163,7 @@ const copy =
 				type="submit"
 				class="btn btn-primary btn-sm w-full sm:w-auto"
 				data-comment-submit
+				disabled
 			>
 				{copy.submit}
 			</button>
@@ -160,6 +179,14 @@ interface Comment {
 	author: string
 	body: string
 	createdAt: string
+}
+
+const getEngagementConsent = () => {
+	try {
+		return localStorage.getItem("aster-engagement-consent") === "accepted"
+	} catch {
+		return false
+	}
 }
 
 const initializeInteractions = () => {
@@ -185,6 +212,9 @@ const initializeInteractions = () => {
 		const commentCount = section.querySelector<HTMLElement>(
 			"[data-comment-count]"
 		)
+		const consentNote = section.querySelector<HTMLElement>(
+			"[data-consent-note]"
+		)
 		if (
 			!likeButton ||
 			!likeCount ||
@@ -192,7 +222,8 @@ const initializeInteractions = () => {
 			!form ||
 			!submit ||
 			!list ||
-			!commentCount
+			!commentCount ||
+			!consentNote
 		) {
 			continue
 		}
@@ -276,26 +307,41 @@ const initializeInteractions = () => {
 			}
 		}
 
-		const load = async () => {
+		const setInteractionAccess = (allowed: boolean) => {
+			for (const control of form.querySelectorAll<
+				HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement
+			>("input, textarea, button")) {
+				control.disabled = !allowed
+			}
+			consentNote.classList.toggle("hidden", allowed)
+			if (!allowed) likeButton.disabled = true
+		}
+
+		const loadComments = async () => {
 			try {
-				const [likeResponse, commentsResponse] = await Promise.all([
-					fetch(`${endpoint}/like`),
-					fetch(`${endpoint}/comments`)
-				])
-				if (!likeResponse.ok || !commentsResponse.ok) {
-					throw new Error("Request failed")
-				}
-				const likes = (await likeResponse.json()) as {
+				const response = await fetch(`${endpoint}/comments`)
+				if (!response.ok) throw new Error("Request failed")
+				const result = (await response.json()) as { comments: Comment[] }
+				renderComments(result.comments)
+				clearStatus()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			}
+		}
+
+		const loadLikes = async () => {
+			likeButton.disabled = true
+			try {
+				const response = await fetch(`${endpoint}/like`, {
+					headers: { "X-Engagement-Consent": "accepted" }
+				})
+				if (!response.ok) throw new Error("Request failed")
+				const likes = (await response.json()) as {
 					likes: number
 					liked: boolean
 				}
-				const comments = (await commentsResponse.json()) as {
-					comments: Comment[]
-				}
 				updateLikeButton(likes.likes, likes.liked)
-				likeButton.disabled = false
-				renderComments(comments.comments)
-				clearStatus()
+				likeButton.disabled = !getEngagementConsent()
 			} catch {
 				showError(section.dataset.error ?? "Interactions could not be loaded.")
 			}
@@ -304,7 +350,10 @@ const initializeInteractions = () => {
 		likeButton.addEventListener("click", async () => {
 			likeButton.disabled = true
 			try {
-				const response = await fetch(`${endpoint}/like`, { method: "POST" })
+				const response = await fetch(`${endpoint}/like`, {
+					method: "POST",
+					headers: { "X-Engagement-Consent": "accepted" }
+				})
 				if (!response.ok) throw new Error("Request failed")
 				const result = (await response.json()) as {
 					likes: number
@@ -315,7 +364,7 @@ const initializeInteractions = () => {
 			} catch {
 				showError(section.dataset.error ?? "Interactions could not be loaded.")
 			} finally {
-				likeButton.disabled = false
+				likeButton.disabled = !getEngagementConsent()
 			}
 		})
 
@@ -326,7 +375,10 @@ const initializeInteractions = () => {
 			try {
 				const response = await fetch(`${endpoint}/comments`, {
 					method: "POST",
-					headers: { "Content-Type": "application/json" },
+					headers: {
+						"Content-Type": "application/json",
+						"X-Engagement-Consent": "accepted"
+					},
 					body: JSON.stringify({
 						author: data.get("author"),
 						body: data.get("body"),
@@ -350,11 +402,21 @@ const initializeInteractions = () => {
 						: (section.dataset.error ?? "Comment could not be submitted.")
 				)
 			} finally {
-				submit.disabled = false
+				submit.disabled = !getEngagementConsent()
 			}
 		})
 
-		void load()
+		section.addEventListener("engagement:consent", (event) => {
+			const accepted = (event as CustomEvent<{ accepted: boolean }>).detail
+				.accepted
+			setInteractionAccess(accepted)
+			if (accepted) void loadLikes()
+		})
+
+		const accepted = getEngagementConsent()
+		setInteractionAccess(accepted)
+		void loadComments()
+		if (accepted) void loadLikes()
 	}
 }
 
