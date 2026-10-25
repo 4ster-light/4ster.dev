@@ -1,0 +1,425 @@
+---
+interface Props {
+	slug: string
+	lang?: "en" | "es"
+}
+
+const { slug, lang = "en" } = Astro.props
+const copy =
+	lang === "es"
+		? {
+				like: "Me gusta",
+				liked: "Ya no me gusta",
+				comments: "Comentarios",
+				name: "Nombre visible",
+				namePlaceholder: "Tu nombre",
+				comment: "Participa en la conversación",
+				commentPlaceholder: "Comparte tu opinión…",
+				submit: "Publicar comentario",
+				guidelines: "Texto sin formato · Máximo 1.000 caracteres",
+				empty: "Todavía no hay comentarios. ¡Sé la primera persona!",
+				loading: "Cargando…",
+				consentRequired:
+					"Para dar «me gusta» o comentar, acepta la cookie que usan estas funciones. No la necesitas para leer los comentarios.",
+				cookieSettings: "Cambiar mi elección",
+				error: "No se pudieron cargar las interacciones."
+			}
+		: {
+				like: "Like this post",
+				liked: "Unlike this post",
+				comments: "Comments",
+				name: "Display name",
+				namePlaceholder: "Your name",
+				comment: "Join the discussion",
+				commentPlaceholder: "Share your thoughts…",
+				submit: "Post comment",
+				guidelines: "Plain text · 1,000 characters max",
+				empty: "No comments yet. Be the first!",
+				loading: "Loading…",
+				consentRequired:
+					"To like or comment, allow the cookie used by these features. You do not need it to read comments.",
+				cookieSettings: "Change my choice",
+				error: "Interactions could not be loaded."
+			}
+---
+
+<section
+	id="discussion"
+	class="mt-16 border-t border-base-300/80 pt-10"
+	data-post-interactions
+	data-slug={slug}
+	data-error={copy.error}
+	data-empty={copy.empty}
+	data-like-label={copy.like}
+	data-unlike-label={copy.liked}
+>
+	<div class="flex flex-wrap items-center justify-between gap-4">
+		<div>
+			<p class="eyebrow">{lang === "es" ? "Conversación" : "Conversation"}</p>
+			<div class="mt-2 flex items-center gap-2.5">
+				<h2 class="text-2xl font-bold tracking-tight">{copy.comments}</h2>
+				<span
+					class="rounded-full bg-base-200 px-2 py-0.5 font-mono text-[0.65rem] text-base-content/55"
+					data-comment-count
+				>
+					0
+				</span>
+			</div>
+		</div>
+		<button
+			type="button"
+			class="btn btn-sm btn-outline gap-2 rounded-full px-4"
+			data-like-button
+			aria-label={copy.like}
+			aria-pressed="false"
+			disabled
+		>
+			<svg
+				class="size-4"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path
+					d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"
+				></path>
+			</svg>
+			<span class="font-mono text-xs" data-like-count>0</span>
+		</button>
+	</div>
+
+	<p
+		class="mt-3 min-h-5 text-sm text-base-content/60 empty:hidden"
+		data-interaction-status
+		aria-live="polite"
+	>
+		{copy.loading}
+	</p>
+
+	<p
+		class="mt-4 rounded-xl border border-base-300/80 bg-base-200/20 px-4 py-3 text-sm text-base-content/65"
+		data-consent-note
+	>
+		{copy.consentRequired}{" "}
+		<button type="button" class="link link-primary" data-consent-open>
+			{copy.cookieSettings}
+		</button>
+	</p>
+
+	<form
+		class="mt-6 overflow-hidden rounded-2xl border border-base-300/80 bg-base-200/20 transition-colors focus-within:border-primary/50 focus-within:bg-base-200/35"
+		data-comment-form
+	>
+		<div class="flex flex-col gap-5 p-4 sm:p-6">
+			<label class="block max-w-full sm:max-w-72">
+				<span
+					class="font-mono text-[0.65rem] uppercase tracking-widest text-base-content/50"
+				>
+					{copy.name}
+				</span>
+				<input
+					name="author"
+					type="text"
+					class="mt-1 w-full border-b border-base-300 bg-transparent px-0 py-2 text-sm outline-none transition-colors placeholder:text-base-content/35 focus:border-primary"
+					placeholder={copy.namePlaceholder}
+					maxlength="40"
+					autocomplete="nickname"
+					required
+					disabled
+				>
+			</label>
+			<label class="block">
+				<span
+					class="font-mono text-[0.65rem] uppercase tracking-widest text-base-content/50"
+				>
+					{copy.comment}
+				</span>
+				<textarea
+					name="body"
+					rows="4"
+					class="mt-2 min-h-28 w-full resize-y bg-transparent px-0 py-1 text-[0.95rem] leading-7 outline-none placeholder:text-base-content/35"
+					placeholder={copy.commentPlaceholder}
+					maxlength="1000"
+					required
+					disabled
+				></textarea>
+			</label>
+		</div>
+		<label class="hidden" aria-hidden="true">
+			Website
+			<input name="website" type="text" tabindex="-1" autocomplete="off">
+		</label>
+		<div
+			class="flex flex-col-reverse gap-3 border-t border-base-300/70 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+		>
+			<p class="font-mono text-[0.65rem] leading-relaxed text-base-content/45">
+				{copy.guidelines}
+			</p>
+			<button
+				type="submit"
+				class="btn btn-primary btn-sm w-full sm:w-auto"
+				data-comment-submit
+				disabled
+			>
+				{copy.submit}
+			</button>
+		</div>
+	</form>
+
+	<ol class="mt-8 list-none divide-y divide-base-300/70" data-comment-list></ol>
+</section>
+
+<script>
+interface Comment {
+	id: number
+	author: string
+	body: string
+	createdAt: string
+}
+
+const getEngagementConsent = () => {
+	try {
+		return localStorage.getItem("aster-engagement-consent") === "accepted"
+	} catch {
+		return false
+	}
+}
+
+const initializeInteractions = () => {
+	const sections = document.querySelectorAll<HTMLElement>(
+		"[data-post-interactions]:not([data-initialized])"
+	)
+
+	for (const section of sections) {
+		section.dataset.initialized = "true"
+		const slug = section.dataset.slug ?? ""
+		const endpoint = `/api/posts/${encodeURIComponent(slug)}`
+		const likeButton =
+			section.querySelector<HTMLButtonElement>("[data-like-button]")
+		const likeCount = section.querySelector<HTMLElement>("[data-like-count]")
+		const status = section.querySelector<HTMLElement>(
+			"[data-interaction-status]"
+		)
+		const form = section.querySelector<HTMLFormElement>("[data-comment-form]")
+		const submit = section.querySelector<HTMLButtonElement>(
+			"[data-comment-submit]"
+		)
+		const list = section.querySelector<HTMLElement>("[data-comment-list]")
+		const commentCount = section.querySelector<HTMLElement>(
+			"[data-comment-count]"
+		)
+		const consentNote = section.querySelector<HTMLElement>(
+			"[data-consent-note]"
+		)
+		if (
+			!likeButton ||
+			!likeCount ||
+			!status ||
+			!form ||
+			!submit ||
+			!list ||
+			!commentCount ||
+			!consentNote
+		) {
+			continue
+		}
+
+		const updateLikeButton = (likes: number, liked: boolean) => {
+			likeCount.textContent = String(likes)
+			likeButton.setAttribute("aria-pressed", String(liked))
+			likeButton.setAttribute(
+				"aria-label",
+				liked
+					? (section.dataset.unlikeLabel ?? "Unlike this post")
+					: (section.dataset.likeLabel ?? "Like this post")
+			)
+			likeButton.classList.toggle("btn-primary", liked)
+			likeButton.classList.toggle("btn-outline", !liked)
+		}
+
+		const showError = (message: string) => {
+			status.textContent = message
+			status.classList.add("text-error")
+		}
+		const clearStatus = () => {
+			status.textContent = ""
+			status.classList.remove("text-error")
+		}
+		const renderComments = (comments: Comment[]) => {
+			list.replaceChildren()
+			commentCount.textContent = String(comments.length)
+			if (comments.length === 0) {
+				const empty = document.createElement("li")
+				empty.className =
+					"rounded-2xl border border-dashed border-base-300 px-6 py-8 text-center text-sm text-base-content/55"
+				empty.textContent = section.dataset.empty ?? "No comments yet."
+				list.appendChild(empty)
+				return
+			}
+
+			for (const comment of comments) {
+				const item = document.createElement("li")
+				item.className =
+					"grid grid-cols-[2.25rem_minmax(0,1fr)] gap-3 py-7 first:pt-2 last:pb-0 sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:gap-4"
+				const avatar = document.createElement("div")
+				avatar.className =
+					"flex size-9 items-center justify-center rounded-full border border-primary/20 bg-primary/10 font-mono text-[0.65rem] font-semibold uppercase text-primary sm:size-10"
+				avatar.setAttribute("aria-hidden", "true")
+				avatar.textContent = comment.author
+					.trim()
+					.split(/\s+/)
+					.slice(0, 2)
+					.map((part) => Array.from(part)[0] ?? "")
+					.join("")
+				const article = document.createElement("article")
+				article.className = "min-w-0 pt-0.5"
+				const header = document.createElement("header")
+				header.className = "flex flex-wrap items-baseline gap-x-3 gap-y-1"
+				const author = document.createElement("strong")
+				author.className = "text-sm font-semibold tracking-tight"
+				author.textContent = comment.author
+				const date = document.createElement("time")
+				date.className = "font-mono text-[0.65rem] text-base-content/45"
+				date.dateTime = comment.createdAt
+				const fullDate = new Intl.DateTimeFormat(undefined, {
+					dateStyle: "full",
+					timeStyle: "short"
+				}).format(new Date(comment.createdAt))
+				date.title = fullDate
+				date.textContent = new Intl.DateTimeFormat(undefined, {
+					dateStyle: "medium"
+				}).format(new Date(comment.createdAt))
+				const body = document.createElement("p")
+				body.className =
+					"mt-2 max-w-[65ch] whitespace-pre-wrap break-words text-[0.95rem] leading-7 text-base-content/75"
+				body.textContent = comment.body
+				header.appendChild(author)
+				header.appendChild(date)
+				article.appendChild(header)
+				article.appendChild(body)
+				item.appendChild(avatar)
+				item.appendChild(article)
+				list.appendChild(item)
+			}
+		}
+
+		const setInteractionAccess = (allowed: boolean) => {
+			for (const control of form.querySelectorAll<
+				HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement
+			>("input, textarea, button")) {
+				control.disabled = !allowed
+			}
+			consentNote.classList.toggle("hidden", allowed)
+			if (!allowed) likeButton.disabled = true
+		}
+
+		const loadComments = async () => {
+			try {
+				const response = await fetch(`${endpoint}/comments`)
+				if (!response.ok) throw new Error("Request failed")
+				const result = (await response.json()) as { comments: Comment[] }
+				renderComments(result.comments)
+				clearStatus()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			}
+		}
+
+		const loadLikes = async () => {
+			likeButton.disabled = true
+			try {
+				const response = await fetch(`${endpoint}/like`, {
+					headers: { "X-Engagement-Consent": "accepted" }
+				})
+				if (!response.ok) throw new Error("Request failed")
+				const likes = (await response.json()) as {
+					likes: number
+					liked: boolean
+				}
+				updateLikeButton(likes.likes, likes.liked)
+				likeButton.disabled = !getEngagementConsent()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			}
+		}
+
+		likeButton.addEventListener("click", async () => {
+			likeButton.disabled = true
+			try {
+				const response = await fetch(`${endpoint}/like`, {
+					method: "POST",
+					headers: { "X-Engagement-Consent": "accepted" }
+				})
+				if (!response.ok) throw new Error("Request failed")
+				const result = (await response.json()) as {
+					likes: number
+					liked: boolean
+				}
+				updateLikeButton(result.likes, result.liked)
+				clearStatus()
+			} catch {
+				showError(section.dataset.error ?? "Interactions could not be loaded.")
+			} finally {
+				likeButton.disabled = !getEngagementConsent()
+			}
+		})
+
+		form.addEventListener("submit", async (event) => {
+			event.preventDefault()
+			submit.disabled = true
+			const data = new FormData(form)
+			try {
+				const response = await fetch(`${endpoint}/comments`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-Engagement-Consent": "accepted"
+					},
+					body: JSON.stringify({
+						author: data.get("author"),
+						body: data.get("body"),
+						website: data.get("website")
+					})
+				})
+				const result = (await response.json()) as {
+					comments?: Comment[]
+					error?: string
+				}
+				if (!response.ok || !result.comments) {
+					throw new Error(result.error ?? "Request failed")
+				}
+				renderComments(result.comments)
+				form.reset()
+				clearStatus()
+			} catch (error) {
+				showError(
+					error instanceof Error
+						? error.message
+						: (section.dataset.error ?? "Comment could not be submitted.")
+				)
+			} finally {
+				submit.disabled = !getEngagementConsent()
+			}
+		})
+
+		section.addEventListener("engagement:consent", (event) => {
+			const accepted = (event as CustomEvent<{ accepted: boolean }>).detail
+				.accepted
+			setInteractionAccess(accepted)
+			if (accepted) void loadLikes()
+		})
+
+		const accepted = getEngagementConsent()
+		setInteractionAccess(accepted)
+		void loadComments()
+		if (accepted) void loadLikes()
+	}
+}
+
+document.addEventListener("astro:page-load", initializeInteractions)
+initializeInteractions()
+</script>

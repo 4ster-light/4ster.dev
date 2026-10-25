@@ -3,6 +3,14 @@
 	"compatibility_date": "2026-04-26",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"kv_namespaces": [{ "binding": "SESSION" }],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "aster-interactions",
+			"database_id": "3f4e41db-e71d-4ba7-b8c6-af7a5d221f06",
+			"migrations_dir": "migrations"
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content"
 import ButtonLink from "../../../components/ButtonLink.astro"
+import EngagementConsent from "../../../components/EngagementConsent.astro"
+import PostInteractions from "../../../components/PostInteractions.astro"
 import PostMeta from "../../../components/PostMeta.astro"
 import TocSidebar from "../../../components/TocSidebar.astro"
 import leftArrowsIcon from "../../../icons/LeftArrows.svg?url"
@@ -147,6 +149,9 @@ const olderPost =
 			/>
 		</div>
 	</div>
+
+	<PostInteractions slug={post.id} {lang} />
+	<EngagementConsent {lang} />
 
 	{(olderPost || newerPost) && (
 		<nav

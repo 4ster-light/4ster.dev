@@ -65,6 +65,53 @@ tags: ["personal"]
 Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
 pnpm.
 
+## Post interactions and D1
+
+Likes and comments are stored in Cloudflare D1. Likes use an anonymous, HTTP-only visitor cookie; a
+composite primary key allows one like per post and visitor, and clicking again removes it. The
+optional cookie requires explicit prior consent. Denying it expires the cookie and disables likes
+and comment submission, while public comments remain readable without cookies. This is not
+authentication: clearing cookies or changing browsers creates a new visitor. Comments have basic
+validation, a honeypot, and per-visitor rate limiting. Add moderation and stronger anti-spam
+controls as the feature evolves.
+
+### Local database
+
+Local development uses an isolated SQLite database under `.wrangler/state/`. The entire
+`.wrangler/` directory is git-ignored, so local likes, comments, and other test data are never
+committed or deployed. Only the schema files in `migrations/` are tracked.
+
+Apply pending migrations to the local database before starting Astro:
+
+```sh
+pnpm exec wrangler d1 migrations apply DB --local
+pnpm run dev
+```
+
+Always use `--local` for development data. Do not export or import this database into production.
+
+### Production database
+
+The production binding is named `DB` and its database ID is configured in `wrangler.jsonc`. For the
+initial setup on a new Cloudflare account, create an empty database, copy the returned ID into that
+file, and apply only the tracked schema migrations:
+
+```sh
+pnpm exec wrangler d1 create aster-interactions
+pnpm exec wrangler d1 migrations apply DB --remote
+```
+
+`--remote` targets Cloudflare, never the local test database. For later schema changes, add a new
+SQL file in `migrations/` and run the last command again; Wrangler applies only pending migrations.
+Do not edit migrations that have already been applied to production.
+
+After a production build, deploy with the adapter-generated configuration:
+
+```sh
+pnpm run build
+pnpm exec wrangler deploy --config dist/server/wrangler.json
+```
+
 ## Social preview image
 
 `public/og.png` is generated from `src/assets/og.svg`. Social platforms don't render SVG
