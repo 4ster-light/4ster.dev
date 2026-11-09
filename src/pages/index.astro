@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content"
+import CvMenu from "../components/CvMenu.astro"
 import LanguageFilter from "../components/LanguageFilter.astro"
 import PostMeta from "../components/PostMeta.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
@@ -23,7 +24,7 @@ const toCard = (post: (typeof posts)[number]) => ({
 	body: post.body
 })
 
-const featured = FEATURED_REPOS.slice(0, 6)
+const featured = FEATURED_REPOS
 ---
 
 <BaseLayout
@@ -80,11 +81,12 @@ const featured = FEATURED_REPOS.slice(0, 6)
 				<div>
 					<p class="eyebrow">Open source developer</p>
 					<h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-						David Vivar Bogónez
+						David Vivar Bogónez{" "}
 						<span class="text-base-content/40">/ Aster</span>
 					</h1>
 					<p class="mt-2 font-mono text-sm text-base-content/60">
-						Python · Rust · TypeScript · SQL · Docker/Podman · Java
+						Python · Rust · Scala · SQL (PostgreSQL, SQLite) · Docker/Podman ·
+						TypeScript
 					</p>
 				</div>
 
@@ -150,6 +152,7 @@ const featured = FEATURED_REPOS.slice(0, 6)
 						</svg>
 						Linktree
 					</a>
+					<CvMenu variant="button" />
 					<a href={site.projects} class="btn btn-sm btn-primary gap-2">
 						Projects
 					</a>
@@ -159,10 +162,10 @@ const featured = FEATURED_REPOS.slice(0, 6)
 
 		<section class="max-w-[70ch]">
 			<p class="text-base text-base-content/80 leading-relaxed md:text-lg">
-				Hi, I am
+				Hi, I am{" "}
 				<strong class="font-semibold text-base-content"
 					>David Vivar Bogónez</strong
-				>, a Spanish open source developer most known as
+				>, a Spanish open source developer most known as{" "}
 				<strong class="font-semibold text-base-content">Aster</strong>, and a
 				computer engineering undergraduate at{" "}
 				<a
@@ -174,8 +177,8 @@ const featured = FEATURED_REPOS.slice(0, 6)
 					ESI-UCLM
 				</a
 				>. I am passionate about software and computers in general, and I mostly
-				work with Python and Rust, along with TypeScript, SQL, Java, and
-				containers via Docker and Podman.
+				work with Python and Rust, along with Java/Scala, SQL with PostgreSQL and
+				SQLite, containers via Docker/Podman, and Javascript/TypeScript.
 			</p>
 		</section>
 
@@ -277,7 +280,7 @@ const featured = FEATURED_REPOS.slice(0, 6)
 					class="link link-hover link-primary"
 				>
 					Substack</a
-				>
+				>{" "}
 				publication.
 			</p>
 		</section>

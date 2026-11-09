@@ -23,7 +23,8 @@ Required / supported fields:
 - `description`: short summary
 - `date`: publication date
 - `lang`: `en` or `es`
-- `translationKey`: optional shared key used to pair translated versions of the same post
+- `translationKey`: optional shared key used to pair translated versions
+  of the same post
 - `tags`: optional tag list
 - `is-preview`: optional boolean for unpublished draft posts
 
@@ -32,7 +33,8 @@ Required / supported fields:
 - Use `lang: "en"` for English posts and `lang: "es"` for Spanish posts.
 - If a post exists in both languages, give both files the same `translationKey`.
 - Locale-aware post URLs are generated automatically.
-- The homepage groups posts into English and Spanish sections so readers can browse each language
+- The homepage groups posts into English and Spanish sections so readers can
+  browse each language
   separately.
 - Legacy `/posts/[slug]` URLs still redirect to the locale route.
 
@@ -65,8 +67,8 @@ tags: ["personal"]
 | `pnpm run test:unit` | Run Workers/D1 tests with Vitest                 |
 | `pnpm run test:e2e`  | Run focused browser tests with Playwright        |
 
-Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`); package management uses
-pnpm.
+Formatting and linting use [Biome](https://biomejs.dev/) (`biome.json`);
+package management uses pnpm.
 
 ## Testing
 

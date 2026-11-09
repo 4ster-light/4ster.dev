@@ -4,11 +4,10 @@ export const FEATURED_REPOS = [
 	"artscii",
 	"sentinel",
 	"http",
+	"perlin",
 	"go-pane",
 	"pmatrix",
-	"bfcompiler",
-	"perlin",
-	"py-logic"
+	"bfcompiler"
 ] as const
 
 export interface Repository {

@@ -1,0 +1,152 @@
+---
+import cvIcon from "../icons/Cv.svg?raw"
+import { svgMaskUrl } from "../lib/icon.ts"
+import site from "../lib/site.ts"
+
+interface Props {
+	variant?: "nav" | "button"
+}
+
+const { variant = "nav" } = Astro.props
+const mask = svgMaskUrl(cvIcon)
+const buttonClass =
+	variant === "nav"
+		? "inline-flex items-center gap-2 rounded-lg px-3 py-2 font-mono text-xs tracking-wide text-base-content/70 transition-colors hover:bg-base-200 hover:text-base-content"
+		: "btn btn-sm btn-outline gap-2"
+const labelClass = variant === "nav" ? "hidden sm:inline" : ""
+---
+
+<div class:list={["dropdown", variant === "nav" && "dropdown-end"]}>
+	<button
+		type="button"
+		tabindex="0"
+		class={buttonClass}
+		aria-label="Download CV"
+		aria-haspopup="true"
+	>
+		<span
+			aria-hidden="true"
+			class="inline-block size-4 bg-current"
+			style={`-webkit-mask-image:${mask};mask-image:${mask};-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;`}
+		></span>
+		<span class={labelClass}>CV</span>
+		<svg
+			class="size-3"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+		>
+			<path d="m6 9 6 6 6-6"></path>
+		</svg>
+	</button>
+	<ul
+		class="dropdown-content menu z-50 mt-2 w-56 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
+	>
+		<li class="menu-title">English CV</li>
+		<li>
+			<a
+				href={site.cv.en}
+				download
+				type="application/pdf"
+				class="flex items-center gap-2"
+			>
+				<svg
+					class="size-3.5 shrink-0"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M12 3v12"></path>
+					<path d="m7 10 5 5 5-5"></path>
+					<path d="M5 21h14"></path>
+				</svg>
+				Download PDF
+			</a>
+		</li>
+		<li>
+			<a
+				href={site.cv.en}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-2"
+			>
+				<svg
+					class="size-3.5 shrink-0"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M14 3h7v7"></path>
+					<path d="M10 14 21 3"></path>
+					<path
+						d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"
+					></path>
+				</svg>
+				Open in browser
+			</a>
+		</li>
+		<li class="menu-title">CV en español</li>
+		<li>
+			<a
+				href={site.cv.es}
+				download
+				type="application/pdf"
+				class="flex items-center gap-2"
+			>
+				<svg
+					class="size-3.5 shrink-0"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M12 3v12"></path>
+					<path d="m7 10 5 5 5-5"></path>
+					<path d="M5 21h14"></path>
+				</svg>
+				Descargar PDF
+			</a>
+		</li>
+		<li>
+			<a
+				href={site.cv.es}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="flex items-center gap-2"
+			>
+				<svg
+					class="size-3.5 shrink-0"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M14 3h7v7"></path>
+					<path d="M10 14 21 3"></path>
+					<path
+						d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"
+					></path>
+				</svg>
+				Abrir en el navegador
+			</a>
+		</li>
+	</ul>
+</div>

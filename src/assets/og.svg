@@ -68,7 +68,7 @@
 
 	<!-- Stack -->
 	<text x="92" y="438" font-size="23" fill="#c8d8da">
-		Python · Rust · TypeScript · Java
+		Python · Rust · TypeScript · Scala
 	</text>
 	<text x="92" y="474" font-size="23" fill="#c8d8da">
 		SQL · Docker / Podman

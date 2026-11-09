@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css"
 import { ClientRouter } from "astro:transitions"
+import CvMenu from "../components/CvMenu.astro"
 import NavLink from "../components/NavLink.astro"
 import articleIcon from "../icons/Article.svg?raw"
 import codeIcon from "../icons/Code.svg?raw"
@@ -44,27 +45,6 @@ const {
 const canonical = canonicalUrl ?? new URL(Astro.url.pathname, site.baseUrl).href
 const openGraphUrl = ogUrl ?? canonical
 const rssMask = svgMaskUrl(rssIcon)
-
-const navLinks = [
-	{
-		href: site.blog,
-		label: "Blog",
-		icon: articleIcon,
-		target: ""
-	},
-	{
-		href: site.projects,
-		label: "Projects",
-		icon: codeIcon,
-		target: ""
-	},
-	{
-		href: site.donate,
-		label: "Support",
-		icon: loveIcon,
-		target: ""
-	}
-]
 ---
 
 <html {lang}>
@@ -189,7 +169,25 @@ const navLinks = [
 
 				<div class="flex flex-1 items-center justify-end gap-1">
 					<div class="flex items-center gap-1">
-						{navLinks.map((entry) => <NavLink {...entry} />)}
+						<NavLink
+							href={site.blog}
+							label="Blog"
+							icon={articleIcon}
+							target=""
+						/>
+						<NavLink
+							href={site.projects}
+							label="Projects"
+							icon={codeIcon}
+							target=""
+						/>
+						<CvMenu variant="nav" />
+						<NavLink
+							href={site.donate}
+							label="Support"
+							icon={loveIcon}
+							target=""
+						/>
 					</div>
 
 					<a

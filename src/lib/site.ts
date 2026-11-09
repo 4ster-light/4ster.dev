@@ -11,6 +11,10 @@ const site = {
 	githubSponsors: "https://github.com/sponsors/4ster-light",
 	rss: "/rss.xml",
 	projects: "/projects",
+	cv: {
+		en: "/cv/David_Vivar_Bogonez_CV_EN.pdf",
+		es: "/cv/David_Vivar_Bogonez_CV_ES.pdf"
+	},
 	blog: "/blog",
 	donate: "/sponsor",
 	uni: "https://esi.uclm.es"
