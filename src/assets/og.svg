@@ -68,10 +68,13 @@
 
 	<!-- Stack -->
 	<text x="92" y="438" font-size="23" fill="#c8d8da">
-		Python · Rust · TypeScript · Scala
+		Python · Rust · Scala
 	</text>
-	<text x="92" y="474" font-size="23" fill="#c8d8da">
-		SQL · Docker / Podman
+	<text x="92" y="470" font-size="23" fill="#c8d8da">
+		SQL (PostgreSQL, SQLite)
+	</text>
+	<text x="92" y="502" font-size="23" fill="#c8d8da">
+		Docker/Podman · TypeScript
 	</text>
 
 	<!-- Terminal card -->
@@ -112,9 +115,7 @@
 		<text x="728" y="364" font-size="19" fill="#9fb3b6">
 			artscii sentinel http
 		</text>
-		<text x="728" y="398" font-size="19" fill="#9fb3b6">
-			bfcompiler perlin py-logic
-		</text>
+		<text x="728" y="398" font-size="19" fill="#9fb3b6">bfcompiler perlin</text>
 		<rect x="728" y="414" width="11" height="18" fill="#4fb3a2" />
 	</g>
 
