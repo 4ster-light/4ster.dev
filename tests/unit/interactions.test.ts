@@ -127,3 +127,24 @@ describe("comments", () => {
 		expect(await hasRecentComment(db, "visitor-a")).toBe(false)
 	})
 })
+
+describe("shared like keys", () => {
+	it("shares one like counter across a pair while comments stay separate", async () => {
+		await toggleLike(db, "hello-world", "visitor-a")
+
+		expect(await getLikeState(db, "hello-world", "visitor-b")).toEqual({
+			likes: 1,
+			liked: false
+		})
+
+		await createComment(db, "hello-world", "Ada", "english", "visitor-a")
+		await createComment(db, "hola-mundo", "Ada", "spanish", "visitor-b")
+
+		expect(
+			(await listComments(db, "hello-world")).map((comment) => comment.body)
+		).toEqual(["english"])
+		expect(
+			(await listComments(db, "hola-mundo")).map((comment) => comment.body)
+		).toEqual(["spanish"])
+	})
+})

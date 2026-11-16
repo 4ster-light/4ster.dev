@@ -1,70 +1,65 @@
 import { getCollection } from "astro:content"
+import type { APIRoute } from "astro"
+import { findTranslation, postLang, publishedPosts } from "../lib/posts.ts"
 import { FEATURED_REPOS } from "../lib/projects.ts"
-import site from "../lib/site.ts"
+import site, { blogPath, LANGUAGES, postPath } from "../lib/site.ts"
+import { buildSitemap, type SitemapEntry } from "../lib/sitemap.ts"
+import { xmlResponse } from "../lib/xml.ts"
 
 export const prerender = true
 
-type SitemapEntry = {
-	url: string
-	lastmod?: string
-}
+const posts = publishedPosts(await getCollection("posts"))
 
-function escapeXml(value: string): string {
-	return value
-		.replaceAll("&", "&amp;")
-		.replaceAll("<", "&lt;")
-		.replaceAll(">", "&gt;")
-		.replaceAll('"', "&quot;")
-		.replaceAll("'", "&apos;")
-}
-
-function renderUrl(entry: SitemapEntry): string {
-	const lastmod = entry.lastmod
-		? `
-    <lastmod>${escapeXml(entry.lastmod)}</lastmod>`
-		: ""
-
-	return `  <url>
-    <loc>${escapeXml(entry.url)}</loc>${lastmod}
-  </url>`
-}
-
-const posts = await getCollection("posts")
+const listingAlternates = [
+	...LANGUAGES.map((lang) => ({
+		lang,
+		href: `${site.baseUrl}${blogPath(lang)}`
+	})),
+	{ lang: "x-default" as const, href: `${site.baseUrl}${blogPath("en")}` }
+]
 
 const urls: SitemapEntry[] = [
 	{ url: site.baseUrl },
-	{ url: `${site.baseUrl}/blog` },
+	...LANGUAGES.map((lang) => ({
+		url: `${site.baseUrl}${blogPath(lang)}`,
+		alternates: listingAlternates
+	})),
 	{ url: `${site.baseUrl}/projects` },
 	{ url: `${site.baseUrl}/sponsor` }
 ]
 
 for (const post of posts) {
-	if (post.data["is-preview"]) continue
+	const lang = postLang(post)
+	const url = `${site.baseUrl}${postPath(lang, post.id)}`
+	const translation = findTranslation(post, posts)
 
-	const lang = post.data.lang || "en"
+	// Only translated posts get alternates: a lone self alternate adds noise.
+	const alternates = translation
+		? [
+				{ lang, href: url },
+				{
+					lang: translation.data.lang,
+					href: `${site.baseUrl}${postPath(translation.data.lang, translation.id)}`
+				},
+				{
+					lang: "x-default" as const,
+					href: `${site.baseUrl}${postPath(
+						"en",
+						lang === "en" ? post.id : translation.id
+					)}`
+				}
+			]
+		: undefined
+
 	urls.push({
-		url: `${site.baseUrl}/${lang}/posts/${post.id}`,
-		lastmod: post.data.date.toISOString().slice(0, 10)
+		url,
+		lastmod: post.data.date.toISOString().slice(0, 10),
+		alternates
 	})
 }
 
 for (const project of FEATURED_REPOS) {
-	urls.push({
-		url: `${site.baseUrl}/projects/${project}`
-	})
+	urls.push({ url: `${site.baseUrl}/projects/${project}` })
 }
 
-export function GET() {
-	const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(renderUrl).join("\n")}
-</urlset>
-`
-
-	return new Response(body, {
-		headers: {
-			"Content-Type": "application/xml; charset=utf-8",
-			"Cache-Control": "public, max-age=3600"
-		}
-	})
-}
+export const GET: APIRoute = () => xmlResponse(buildSitemap(urls))

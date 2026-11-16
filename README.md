@@ -32,11 +32,23 @@ Required / supported fields:
 
 - Use `lang: "en"` for English posts and `lang: "es"` for Spanish posts.
 - If a post exists in both languages, give both files the same `translationKey`.
-- Locale-aware post URLs are generated automatically.
-- The homepage groups posts into English and Spanish sections so readers can
-  browse each language
-  separately.
-- Legacy `/posts/[slug]` URLs still redirect to the locale route.
+  `pnpm run check` rejects a key that appears twice in one language.
+- The URL space is symmetrical for both languages:
+
+  | Content | English            | Spanish            |
+  | ------- | ------------------ | ------------------ |
+  | Post    | `/en/posts/[slug]` | `/es/posts/[slug]` |
+  | Listing | `/en/blog`         | `/es/blog`         |
+  | Feed    | `/en/rss.xml`      | `/es/rss.xml`      |
+
+- `/blog` redirects to `/en/blog`, and legacy `/posts/[slug]` URLs redirect to
+  the locale route.
+- `/rss.xml` is the aggregate feed. RSS 2.0 has no per-item language, so its
+  items carry `<dc:language>` and the channel omits `<language>`.
+- The sitemap emits `hreflang` alternates for translated pairs, with
+  `x-default` pointing at the English URL.
+- Post chrome (dates, reading time, pagination labels) follows the post
+  language; the shared navigation and the static pages are English.
 
 ### Example
 
@@ -60,7 +72,7 @@ tags: ["personal"]
 | `pnpm run preview`   | Build and preview the production build locally   |
 | `pnpm run fmt`       | Format files with Biome                          |
 | `pnpm run lint`      | Lint and apply safe fixes with Biome             |
-| `pnpm run check`     | Sync content and run `astro check`               |
+| `pnpm run check`     | Sync, type check, and validate post pairing      |
 | `pnpm run sync`      | Regenerate Astro content types                   |
 | `pnpm run types`     | Regenerate worker types (run after a build)      |
 | `pnpm run test`      | Run the Vitest and Playwright suites             |
@@ -84,14 +96,21 @@ rendering of comment text. Install the browser once with:
 pnpm exec playwright install chromium
 ```
 
-`pnpm run test` runs both suites. CI runs them after the formatting and type checks.
+`pnpm run test` runs both suites. CI runs them after the formatting and type checks. The Vitest
+suite also covers the RSS and sitemap builders and the shared like key; the Playwright suite adds
+the language addressed listings, the `/blog` redirect, the translation switch, and the
+per-language feed discovery link.
 
 ## Post interactions and D1
 
-Likes and comments are stored in Cloudflare D1. Likes use an anonymous, HTTP-only visitor cookie; a
-composite primary key allows one like per post and visitor, and clicking again removes it. The
+Likes and comments are stored in Cloudflare D1. Likes use an anonymous, HTTP-only visitor cookie and
+are keyed by the post's `translationKey` (or its id when untranslated), so both halves of a
+translation pair share one counter; the primary key allows one like per key and visitor, and
+clicking again removes it. Comments stay keyed by post slug, so each language keeps its own thread.
+The
 optional cookie requires explicit prior consent. Denying it expires the cookie and disables likes
-and comment submission, while public comments remain readable without cookies. This is not
+and comment submission, while public comments remain readable without cookies. Likes live at
+`/api/likes/[key]` (the shared interaction key) and comments at `/api/posts/[slug]/comments`. This is not
 authentication: clearing cookies or changing browsers creates a new visitor. Comments have basic
 validation, a honeypot, and per-visitor rate limiting. Add moderation and stronger anti-spam
 controls as the feature evolves.

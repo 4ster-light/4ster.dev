@@ -1,12 +1,13 @@
 ---
 import { formatDate, readingTime } from "../lib/format.ts"
+import { type Lang, postPath } from "../lib/site.ts"
 
 interface PostData {
 	slug?: string
 	title: string
 	description: string
 	date: Date
-	lang?: "en" | "es"
+	lang?: Lang
 	tags?: string[]
 	body?: string
 }
@@ -18,12 +19,15 @@ interface Props {
 }
 
 const { post, header = false, headingLevel = 3 } = Astro.props
-const langLabel = post.lang === "es" ? "ES" : "EN"
-const href = post.slug ? `/${post.lang || "en"}/posts/${post.slug}` : "/"
-const reading = readingTime(post.body)
-const dateLabel = formatDate(post.date)
+const lang: Lang = post.lang === "es" ? "es" : "en"
+const langLabel = lang === "es" ? "ES" : "EN"
+const href = post.slug ? postPath(lang, post.slug) : "/"
+const reading = readingTime(post.body, lang)
+const dateLabel = formatDate(post.date, lang)
 const dateIso = post.date.toISOString()
-const tags = post.tags?.length ? post.tags : ["uncategorised"]
+const tags = post.tags?.length
+	? post.tags
+	: [lang === "es" ? "sin categoría" : "uncategorised"]
 ---
 
 {header ? (

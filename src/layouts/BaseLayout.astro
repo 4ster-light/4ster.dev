@@ -8,7 +8,7 @@ import codeIcon from "../icons/Code.svg?raw"
 import loveIcon from "../icons/Love.svg?raw"
 import rssIcon from "../icons/Rss.svg?raw"
 import { svgMaskUrl } from "../lib/icon.ts"
-import site from "../lib/site.ts"
+import site, { blogPath, combinedFeedPath, feedPath } from "../lib/site.ts"
 
 interface Props {
 	title?: string
@@ -20,8 +20,9 @@ interface Props {
 	ogImage?: string
 	lang?: "en" | "es"
 	ogLocale?: string
+	alternateLocales?: string[]
 	canonicalUrl?: string
-	alternateUrls?: Array<{ lang: "en" | "es"; href: string }>
+	alternateUrls?: Array<{ lang: "en" | "es" | "x-default"; href: string }>
 	robots?: string
 	jsonLd?: Array<Record<string, unknown>>
 }
@@ -36,6 +37,7 @@ const {
 	ogImage = `${site.baseUrl}${site.ogImage}`,
 	lang = "en",
 	ogLocale = lang === "es" ? "es_ES" : "en_US",
+	alternateLocales,
 	canonicalUrl,
 	alternateUrls,
 	robots = "index,follow,max-image-preview:large",
@@ -73,6 +75,9 @@ const rssMask = svgMaskUrl(rssIcon)
 		<meta property="og:url" content={openGraphUrl}>
 		<meta property="og:site_name" content="✰λster✰">
 		<meta property="og:locale" content={ogLocale}>
+		{alternateLocales?.map((locale) => (
+			<meta property="og:locale:alternate" content={locale} />
+		))}
 		<link rel="canonical" href={canonical}>
 		{alternateUrls?.map((alternate) => (
 			<link rel="alternate" hreflang={alternate.lang} href={alternate.href} />
@@ -96,8 +101,15 @@ const rssMask = svgMaskUrl(rssIcon)
 		<link
 			rel="alternate"
 			type="application/rss+xml"
-			title="✰λster✰"
-			href={`${site.baseUrl}${site.rss}`}
+			hreflang={lang}
+			title={`✰λster✰ (${lang})`}
+			href={`${site.baseUrl}${feedPath(lang)}`}
+		>
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="✰λster✰ (all posts)"
+			href={`${site.baseUrl}${combinedFeedPath}`}
 		>
 		<link rel="preconnect" href="https://github.com">
 		<link rel="preconnect" href="https://avatars.githubusercontent.com">
@@ -170,7 +182,7 @@ const rssMask = svgMaskUrl(rssIcon)
 				<div class="flex flex-1 items-center justify-end gap-1">
 					<div class="flex items-center gap-1">
 						<NavLink
-							href={site.blog}
+							href={blogPath(lang)}
 							label="Blog"
 							icon={articleIcon}
 							target=""
@@ -191,7 +203,7 @@ const rssMask = svgMaskUrl(rssIcon)
 					</div>
 
 					<a
-						href={site.rss}
+						href={feedPath(lang)}
 						class="inline-flex size-9 items-center justify-center rounded-lg text-base-content/70 transition-colors hover:bg-base-200 hover:text-base-content"
 						aria-label="Subscribe via RSS"
 						title="RSS feed"
@@ -255,9 +267,9 @@ const rssMask = svgMaskUrl(rssIcon)
 			>
 				<p>© {new Date().getFullYear()} ✰λster✰ · David Vivar Bogónez</p>
 				<nav class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-					<a href={site.blog} class="link link-hover">Blog</a>
+					<a href={blogPath(lang)} class="link link-hover">Blog</a>
 					<a href={site.projects} class="link link-hover">Projects</a>
-					<a href={site.rss} class="link link-hover">RSS</a>
+					<a href={feedPath(lang)} class="link link-hover">RSS</a>
 					<a href="/license" class="link link-hover">Licensing</a>
 				</nav>
 			</div>

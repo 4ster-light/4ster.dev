@@ -52,21 +52,25 @@ export const validateCommentInput = (
 	return { ok: true, author, body }
 }
 
+/**
+ * `postKey` groups a translation pair: it is the post's `translationKey` when
+ * one exists and the post id otherwise.
+ */
 export const getLikeState = async (
 	db: D1Database,
-	slug: string,
+	postKey: string,
 	visitorHash: string
 ): Promise<LikeState> => {
 	const [total, visitor] = await Promise.all([
 		db
-			.prepare("SELECT COUNT(*) AS count FROM likes WHERE post_slug = ?")
-			.bind(slug)
+			.prepare("SELECT COUNT(*) AS count FROM likes WHERE post_key = ?")
+			.bind(postKey)
 			.first<{ count: number }>(),
 		db
 			.prepare(
-				"SELECT 1 AS liked FROM likes WHERE post_slug = ? AND visitor_hash = ?"
+				"SELECT 1 AS liked FROM likes WHERE post_key = ? AND visitor_hash = ?"
 			)
-			.bind(slug, visitorHash)
+			.bind(postKey, visitorHash)
 			.first<{ liked: number }>()
 	])
 
@@ -78,24 +82,24 @@ export const getLikeState = async (
 
 export const toggleLike = async (
 	db: D1Database,
-	slug: string,
+	postKey: string,
 	visitorHash: string
 ): Promise<LikeState> => {
 	const inserted = await db
 		.prepare(
-			"INSERT OR IGNORE INTO likes (post_slug, visitor_hash) VALUES (?, ?)"
+			"INSERT OR IGNORE INTO likes (post_key, visitor_hash) VALUES (?, ?)"
 		)
-		.bind(slug, visitorHash)
+		.bind(postKey, visitorHash)
 		.run()
 
 	if (inserted.meta.changes === 0) {
 		await db
-			.prepare("DELETE FROM likes WHERE post_slug = ? AND visitor_hash = ?")
-			.bind(slug, visitorHash)
+			.prepare("DELETE FROM likes WHERE post_key = ? AND visitor_hash = ?")
+			.bind(postKey, visitorHash)
 			.run()
 	}
 
-	return getLikeState(db, slug, visitorHash)
+	return getLikeState(db, postKey, visitorHash)
 }
 
 export const listComments = async (

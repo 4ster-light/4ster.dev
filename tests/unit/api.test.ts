@@ -1,13 +1,13 @@
 import { env } from "cloudflare:workers"
 import { beforeEach, describe, expect, it } from "vitest"
 import {
+	GET as getLikes,
+	POST as postLike
+} from "../../src/pages/api/likes/[key].ts"
+import {
 	GET as getComments,
 	POST as postComment
 } from "../../src/pages/api/posts/[slug]/comments.ts"
-import {
-	GET as getLikes,
-	POST as postLike
-} from "../../src/pages/api/posts/[slug]/like.ts"
 
 const db = env.DB
 
@@ -24,16 +24,25 @@ const request = (path: string, method = "GET") =>
 describe("interaction API consent", () => {
 	it("rejects like reads and writes without consent", async () => {
 		const getResponse = await getLikes({
-			params: { slug: "post-a" },
-			request: request("/api/posts/post-a/like")
+			params: { key: "hello-world" },
+			request: request("/api/likes/hello-world")
 		} as never)
 		const postResponse = await postLike({
-			params: { slug: "post-a" },
-			request: request("/api/posts/post-a/like", "POST")
+			params: { key: "hello-world" },
+			request: request("/api/likes/hello-world", "POST")
 		} as never)
 
 		expect(getResponse.status).toBe(403)
 		expect(postResponse.status).toBe(403)
+	})
+
+	it("rejects an invalid like key before consent is checked", async () => {
+		const response = await postLike({
+			params: { key: "Not A Key" },
+			request: request("/api/likes/Not%20A%20Key", "POST")
+		} as never)
+
+		expect(response.status).toBe(400)
 	})
 
 	it("rejects comment submission without consent", async () => {
@@ -61,8 +70,8 @@ describe("interaction API consent", () => {
 
 	it("creates a consented like and visitor cookie", async () => {
 		const response = await postLike({
-			params: { slug: "post-a" },
-			request: new Request("http://test/api/posts/post-a/like", {
+			params: { key: "hello-world" },
+			request: new Request("http://test/api/likes/hello-world", {
 				method: "POST",
 				headers: { "X-Engagement-Consent": "accepted" }
 			})

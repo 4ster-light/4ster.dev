@@ -26,7 +26,7 @@ const mockInteractions = async (
 	}
 	const likeRequests: string[] = []
 
-	await page.route("**/api/posts/hello-world/like", async (route) => {
+	await page.route("**/api/likes/hello-world", async (route) => {
 		const method = route.request().method()
 		likeRequests.push(method)
 

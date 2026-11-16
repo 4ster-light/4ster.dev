@@ -9,8 +9,15 @@ import leftArrowsIcon from "../../../icons/LeftArrows.svg?url"
 import loveIcon from "../../../icons/Love.svg?url"
 import BaseLayout from "../../../layouts/BaseLayout.astro"
 import marked, { preloadHighlightLanguages } from "../../../lib/marked.ts"
-import site from "../../../lib/site.ts"
+import { interactionKey } from "../../../lib/posts.ts"
+import site, {
+	blogPath,
+	OG_LOCALE,
+	otherLanguage,
+	postPath
+} from "../../../lib/site.ts"
 import { extractHeadings } from "../../../lib/toc.ts"
+import { ui } from "../../../lib/ui.ts"
 
 export const prerender = true
 
@@ -60,18 +67,23 @@ const recentPosts = allPosts
 		lang: entry.data.lang || "en"
 	}))
 
-const switchLabel = lang === "es" ? "Read in English 🇬🇧" : "Leer en español 🇪🇸"
+const strings = ui(lang)
+const switchLabel = strings.post.switchTo
 const switchHref = translatedPost
-	? `/${translatedPost.data.lang || "en"}/posts/${translatedPost.id}`
+	? postPath(translatedPost.data.lang, translatedPost.id)
 	: undefined
 const canonicalUrl = `${site.baseUrl}/${lang}/posts/${post.id}`
+const translatedUrl = translatedPost
+	? `${site.baseUrl}${postPath(translatedPost.data.lang, translatedPost.id)}`
+	: undefined
 const alternateUrls = [
 	{ lang, href: canonicalUrl },
-	...(translatedPost
+	...(translatedPost && translatedUrl
 		? [
+				{ lang: translatedPost.data.lang, href: translatedUrl },
 				{
-					lang: translatedPost.data.lang || "en",
-					href: `${site.baseUrl}/${translatedPost.data.lang || "en"}/posts/${translatedPost.id}`
+					lang: "x-default" as const,
+					href: lang === "en" ? canonicalUrl : translatedUrl
 				}
 			]
 		: [])
@@ -95,7 +107,10 @@ const olderPost =
 	ogDescription={post.data.description}
 	ogType="article"
 	{lang}
-	ogLocale={lang === "es" ? "es_ES" : "en_US"}
+	ogLocale={OG_LOCALE[lang]}
+	alternateLocales={translatedPost
+		? [OG_LOCALE[otherLanguage(lang)]]
+		: undefined}
 	ogUrl={canonicalUrl}
 	{canonicalUrl}
 	{alternateUrls}
@@ -150,13 +165,13 @@ const olderPost =
 		</div>
 	</div>
 
-	<PostInteractions slug={post.id} {lang} />
+	<PostInteractions slug={post.id} likeKey={interactionKey(post)} {lang} />
 	<EngagementConsent {lang} />
 
 	{(olderPost || newerPost) && (
 		<nav
 			class="mt-12 grid gap-4 border-t border-base-300 pt-8 sm:grid-cols-2"
-			aria-label="More posts"
+			aria-label={strings.post.morePosts}
 		>
 			{olderPost ? (
 				<a
@@ -164,7 +179,7 @@ const olderPost =
 					class="group flex flex-col gap-1 rounded-xl border border-base-300 p-4 transition-colors hover:border-primary/40 hover:bg-base-200/40"
 				>
 					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">
-						← Older
+						{strings.post.older}
 					</span>
 					<span class="font-semibold transition-colors group-hover:text-primary">
 						{olderPost.data.title}
@@ -179,7 +194,7 @@ const olderPost =
 					class="group flex flex-col items-end gap-1 rounded-xl border border-base-300 p-4 text-right transition-colors hover:border-primary/40 hover:bg-base-200/40 sm:col-start-2"
 				>
 					<span class="font-mono text-xs uppercase tracking-widest text-base-content/50">
-						Newer →
+						{strings.post.newer}
 					</span>
 					<span class="font-semibold transition-colors group-hover:text-primary">
 						{newerPost.data.title}
@@ -222,7 +237,11 @@ const olderPost =
 	</div>
 
 	<footer class="mt-10 flex flex-wrap items-center justify-between gap-4">
-		<ButtonLink href={site.blog} target="" ariaLabel="Back to all posts">
+		<ButtonLink
+			href={blogPath(lang)}
+			target=""
+			ariaLabel={strings.post.backToAllPosts}
+		>
 			<img
 				src={leftArrowsIcon}
 				alt=""
@@ -231,9 +250,9 @@ const olderPost =
 				decoding="async"
 				class="size-8"
 			>
-			All posts
+			{strings.post.allPosts}
 		</ButtonLink>
-		<ButtonLink href={site.donate} ariaLabel="Sponsor me">
+		<ButtonLink href={site.donate} ariaLabel={strings.post.sponsor}>
 			<img
 				src={loveIcon}
 				alt=""
@@ -242,7 +261,7 @@ const olderPost =
 				decoding="async"
 				class="size-6"
 			>
-			Sponsor
+			{strings.post.sponsor}
 		</ButtonLink>
 	</footer>
 </BaseLayout>

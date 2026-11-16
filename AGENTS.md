@@ -32,12 +32,14 @@
 
 - `src/pages/` is the app surface: home, projects, article routes, and the JSON API live here.
 - `src/content/posts/` holds blog posts.
+- `src/lib/feed.ts` and `src/lib/sitemap.ts` build the XML feeds and sitemap; `src/lib/ui.ts` holds
+  the English and Spanish page strings.
 - `src/lib/projects.ts` fetches featured GitHub repos and README content for the projects pages/API.
 - `migrations/` contains the tracked D1 schema migrations for post interactions.
 - `src/lib/engagement.ts` handles visitor cookies, consent checks, slug validation, and JSON/error
   responses.
 - `src/lib/interactions.ts` contains the D1 repository operations and comment input validation.
-- `src/pages/api/posts/[slug]/like.ts` and `comments.ts` implement likes/comments;
+- `src/pages/api/likes/[key].ts` and `src/pages/api/posts/[slug]/comments.ts` implement likes/comments;
   `src/pages/api/engagement/consent.ts` clears the visitor cookie when consent is denied.
 - `src/components/PostInteractions.astro` renders the discussion UI and
   `src/components/EngagementConsent.astro` renders the cookie prompt.
@@ -54,7 +56,12 @@
 - All blog post text and content (`src/content/posts/*`) is licensed under CC BY-NC-SA 4.0; do not
   introduce content under a different license.
 - If a post exists in both languages, both files must share the same `translationKey`.
-- Legacy `/posts/[slug]` URLs redirect to `/{lang}/posts/[slug]`.
+- Legacy `/posts/[slug]` URLs redirect to `/{lang}/posts/[slug]`; `/blog` redirects to `/en/blog`.
+- Routes are symmetrical per language: `/{lang}/posts/[slug]`, `/{lang}/blog`, `/{lang}/rss.xml`.
+- `/rss.xml` is the aggregate feed: items carry `<dc:language>` and the channel omits `<language>`.
+  The per-language feeds live at `/en/rss.xml` and `/es/rss.xml`.
+- `pnpm run check` also runs `scripts/check-content.mjs`, which rejects a `translationKey` used
+  twice in one language and invalid `lang`, `date`, or key shapes.
 
 ## Workflow Notes
 
@@ -74,8 +81,10 @@
 - Likes and comment submission require explicit cookie consent. The browser sends
   `X-Engagement-Consent: accepted`; the APIs reject likes and comment POSTs without it and only
   then create the HTTP-only `aster_visitor` cookie. Comment reads are public and cookie-free.
-  Denying consent expires the cookie. Likes are unique per `(post_slug, visitor_hash)`; the visitor
-  is anonymous and identified only by a hash of the cookie value.
+  Denying consent expires the cookie. Likes are unique per `(post_key, visitor_hash)`, where
+  `post_key` is the post's `translationKey` or its id, so a translation pair shares one counter.
+  Comments stay keyed by `post_slug`, keeping each language's thread separate. The visitor is
+  anonymous and identified only by a hash of the cookie value.
 - Add new D1 schema changes as new files in `migrations/`; do not edit a migration already applied
   to production. Apply migrations before deploying code that depends on them. Keep SQL in
   `src/lib/interactions.ts` so the Vitest suite can exercise it directly.

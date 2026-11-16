@@ -1,10 +1,12 @@
 ---
 interface Props {
 	slug: string
+	/** Groups likes across a translation pair; defaults to the slug. */
+	likeKey?: string
 	lang?: "en" | "es"
 }
 
-const { slug, lang = "en" } = Astro.props
+const { slug, likeKey, lang = "en" } = Astro.props
 const copy =
 	lang === "es"
 		? {
@@ -48,6 +50,7 @@ const copy =
 	class="mt-16 border-t border-base-300/80 pt-10"
 	data-post-interactions
 	data-slug={slug}
+	data-like-key={likeKey ?? slug}
 	data-error={copy.error}
 	data-empty={copy.empty}
 	data-like-label={copy.like}
@@ -198,6 +201,7 @@ const initializeInteractions = () => {
 		section.dataset.initialized = "true"
 		const slug = section.dataset.slug ?? ""
 		const endpoint = `/api/posts/${encodeURIComponent(slug)}`
+		const likeEndpoint = `/api/likes/${encodeURIComponent(section.dataset.likeKey ?? slug)}`
 		const likeButton =
 			section.querySelector<HTMLButtonElement>("[data-like-button]")
 		const likeCount = section.querySelector<HTMLElement>("[data-like-count]")
@@ -332,7 +336,7 @@ const initializeInteractions = () => {
 		const loadLikes = async () => {
 			likeButton.disabled = true
 			try {
-				const response = await fetch(`${endpoint}/like`, {
+				const response = await fetch(likeEndpoint, {
 					headers: { "X-Engagement-Consent": "accepted" }
 				})
 				if (!response.ok) throw new Error("Request failed")
@@ -350,7 +354,7 @@ const initializeInteractions = () => {
 		likeButton.addEventListener("click", async () => {
 			likeButton.disabled = true
 			try {
-				const response = await fetch(`${endpoint}/like`, {
+				const response = await fetch(likeEndpoint, {
 					method: "POST",
 					headers: { "X-Engagement-Consent": "accepted" }
 				})

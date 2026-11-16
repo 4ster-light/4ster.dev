@@ -1,0 +1,119 @@
+---
+import { getCollection } from "astro:content"
+import type { GetStaticPaths } from "astro"
+import LanguageFilter from "../../components/LanguageFilter.astro"
+import PostMeta from "../../components/PostMeta.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { publishedPosts } from "../../lib/posts.ts"
+import site, {
+	blogPath,
+	LANGUAGES,
+	type Lang,
+	OG_LOCALE,
+	otherLanguage
+} from "../../lib/site.ts"
+import { ui } from "../../lib/ui.ts"
+
+export const prerender = true
+
+export const getStaticPaths: GetStaticPaths = () =>
+	LANGUAGES.map((lang) => ({ params: { lang } }))
+
+const lang = (Astro.params.lang ?? "en") as Lang
+const strings = ui(lang)
+const posts = publishedPosts(await getCollection("posts"))
+const postsIn = (value: Lang) =>
+	posts.filter((post) => post.data.lang === value)
+const mine = postsIn(lang)
+const counts = { en: postsIn("en").length, es: postsIn("es").length }
+
+const toCard = (post: (typeof posts)[number]) => ({
+	slug: post.id,
+	...post.data,
+	body: post.body
+})
+
+const canonicalUrl = `${site.baseUrl}${blogPath(lang)}`
+const alternateUrls = [
+	...LANGUAGES.map((value) => ({
+		lang: value,
+		href: `${site.baseUrl}${blogPath(value)}`
+	})),
+	{ lang: "x-default" as const, href: `${site.baseUrl}${blogPath("en")}` }
+]
+const pageTitle =
+	lang === "es" ? "Blog | ✰λster✰ (Español)" : "Blog | ✰λster✰ (English)"
+const breadcrumbHome = lang === "es" ? "Inicio" : "Home"
+---
+
+<BaseLayout
+	title={pageTitle}
+	description={strings.blog.description}
+	ogTitle={pageTitle}
+	ogDescription={strings.blog.description}
+	{lang}
+	ogLocale={OG_LOCALE[lang]}
+	ogUrl={canonicalUrl}
+	{canonicalUrl}
+	{alternateUrls}
+	jsonLd={[
+		{
+			"@context": "https://schema.org",
+			"@type": "BreadcrumbList",
+			itemListElement: [
+				{
+					"@type": "ListItem",
+					position: 1,
+					name: breadcrumbHome,
+					item: site.baseUrl
+				},
+				{
+					"@type": "ListItem",
+					position: 2,
+					name: "Blog",
+					item: canonicalUrl
+				}
+			]
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "Blog",
+			name: `✰λster✰ blog (${lang})`,
+			url: canonicalUrl,
+			inLanguage: lang,
+			description: strings.blog.description
+		}
+	]}
+>
+	<div class="flex flex-col gap-10">
+		<header class="flex flex-col gap-3 border-b border-base-300 pb-8">
+			<p class="eyebrow">{strings.blog.eyebrow}</p>
+			<h1 class="text-3xl font-bold tracking-tight md:text-4xl">
+				{strings.blog.title}
+			</h1>
+			<p class="max-w-[70ch] text-base-content/70">
+				{strings.blog.description}
+			</p>
+		</header>
+
+		<LanguageFilter {counts} current={lang} />
+
+		<section class="masonry">
+			{mine.length > 0 ? (
+				mine.map((post) => <PostMeta post={toCard(post)} headingLevel={2} />)
+			) : (
+				<p class="text-base-content/60">{strings.blog.empty}</p>
+			)}
+		</section>
+
+		<p class="font-mono text-xs text-base-content/50">
+			<a href={blogPath(otherLanguage(lang))} class="link link-hover">
+				{lang === "es" ? "English posts" : "Artículos en español"}
+			</a>
+			{" · "}
+			<a href={`/${lang}/rss.xml`} class="link link-hover">
+				{lang === "es" ? "RSS en español" : "English RSS"}
+			</a>
+		</p>
+	</div>
+</BaseLayout>

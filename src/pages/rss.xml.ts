@@ -1,59 +1,44 @@
 import { getCollection } from "astro:content"
-import site from "../lib/site.ts"
+import type { APIRoute } from "astro"
+import { buildRssFeed } from "../lib/feed.ts"
+import { publishedPosts, toFeedPost } from "../lib/posts.ts"
+import site, { combinedFeedPath, feedPath } from "../lib/site.ts"
+import { xmlResponse } from "../lib/xml.ts"
 
 export const prerender = true
 
-function escapeXml(value: string): string {
-	return value
-		.replaceAll("&", "&amp;")
-		.replaceAll("<", "&lt;")
-		.replaceAll(">", "&gt;")
-		.replaceAll('"', "&quot;")
-		.replaceAll("'", "&apos;")
-}
+const FEED_COPY = {
+	en: { title: "✰λster✰ (English)" },
+	es: { title: "✰λster✰ (Español)" }
+} as const
 
-export async function GET() {
-	const posts = (await getCollection("posts"))
-		.filter((post) => !post.data["is-preview"])
-		.sort(
-			(a, b) =>
-				new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
-		)
+/**
+ * The aggregate feed. RSS 2.0 has no per-item language, so items carry
+ * `dc:language` and the channel omits `<language>` rather than claiming one.
+ */
+export const GET: APIRoute = async () => {
+	const posts = publishedPosts(await getCollection("posts")).map(toFeedPost)
 
-	const items = posts.map((post) => {
-		const lang = post.data.lang || "en"
-		const url = `${site.baseUrl}/${lang}/posts/${post.id}`
-		const categories = (post.data.tags ?? [])
-			.map((tag) => `      <category>${escapeXml(tag)}</category>`)
-			.join("\n")
-
-		return `    <item>
-      <title>${escapeXml(post.data.title)}</title>
-      <link>${escapeXml(url)}</link>
-      <guid isPermaLink="true">${escapeXml(url)}</guid>
-      <description>${escapeXml(post.data.description)}</description>
-      <pubDate>${new Date(post.data.date).toUTCString()}</pubDate>
-${categories}
-    </item>`
+	const body = buildRssFeed({
+		posts,
+		siteUrl: site.baseUrl,
+		selfHref: `${site.baseUrl}${combinedFeedPath}`,
+		title: "✰λster✰",
+		description:
+			"Programming, computer science, and open source by David Vivar Bogónez.",
+		alternates: [
+			{
+				href: `${site.baseUrl}${feedPath("en")}`,
+				title: FEED_COPY.en.title,
+				lang: "en"
+			},
+			{
+				href: `${site.baseUrl}${feedPath("es")}`,
+				title: FEED_COPY.es.title,
+				lang: "es"
+			}
+		]
 	})
 
-	const body = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>✰λster✰</title>
-    <link>${site.baseUrl}</link>
-    <atom:link href="${site.baseUrl}${site.rss}" rel="self" type="application/rss+xml" />
-    <description>Programming, computer science, and open source by David Vivar Bogónez.</description>
-    <language>en</language>
-${items.join("\n")}
-  </channel>
-</rss>
-`
-
-	return new Response(body, {
-		headers: {
-			"Content-Type": "application/xml; charset=utf-8",
-			"Cache-Control": "public, max-age=3600"
-		}
-	})
+	return xmlResponse(body)
 }
